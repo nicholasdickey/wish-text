@@ -1,0 +1,34 @@
+{
+  "name": "wish-text",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@next/font": "^13.4.3",
+    "@nextui-org/react": "^1.0.0-beta.12",
+    "@types/node": "20.2.1",
+    "@types/react": "18.2.6",
+    "@types/react-dom": "18.2.4",
+    "axios": "^1.4.0",
+    "eslint": "8.40.0",
+    "eslint-config-next": "13.4.3",
+    "iron-session": "^6.3.1",
+    "next": "13.4.3",
+    "next-session": "^4.0.5",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
+    "react-markdown": "^8.0.7",
+    "react-select": "^5.7.3",
+    "react-use-event-hook": "^0.9.6",
+    "rehype-raw": "^6.1.1",
+    "styled-components": "^6.0.0-rc.1",
+    "swr": "^2.1.5",
+    "typescript": "5.0.4",
+    "use-event-hook": "^2.0.1"
+  }
+}
