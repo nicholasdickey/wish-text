@@ -9,7 +9,7 @@ const ElementContainer = styled.div`
     `;
 
 
-export default ({value,options,onChange,disable}:{value:string, options:{value:string,label:string}[],onChange:any,disable?:boolean})=> {
+const Element= ({value,options,onChange,disable}:{value:string, options:{value:string,label:string}[],onChange:any,disable?:boolean})=> {
     const [opened,setOpened] = useState(false);
     //  const [choice,setChoice] = useState(choices[0]);
     console.log("value",value,"options",options);
@@ -21,3 +21,4 @@ export default ({value,options,onChange,disable}:{value:string, options:{value:s
     } options={options} onChange={onChange}  isDisabled={disable}/></ElementContainer></>
   );
 }
+export default Element;

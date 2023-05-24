@@ -127,7 +127,7 @@ export default function Home({ from:startFrom, to:startTo, occasion:startOccasio
     const assigned = { ...Object.assign(session, updSession) }
     setSession(assigned);
     axios.post(`/api/session/save`, { session: updSession });
-  }, [session, router]);
+  }, [session]);
   
   const updateRoute = ({ to, from, occasion, interests, sex, age }: { to: string, from: string, occasion: string, interests: string, sex: string, age: string }) => {
     const params = `/?occasion=${encodeURIComponent(occasion)}${to ? `&to=${encodeURIComponent(to)}` : ``}${from ? `&from=${encodeURIComponent(from)}` : ``}${interests ? `&interests=${encodeURIComponent(interests)}` : ``}${sex ? `&sex=${encodeURIComponent(sex)}` : ``}${age ? `&age=${encodeURIComponent(age)}` : ``}`;

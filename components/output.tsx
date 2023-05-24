@@ -113,11 +113,11 @@ export default function Output({ session, updateSession, from, to, occasion, age
       setGiftSuggestions(processGiftSuggestions(valueGiftSuggestions));
 
     }
-  }, [value]);
+  }, [value,updateSession]);
   // generate code to parse the value for double quoted strings
   //  
-  const output = greeting ? <>Gift Suggestions: {giftSuggestions.map((suggest: GiftSuggestion) => {
-    return <div><AmazonIdeaSearch search={suggest.search} text={suggest.text} /></div>
+  const output = greeting ? <>Gift Suggestions: {giftSuggestions.map((suggest: GiftSuggestion,i:number) => {
+    return <AmazonIdeaSearch key={`amazon-idea-search-${i}`} search={suggest.search} text={suggest.text} />
   })}</> : null;
 
   return <div><ButtonContainer><Button loading={loading}><a onClick={async () => {

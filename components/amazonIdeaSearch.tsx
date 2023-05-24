@@ -1,7 +1,7 @@
 import React, { useState, FormEvent, useEffect } from "react";
 import { styled } from "styled-components";
-import { getAmazonSearch,Item } from "@/lib/api";
-import {Container,RichLink} from "./rich-link";
+import { getAmazonSearch, Item } from "@/lib/api";
+import { Container, RichLink } from "./rich-link";
 const Results = styled.div`
     display:flex;
     flex-direction:column;
@@ -19,20 +19,22 @@ const Result = styled.div`
     margin-right:15px;
     max-height:200px;
     `;
-const Text=styled.div`
+const Text = styled.div`
 `
-export default ({search,text}:{search:string,text:string}) => {
+const AmazonIdeaSearch = ({ search, text }: { search: string, text: string }) => {
     const [amazonSearch, setAmazonSearch] = useState(new Array<Item>());
-    useEffect( () => {
-        const res= getAmazonSearch({search}).then((res)=>setAmazonSearch(res));
-        }, [search]);
-    return (
-        <div>
-      
-        <Results><Text>{text}</Text><Container>{amazonSearch.map(s=>{
-            return <RichLink imageUrl={s.image} title={s.title} price={s.price} link={s.link}/>
-            
-        })}</Container></Results>
-        </div>
-    );
+    useEffect(() => {
+        const fetchData = async () => {
+            const res = await getAmazonSearch({ search });
+            setAmazonSearch(res)
+        }
+        fetchData();
+    }, [search]);
+    return <div>
+            <Results><Text>{text}</Text><Container>{amazonSearch.map((s, i) => {
+                return <RichLink key={`rich-link-${s.title}`} imageUrl={s.image} title={s.title} price={s.price} link={s.link} />
+
+            })}</Container></Results>
+        </div>;
 }
+export default AmazonIdeaSearch;
