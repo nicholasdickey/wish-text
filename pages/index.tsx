@@ -316,13 +316,14 @@ export default function Home({ from: startFrom, to: startTo, occasion: startOcca
                 <InputContainer>
                   <Label hasValue={occasion.length > 0}>Occasion</Label>
                   <Input type="text" value={occasion} onChange={onOccasionChange} />
-                  <HelpText>Required for a meaningful result. For example: "8th Birthday", "Sweet Sixteen", "Illness", "Death in the family", "Christmas", "Graduation"</HelpText>
+                  <HelpText>Required for a meaningful result. For example: &ldquo;8th Birthday&rdquo;, &ldquo;Sweet Sixteen&rdquo;, &ldquo;Illness&rdquo; &ldquo;Death in the family&rdquo;, &ldquo;Christmas&rdquo;, &ldquo;Graduation&ldquo;</HelpText>
+                
               
                 </InputContainer>
                 <InputContainer>
                   <Label hasValue={to.length > 0}>To (Recepient)</Label>
                   <Input type="text" value={to} onChange={onToChange} />
-                  <HelpText>For example: "8th Birthday", "Sweet Sixteen", "Illness", "Death in the family", "Christmas", "Graduation"</HelpText>
+                  <HelpText>Required for a meaningful result. For example: &ldquo;8th Birthday&rdquo;, &ldquo;Sweet Sixteen&rdquo;, &ldquo;Illness&rdquo; &ldquo;Death in the family&rdquo;, &ldquo;Christmas&rdquo;, &ldquo;Graduation&ldquo;</HelpText>
                 </InputContainer>
                 <InputContainer>
                   <Label hasValue={from.length > 0}>From</Label>
@@ -337,7 +338,7 @@ export default function Home({ from: startFrom, to: startTo, occasion: startOcca
                 <InputContainer>
                   <Label hasValue={reflections.length > 0}>Additional Gift Considerations</Label>
                   <Input type="text" value={interests} onChange={onInterestsChange} />
-                  <HelpText>For example: "a middle-aged woman, likes square dancing, horse riding, sparkling wine.", "a 16 year-old girl who likes music."</HelpText>
+                  <HelpText>For example: &ldquo;a middle-aged woman, likes square dancing, horse riding, sparkling wine.&rdquo;, &ldquo;a 16 year-old girl who likes music.&rdquo;</HelpText>
                 </InputContainer>
               </FormContainer>
               <Output session={session} updateSession2={updateSession2} from={from} to={to} age={age} occasion={occasion} reflections={reflections} interests={interests} />
