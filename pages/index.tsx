@@ -336,7 +336,7 @@ export default function Home({ from: startFrom, to: startTo, occasion: startOcca
                   <HelpText>Enter your full name</HelpText>
                 </InputContainer>
                 <InputContainer>
-                  <Label hasValue={reflections.length > 0}>Additional Gift Considerations</Label>
+                  <Label hasValue={interests.length > 0}>Additional Gift Considerations</Label>
                   <Input type="text" value={interests} onChange={onInterestsChange} />
                   <HelpText>For example: &ldquo;a middle-aged woman, likes square dancing, horse riding, sparkling wine.&rdquo;, &ldquo;a 16 year-old girl who likes music.&rdquo;</HelpText>
                 </InputContainer>
