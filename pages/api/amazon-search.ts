@@ -27,14 +27,17 @@ export default async (
 */
     let search:string = req.query.search as string;
     //const url=`https://www.amazon.com/s?k=${encodeURIComponent(search)}&ref=nb_sb_noss_2`;
-    const httpsAgent = new SocksProxyAgent(`socks5h://tor:9050`)
-    const client = axios.create({
+   // const httpsAgent = new SocksProxyAgent(`socks5h://tor:9050`)
+    /*const client = axios.create({
         baseURL: 'https://www.amazon.com/',
      
-      });
-    const url=`https://www.amazon.com/s?k=${encodeURIComponent(search)}&crid=J3J01A6F797V&sprefix=%2Caps%2C362&ref=nb_sb_ss_recent_1_0_recent`;
+      });*/
+    const url=`https://www.amazon.com/s?k=${search.replaceAll(' ','+')}&ref=nb_sb_noss_2`;
     l(chalk.greenBright("calling amazon search",url))
-    const response =  await axios.get(url);// await client.get(`s?k=${encodeURIComponent(search)}&crid=J3J01A6F797V&sprefix=%2Caps%2C362&ref=nb_sb_ss_recent_1_0_recent`);
+    const response =  await axios.get(url,{
+      headers:{
+      'User-Agent':'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:80.0) Gecko/20100101 Firefox/80.0'
+    }});// await client.get(`s?k=${encodeURIComponent(search)}&crid=J3J01A6F797V&sprefix=%2Caps%2C362&ref=nb_sb_ss_recent_1_0_recent`);
     l(chalk.greenBright("got amazon search",response.status,response.statusText,response.data.slice(0,100)))
     const $ = cheerio.load(response.data);
     const results = $('.s-result-item');

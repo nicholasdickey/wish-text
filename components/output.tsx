@@ -105,7 +105,7 @@ export default function Output({ session, updateSession2, from, to, occasion, ag
   const [loading, setLoading] = useState(false);
   const [greeting, setGreeting] = useState(session.greeting || '');
   const [giftSuggestions, setGiftSuggestions] = useState(session.giftSuggestions ? processGiftSuggestions(session.giftSuggestions) : Array<GiftSuggestion>());
-  
+  console.log("GREETING:",greeting,'value',value)
   // generate code to parse the value for double quoted strings
   //  
   const output = greeting ? <><GiftSuggesstionHeader><h1>Gift Suggestions:</h1></GiftSuggesstionHeader> {giftSuggestions.map((suggest: GiftSuggestion, i: number) => {
@@ -121,9 +121,10 @@ export default function Output({ session, updateSession2, from, to, occasion, ag
     setLoading(true);
     const result = await getWishText({ from, to, occasion, age, interests });
     setLoading(false);
-    console.log("result", result);
+    console.log("result", result,'value:' ,value);
     if (result != value) {
-      const valueParts = value.split("Gift Suggestions:");
+      console.log("setting value", result)
+      const valueParts = result.split("Gift Suggestions:");
       if(valueParts.length<2)
         return;
       setGreeting(valueParts[0]);
