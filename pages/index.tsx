@@ -1,15 +1,14 @@
-import { useState,useCallback } from "react"
+import { useState, useCallback } from "react"
 import { useRouter } from 'next/router'
 import {
   GetServerSidePropsContext,
-  GetServerSidePropsResult,
-
 } from "next";
+
 import Head from 'next/head'
 import axios from "axios";
 import Image from 'next/image'
 import { Inter } from 'next/font/google'
-//import styles from '@/styles/Home.module.css'
+
 import { styled } from 'styled-components';
 import GlobalStyle from '../components/globalstyles'
 import { ThemeProvider } from 'styled-components'
@@ -23,49 +22,50 @@ import Age from "../components/fields/age";
 import Sex from "../components/fields/sex";
 import Interests from "../components/fields/interests";
 import Output from "../components/output";
-import { start } from "repl";
 
-
-
+const Form = styled.form`
+  width:100%;
+  @media (min-width: 768px) {
+    margin-left:0px;
+    max-width: 800px;
+  }
+`;
 
 const Wrap = styled.div`
-display:flex;
-flex-direction:column;
-padding-left:20px;
-padding-right:20px;
-margin-left:30px;
-@media (min-width: 768px) {
-    margin-left:0px;
-}
+  display:flex;
+  flex-direction:column;
+  padding-left:20px;
+  padding-right:20px;
+  align-items:center;
 
+  @media (min-width: 768px) {
+      margin-left:0px;    
+  }
 `;
+
 const FullPageContainer = styled.div`
   //height: 100vh;
   //width: 100vw;
- // background: linear-gradient(to bottom, #000080, #000033);
+  //background: linear-gradient(to bottom, #000000, #333333);
+  
   display: flex;
   width: 100%;
 
   justify-content: center;
   align-items: center;
   padding: 0 20px;
-  @media(min-width: 900px) {
-    
+
+  @media(min-width: 900px) {    
     padding: 0 40px;
   }
-  @media(min-width: 1200px) {
-   
+  @media(min-width: 1200px) { 
     padding: 0 80px;
   }
-  @media(min-width: 2400px) {
-   
+  @media(min-width: 2400px) { 
     padding: 0 200px;
   }
 `;
-const ContentDiv = styled.div`
-  /* Styles for the centered div */
-  color: white;
-`;
+
 const ContentTop = styled.div`
   /* Styles for the centered div */
   color: white;
@@ -94,41 +94,41 @@ const ContentTop = styled.div`
 const TopContainer = styled.div`
   color: white;
   width:100%;
- 
   display: flex;
   justify-content: center;
   align-items: center;
- // margin-left:auto;
+  // margin-left:auto;
   //margin-right:auto;
- 
   `;
+
 const Hr = styled.hr`
-margin-bottom:40px;
+  margin-bottom:40px;
 `;
 const roboto = Roboto({ subsets: ['latin'], weight: ['300', '400', '700'], style: ['normal', 'italic'] })
 
 const inter = Inter({ subsets: ['latin'] })
 
-export default function Home({ from:startFrom, to:startTo, occasion:startOccasion, interests:startInterests, age:startAge, sex:startSex, session: startSession }: { from: string, to: string, occasion: string, age: string, sex: string, interests: string, session: Options }) {
-  //  const session = { dark: 1 };
+export default function Home({ from: startFrom, to: startTo, occasion: startOccasion, interests: startInterests, age: startAge, sex: startSex, session: startSession }: { from: string, to: string, occasion: string, age: string, sex: string, interests: string, session: Options }) {
+
   const [session, setSession] = useState(startSession);
   const [theme, setTheme] = useState(session.dark != -1 ? session.dark == 1 ? 'dark' : 'light' : "unknown")
-  const [loading, setLoading] = useState("");
-  const [occasion,setOccasion]=useState(startOccasion);
-  const [age,setAge]=useState(startAge);
-  const [sex,setSex]=useState(startSex);
-  const [from,setFrom]=useState(startFrom);
-  const [to,setTo]=useState(startTo);
-  const [interests,setInterests]=useState(startInterests);
-  const router = useRouter();
  
+  const [occasion, setOccasion] = useState(startOccasion);
+  const [age, setAge] = useState(startAge);
+  const [sex, setSex] = useState(startSex);
+  const [from, setFrom] = useState(startFrom);
+  const [to, setTo] = useState(startTo);
+  const [interests, setInterests] = useState(startInterests);
+  const router = useRouter();
+
   //saves the changes to the session on the local web server. 
-  const updateSession = useCallback((updSession: object) => {
+  const updateSession2 = useCallback(async (updSession: object) => {
     const assigned = { ...Object.assign(session, updSession) }
+    console.log('===>pdate session:', assigned);
     setSession(assigned);
-    axios.post(`/api/session/save`, { session: updSession });
-  }, [session]);
-  
+    await axios.post(`/api/session/save`, { session: updSession });
+  },[]);
+
   const updateRoute = ({ to, from, occasion, interests, sex, age }: { to: string, from: string, occasion: string, interests: string, sex: string, age: string }) => {
     const params = `/?occasion=${encodeURIComponent(occasion)}${to ? `&to=${encodeURIComponent(to)}` : ``}${from ? `&from=${encodeURIComponent(from)}` : ``}${interests ? `&interests=${encodeURIComponent(interests)}` : ``}${sex ? `&sex=${encodeURIComponent(sex)}` : ``}${age ? `&age=${encodeURIComponent(age)}` : ``}`;
     router.push(params, params, { shallow: true })
@@ -158,7 +158,7 @@ export default function Home({ from:startFrom, to:startTo, occasion:startOccasio
       age: opt.label != '0' ? opt.label : ""
     })
 
-    setAge(opt.label!='0'?opt.label:"");
+    setAge(opt.label != '0' ? opt.label : "");
   }
   const onFromChange = (opt: any) => {
     console.log(opt.value);
@@ -227,19 +227,18 @@ export default function Home({ from:startFrom, to:startTo, occasion:startOccasio
           <GlobalStyle />
           <FullPageContainer>
             <div>
-
               <TopContainer><ContentTop>FREE WISH TEXT GENERATOR</ContentTop></TopContainer><Hr />
-              <ContentDiv>
-                <Wrap>
+              <Wrap>
+                <Form>
                   <Occasion value={occasion} onChange={onOccasionChange} />
                   <To value={to} onChange={onToChange} />
-                  <From value= {from} onChange={onFromChange} />
+                  <From value={from} onChange={onFromChange} />
                   <Age value={age} onChange={onAgeChange} disable={occasion != 'Birthday'} />
-                  <Sex value={age} onChange={onSexChange}  />
+                  <Sex value={age} onChange={onSexChange} />
                   <Interests value={interests} onChange={onInterestsChange} />
-                  <Output session={session} updateSession={updateSession} from={from} to={to} age={age} occasion={occasion} interests={interests} /></Wrap>
-              </ContentDiv>
-
+                </Form>
+                <Output session={session} updateSession2={updateSession2} from={from} to={to} age={age} occasion={occasion} interests={interests} />
+              </Wrap>
             </div>
           </FullPageContainer>
         </ThemeProvider>
@@ -270,7 +269,7 @@ export const getServerSideProps = withSessionSsr(
         await context.req.session.save();
       }
       let options: Options = startoptions;
-      console.log("SSR:",options.giftSuggestions)
+      console.log("SSR:", options.giftSuggestions)
       return {
         props: {
           from: from,

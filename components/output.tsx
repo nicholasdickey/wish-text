@@ -66,6 +66,10 @@ const Button = styled.button<LoadingProps>`
   
 }
 `;
+const GiftSuggesstionHeader = styled.div`
+text-align:center;
+margin-bottom:30px;
+`
 function splitStringByNumberedSentences(input: string): string[] {
   const regex = /^\d+\.(.*?\.)/gm;
   const matches = input.match(regex);
@@ -96,27 +100,17 @@ const processGiftSuggestions = (valueGiftSuggestions: string) => {
     return { text: giftSuggestion, search: extractDoubleQuotedPart(giftSuggestion) };
   });
 }
-export default function Output({ session, updateSession, from, to, occasion, age, interests }: { session: Options, updateSession: any, from: string, to: string, occasion: string, age: string, interests: string }) {
+export default function Output({ session, updateSession2, from, to, occasion, age, interests }: { session: Options, updateSession2: any, from: string, to: string, occasion: string, age: string, interests: string }) {
   const [value, setValue] = useState('');
   const [loading, setLoading] = useState(false);
   const [greeting, setGreeting] = useState(session.greeting || '');
   const [giftSuggestions, setGiftSuggestions] = useState(session.giftSuggestions ? processGiftSuggestions(session.giftSuggestions) : Array<GiftSuggestion>());
-  useEffect(() => {
-    if (value) {
-      const valueParts = value.split("Gift Suggestions:");
-      setGreeting(valueParts[0]);
-   
-
-      const valueGiftSuggestions = valueParts[1];
-      updateSession({ greeting: valueParts[0] ,giftSuggestions: valueGiftSuggestions });
-
-      setGiftSuggestions(processGiftSuggestions(valueGiftSuggestions));
-
-    }
-  }, [value,updateSession]);
+  
   // generate code to parse the value for double quoted strings
   //  
-  const output = greeting ? <>Gift Suggestions: {giftSuggestions.map((suggest: GiftSuggestion,i:number) => {
+  const output = greeting ? <><GiftSuggesstionHeader><h1>Gift Suggestions:</h1></GiftSuggesstionHeader> {giftSuggestions.map((suggest: GiftSuggestion, i: number) => {
+    if (i >0)
+      return null;
     return <AmazonIdeaSearch key={`amazon-idea-search-${i}`} search={suggest.search} text={suggest.text} />
   })}</> : null;
 
@@ -128,10 +122,18 @@ export default function Output({ session, updateSession, from, to, occasion, age
     const result = await getWishText({ from, to, occasion, age, interests });
     setLoading(false);
     console.log("result", result);
-    setValue(result);
+    if (result != value) {
+      const valueParts = value.split("Gift Suggestions:");
+      if(valueParts.length<2)
+        return;
+      setGreeting(valueParts[0]);
+      const valueGiftSuggestions = valueParts[1];
+      updateSession2({ greeting: valueParts[0], giftSuggestions: valueGiftSuggestions });
+      setGiftSuggestions(processGiftSuggestions(valueGiftSuggestions));
+      setValue(result);
+    }
   }}>{value ? 'Try again' : 'Generate'}!</a></Button></ButtonContainer><Container><InnerOutput>
     <ReactMarkdown rehypePlugins={[rehypeRaw]} >{loading ? 'Generating...' : greeting}</ReactMarkdown>
-
   </InnerOutput> <InnerGifts>{output}</InnerGifts></Container></div>
 
 }

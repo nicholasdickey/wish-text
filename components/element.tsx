@@ -12,7 +12,7 @@ const ElementContainer = styled.div`
 const Element= ({value,options,onChange,disable}:{value:string, options:{value:string,label:string}[],onChange:any,disable?:boolean})=> {
     const [opened,setOpened] = useState(false);
     //  const [choice,setChoice] = useState(choices[0]);
-    console.log("value",value,"options",options);
+   // console.log("value",value,"options",options);
     return (
       <>
   <ElementContainer><CreatableSelect  value = {

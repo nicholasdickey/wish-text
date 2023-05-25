@@ -22,7 +22,7 @@ export interface Item {
     link: string;
 }
 export const getAmazonSearch = async ({ search }: { search: string }) => {
-    const url=`${process.env.NEXT_PUBLIC_LAKEAPI}/api/v1/affiliate/amazon-search?search=${encodeURIComponent(search)}`;
+    const url=`/api/amazon-search?search=${encodeURIComponent(search)}`;
     console.log("url:", url);
     const res = await axios.get(url);
     return res.data.items as Item[];
