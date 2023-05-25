@@ -40,10 +40,10 @@ const RichLinkContainer = styled.a`
   }
   @media(min-width: 1200px) {
    
-    width:480px;
+    width:420px;
   }
   @media(min-width: 2400px) {
-    width:600px;
+    width:480px;
   }
 `;
 
@@ -56,7 +56,7 @@ const Image = styled.img`
   left:0;
   top:0;
   height:100px;
-  min-width:100px;
+  width:100px;
   //margin:10px;
   border-left: 2px solid #ccc;
   border-radius: 50%;

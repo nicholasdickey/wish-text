@@ -112,7 +112,7 @@ const TopContainer = styled.div`
 
 const Hr = styled.hr`
   width: 100%;
-  margin-bottom:20px;
+  margin-bottom:40px;
 `;
 
 
