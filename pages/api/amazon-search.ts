@@ -2,7 +2,7 @@
 import cheerio from "whacko"
 import axios from "axios";
 import type { NextApiRequest, NextApiResponse } from "next"
-import { SocksProxyAgent } from "socks-proxy-agent"
+
 //import NextCors from 'nextjs-cors';
 //import { getRedisClient } from "../../../../lib/redis";
 import { l, chalk, js, sleep,allowLog } from "../../lib/common";
@@ -32,6 +32,7 @@ export default async (
         baseURL: 'https://www.amazon.com/',
      
       });*/
+    js(chalk.yellowBright("===>calling amazon search",search))  
     const url=`https://www.amazon.com/s?k=${search.replaceAll(' ','+')}&ref=nb_sb_noss_2`;
     l(chalk.greenBright("calling amazon search",url))
     const response =  await axios.get(url,{
@@ -50,7 +51,7 @@ export default async (
     let items = new Array<Item>();
     results.each((i:any, el:any) => {
         const title = truncateString( $(el).find('h2').text(),96);
-        const price = $(el).find('.a-price-symbol').text()+$(el).find('.a-price-whole').text()+'.'+$(el).find('.a-price-fraction').text();
+        const price = $(el).find('.a-price-symbol').first().text()+$(el).find('.a-price-whole').first().text()+$(el).find('.a-price-fraction').first().text();
         const image = $(el).find('img').attr('src');
         const link = `https://amazon.com`+$(el).find('a').attr('href')+'&tag=qwiket-20';
         items.push({ title, price, image, link });
@@ -59,6 +60,6 @@ export default async (
     // remove items over 3
    
     items=items.filter(i=>i.title && i.price && i.image && i.link);
-    items=items.slice(0,4);
+    items=items.slice(0,6);
     return res.status(200).json({ items })
 }

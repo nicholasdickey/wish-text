@@ -1,7 +1,7 @@
 import React,{useState,FormEvent} from "react";
 import { styled } from "styled-components";
 import Element from "../element";
-import Text from "../text";
+import {Label,Input} from "../text";
 import LineContainer from "../line-container";
 const targets= [
     { value: "son", label: "Son" },
@@ -14,14 +14,11 @@ const targets= [
     { value: "nephew", label: "Nephew" },
     { value: "grandson", label: "Grandson" },
     { value: "granddaughter", label: "Granddaughter" },
-    
-
-    
    
   ];
 
-export default function Input({value,onChange}:{value:string,onChange:any}) {
+export default function To({value,onChange}:{value:string,onChange:any}) {
 
-return <LineContainer><Text>*To </Text><Element  value={value} options={targets} onChange={onChange}/></LineContainer>
+return <LineContainer><Label>To </Label><Input type="text" id="to" name="to" required onChange={onChange} value={value}/>{false?<Element  value={value} options={targets} onChange={onChange}/>:null}</LineContainer>
 
 }

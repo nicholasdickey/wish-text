@@ -22,12 +22,27 @@ const Result = styled.div`
     max-height:200px;
     `;
 const Text = styled.div`
-    width:600px;
-    background-color:#262644;
+  // width:400px;
+    width: 400px;
+
+  @media(min-width: 600px) {
+    //font-size:34px;
+    width:500px;
+  }
+  @media(min-width: 900px) {
+    
+    width:680px;
+  }
+  @media(min-width: 1200px) {
+    width:800px;
+  }
+   // background-color:#262644;
     padding:40px;
     margin-left:auto;
     margin-right:auto;
+    font-size:14px;
     border-radius:10px;
+    margin-top:20px;
 `
 const AmazonIdeaSearch = ({ search, text }: { search: string, text: string }) => {
     let { data: amazonSearch, error }= useSWRImmutable({search},getAmazonSearch);

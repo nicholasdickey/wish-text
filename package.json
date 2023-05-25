@@ -33,5 +33,11 @@
     "typescript": "5.0.4",
     "use-event-hook": "^2.0.1",
     "whacko": "^0.19.1"
+  },
+  "devDependencies": {
+    "@types/styled-components": "^5.1.26"
+  },
+  "resolutions": {
+    "styled-components": "^5"
   }
 }
