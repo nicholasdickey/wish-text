@@ -2,17 +2,46 @@ import axios from 'axios';
 import { Options } from './with-session';
 
 
-export const getWishText = async ({ from, to, occasion, reflections, interests, age, fresh }: { from: string, to: string, occasion: string, reflections: string, interests: string, age: string, fresh?: boolean }) => {
+export const getWishText = async ({ style, from, to, occasion, reflections,  fresh }: { style: string, from: string, to: string, occasion: string, reflections: string, fresh?: boolean }) => {
+    from = encodeURIComponent(from || '');
+    to = encodeURIComponent(to || '');
+    occasion = encodeURIComponent(occasion || '');
+    reflections = encodeURIComponent(reflections || '');
+    style = encodeURIComponent(style || '');
+    fresh = fresh || false;
+
+    if (!from && !to && !occasion)
+        return '';
+    let url = `${process.env.NEXT_PUBLIC_LAKEAPI}/api/v1/openai/wish-text?from=${from}&to=${to}&occasion=${occasion}&reflections=${reflections}&style=${style}${fresh ? '&fresh=1' : ''}`;
+    console.log("url:", url);
+    let recovery = '';
+    while (true) {
+        try {
+            if (recovery && recovery.length > 0) {
+                url = url + recovery;
+            }
+            const res = await axios.get(url);
+            return res.data.result;
+        } catch (x) {
+            console.log("SLEEP", x);
+            await new Promise(r => setTimeout(r, 1000));
+            recovery = '&recovery=1';
+        }
+    }
+}
+export const getGiftsText = async ({ from, to, occasion, reflections, interests, fresh }: { from: string, to: string, occasion: string, reflections: string, interests: string, fresh?: boolean }) => {
     from = encodeURIComponent(from || '');
     to = encodeURIComponent(to || '');
     occasion = encodeURIComponent(occasion || '');
     reflections = encodeURIComponent(reflections || '');
     interests = encodeURIComponent(interests || '');
-    age = encodeURIComponent(age || '');
+
+
+
     fresh = fresh || false;
-    if (!from && !to && !occasion && !interests && !age)
+    if (!from && !to && !occasion && !interests)
         return '';
-    let url = `${process.env.NEXT_PUBLIC_LAKEAPI}/api/v1/openai/wish-text?from=${from}&to=${to}&occasion=${occasion}&reflections=${reflections}&interests=${interests}&age=${age}${fresh ? '&fresh=1' : ''}`;
+    let url = `${process.env.NEXT_PUBLIC_LAKEAPI}/api/v1/openai/gifts-text?from=${from}&to=${to}&occasion=${occasion}&reflections=${reflections}&interests=${interests}${fresh ? '&fresh=1' : ''}`;
     console.log("url:", url);
     let recovery = '';
     while (true) {
@@ -36,7 +65,7 @@ export interface Item {
     link: string;
 }
 export const getAmazonSearch = async ({ search }: { search: string }) => {
-    if(!search) return [];
+    if (!search) return [];
     const url = `/api/amazon-search?search=${encodeURIComponent(search)}`;
     console.log("url:", url);
     const res = await axios.get(url);

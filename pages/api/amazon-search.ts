@@ -32,7 +32,7 @@ export default async (
         baseURL: 'https://www.amazon.com/',
      
       });*/
-    js(chalk.yellowBright("===>calling amazon search",search))  
+  js(chalk.yellowBright("===>calling amazon search",search))  
     const url=`https://www.amazon.com/s?k=${search.replaceAll(' ','+')}&ref=nb_sb_noss_2`;
     l(chalk.greenBright("calling amazon search",url))
     const response =  await axios.get(url,{
@@ -55,7 +55,7 @@ export default async (
         const image = $(el).find('img').attr('src');
         const link = `https://amazon.com`+$(el).find('a').attr('href')+'&tag=qwiket-20';
         items.push({ title, price, image, link });
-        l(chalk.bgGreenBright.whiteBright(js({ title, price, image, link })));
+      //  l(chalk.bgGreenBright.whiteBright(js({ title, price, image, link })));
     });
     // remove items over 3
    

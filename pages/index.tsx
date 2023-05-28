@@ -15,28 +15,11 @@ import { ThemeProvider } from 'styled-components'
 import { palette } from '../lib/palette';
 import { Roboto } from '@next/font/google';
 import { withSessionSsr, Options } from '../lib/with-session';
-import Occasion from "../components/fields/occasion";
-import Reflections from "../components/fields/reflections";
-import From from "../components/fields/from";
-import To from "../components/fields/to";
-import Age from "../components/fields/age";
-import Sex from "../components/fields/sex";
-import Interests from "../components/fields/interests";
-import Output from "../components/output";
 
-const Form = styled.form`
-  //width:100%;
-  
-  @media (min-width: 768px) {
-    margin-left:0px;
-    width: 800px;
-   
-  }
-  display: grid;
-  gap: 10px;
-  //width: 400px;
-  margin: 0 auto;
-`;
+import GreetingOutput from "../components/output";
+import GiftsOutput from "../components/gifts";
+import FormField from "../components/form-field";
+
 
 const Wrap = styled.div`
   display:flex;
@@ -81,16 +64,11 @@ const ContentTop = styled.div`
   margin-top:20px;
   margin-bottom:10px;
  
-  //display: flex;
-  //justify-content: ;
-  //margin-right:auto;
-  //width:100%
   font-size:19px;
-//  width:280px;
+
   
   @media(min-width: 900px) {
     font-size:34px;
-    //width:480px;
   }
   @media(min-width: 1200px) {
     font-size:49px;
@@ -132,7 +110,7 @@ interface LabelProps {
 const Label = styled.label<LabelProps>`
   position: absolute;
   top: ${(props) => (props.hasValue ? '-12px' : '12px')};
-  left: ${(props) => (props.hasValue ? '-12px' : '12px')};
+  left: ${(props) => (props.hasValue ? '0px' : '12px')};
   color: ${(props) => (props.hasValue ? '#888' : '#555')};
   transition:  top 0.2s, font-size 0.2s, color 0.2s;
   pointer-events: none;
@@ -163,18 +141,16 @@ const HelpText = styled.p`
 `;
 
 const roboto = Roboto({ subsets: ['latin'], weight: ['300', '400', '700'], style: ['normal', 'italic'] })
+  
 
-const inter = Inter({ subsets: ['latin'] })
-
-export default function Home({ from: startFrom, to: startTo, occasion: startOccasion, reflections: startReflections, interests: startInterests, age: startAge, sex: startSex, session: startSession }: { from: string, to: string, occasion: string, reflections: string, age: string, sex: string, interests: string, session: Options }) {
+export default function Home({ from: startFrom, to: startTo, occasion: startOccasion, reflections: startReflections, interests: startInterests,session: startSession }: { from: string, to: string, occasion: string, reflections: string, interests: string, session: Options }) {
 
   const [session, setSession] = useState(startSession);
   const [theme, setTheme] = useState(session.dark != -1 ? session.dark == 1 ? 'dark' : 'light' : "unknown")
 
   const [occasion, setOccasion] = useState(startOccasion);
   const [reflections, setReflections] = useState(startReflections);
-  const [age, setAge] = useState(startAge);
-  const [sex, setSex] = useState(startSex);
+
   const [from, setFrom] = useState(startFrom);
   const [to, setTo] = useState(startTo);
   const [interests, setInterests] = useState(startInterests);
@@ -188,8 +164,8 @@ export default function Home({ from: startFrom, to: startTo, occasion: startOcca
     await axios.post(`/api/session/save`, { session: updSession });
   }, []);
 
-  const updateRoute = ({ to, from, occasion, reflections, interests, sex, age }: { to: string, from: string, occasion: string, reflections: string, interests: string, sex: string, age: string }) => {
-    const params = `/?occasion=${encodeURIComponent(occasion)}${reflections ? `&reflections=${encodeURIComponent(reflections)}` : ``}${to ? `&to=${encodeURIComponent(to)}` : ``}${from ? `&from=${encodeURIComponent(from)}` : ``}${interests ? `&interests=${encodeURIComponent(interests)}` : ``}${sex ? `&sex=${encodeURIComponent(sex)}` : ``}${age ? `&age=${encodeURIComponent(age)}` : ``}`;
+  const updateRoute = ({ to, from, occasion, reflections, interests }: { to: string, from: string, occasion: string, reflections: string, interests: string}) => {
+    const params = `/?occasion=${encodeURIComponent(occasion)}${reflections ? `&reflections=${encodeURIComponent(reflections)}` : ``}${to ? `&to=${encodeURIComponent(to)}` : ``}${from ? `&from=${encodeURIComponent(from)}` : ``}${interests ? `&interests=${encodeURIComponent(interests)}` : ``}`;
     router.push(params, params, { shallow: true })
   }
   const onOccasionChange = (event: any) => {
@@ -201,8 +177,6 @@ export default function Home({ from: startFrom, to: startTo, occasion: startOcca
       occasion: value,
       reflections,
       interests,
-      sex,
-      age
     })
     setOccasion(value);
   }
@@ -215,27 +189,11 @@ export default function Home({ from: startFrom, to: startTo, occasion: startOcca
       occasion,
       reflections: value,
       interests,
-      sex,
-      age
     })
     setReflections(value);
   }
 
-  const onAgeChange = (opt: any) => {
-
-    console.log(opt.value);
-    updateRoute({
-      from,
-      to,
-      occasion,
-      reflections,
-      interests,
-      sex,
-      age: opt.label != '0' ? opt.label : ""
-    })
-
-    setAge(opt.label != '0' ? opt.label : "");
-  }
+  
   const onFromChange = (event: any) => {
     const value = event.target.value;
     console.log(value);
@@ -245,8 +203,7 @@ export default function Home({ from: startFrom, to: startTo, occasion: startOcca
       occasion,
       reflections,
       interests,
-      sex,
-      age
+      
     })
 
     setFrom(value);
@@ -260,8 +217,7 @@ export default function Home({ from: startFrom, to: startTo, occasion: startOcca
       occasion,
       reflections,
       interests,
-      sex,
-      age
+      
     })
     setTo(value);
   }
@@ -274,24 +230,11 @@ export default function Home({ from: startFrom, to: startTo, occasion: startOcca
       occasion,
       reflections,
       interests: value,
-      sex,
-      age
+     
     })
     setInterests(value);
   }
-  const onSexChange = (opt: any) => {
-    console.log(opt.value);
-    updateRoute({
-      from,
-      to,
-      occasion,
-      reflections,
-      interests,
-      sex: opt.label,
-      age
-    })
-    setSex(opt.label);
-  }
+ 
 
   console.log("occasion", occasion);
 
@@ -313,35 +256,15 @@ export default function Home({ from: startFrom, to: startTo, occasion: startOcca
             <TopContainer><ContentTop>FREE WISH TEXT GENERATOR</ContentTop></TopContainer><Hr />
             <Wrap>
               <FormContainer>
-                <InputContainer>
-                  <Label hasValue={occasion.length > 0}>Occasion</Label>
-                  <Input type="text" value={occasion} onChange={onOccasionChange} />
-                  <HelpText>Required for a meaningful result. For example: &ldquo;8th Birthday&rdquo;, &ldquo;Sweet Sixteen&rdquo;, &ldquo;Illness&rdquo; &ldquo;Death in the family&rdquo;, &ldquo;Christmas&rdquo;, &ldquo;Graduation&ldquo;</HelpText>
+                <FormField value={occasion} label="Occasion"  onChange={onOccasionChange} help="Required for a meaningful result. For example: &ldquo;8th Birthday&rdquo;, &ldquo;Sweet Sixteen&rdquo;, &ldquo;Illness&rdquo; &ldquo;Death in the family&rdquo;, &ldquo;Christmas&rdquo;, &ldquo;Graduation&ldquo;"/>
+                <FormField value={to} label="To (Recepient)" onChange={onToChange} help="Examples: &ldquo;Our nephew Billy&rdquo;, &ldquo;My Grandson Evan&rdquo;, &ldquo;My Love&rdquo; &ldquo;Love of My Life&rdquo;, &ldquo;Simpsons&rdquo;, &ldquo;Mr Williams, the postman.&ldquo;"/>  
+                <FormField value={from} label="From" onChange={onFromChange} help="Optional: who is the greeting from? For example - Grandma and Grandpa, Your Dad, etc."/>
+                <FormField value={reflections} label="Additional Reflections and Thoughts" onChange={onReflectionsChange} help="Any thoughts that you have about what should be reflected in the greeting."/>
                 
               
-                </InputContainer>
-                <InputContainer>
-                  <Label hasValue={to.length > 0}>To (Recepient)</Label>
-                  <Input type="text" value={to} onChange={onToChange} />
-                  <HelpText>Required for a meaningful result. For example: &ldquo;8th Birthday&rdquo;, &ldquo;Sweet Sixteen&rdquo;, &ldquo;Illness&rdquo; &ldquo;Death in the family&rdquo;, &ldquo;Christmas&rdquo;, &ldquo;Graduation&ldquo;</HelpText>
-                </InputContainer>
-                <InputContainer>
-                  <Label hasValue={from.length > 0}>From</Label>
-                  <Input type="text" value={from} onChange={onFromChange} />
-                  <HelpText>Enter your full name</HelpText>
-                </InputContainer>
-                <InputContainer>
-                  <Label hasValue={reflections.length > 0}>Additional Reflections and Thoughts</Label>
-                  <Input type="text" value={reflections} onChange={onReflectionsChange} />
-                  <HelpText>Enter your full name</HelpText>
-                </InputContainer>
-                <InputContainer>
-                  <Label hasValue={interests.length > 0}>Additional Gift Considerations</Label>
-                  <Input type="text" value={interests} onChange={onInterestsChange} />
-                  <HelpText>For example: &ldquo;a middle-aged woman, likes square dancing, horse riding, sparkling wine.&rdquo;, &ldquo;a 16 year-old girl who likes music.&rdquo;</HelpText>
-                </InputContainer>
               </FormContainer>
-              <Output session={session} updateSession2={updateSession2} from={from} to={to} age={age} occasion={occasion} reflections={reflections} interests={interests} />
+              <GreetingOutput session={session} updateSession2={updateSession2} from={from} to={to} occasion={occasion} reflections={reflections}  />
+              <GiftsOutput session={session} updateSession2={updateSession2} from={from} to={to} occasion={occasion} reflections={reflections} interests={interests} onInterestsChange={onInterestsChange} />
             </Wrap>
 
           </FullPageContainer>
