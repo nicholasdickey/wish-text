@@ -46,7 +46,7 @@ const ButtonContainer = styled.div`
     width:100%;
     `
 interface LoadingProps {
-  loading: boolean;
+    loading: boolean;
 }
 const Button = styled.button<LoadingProps>`
   background:#048080;
@@ -79,7 +79,7 @@ const GeneratingPlaceholder = styled.div`
   margin:80px;
   `;
 
-  const FormContainer = styled.div`
+const FormContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -87,95 +87,106 @@ const GeneratingPlaceholder = styled.div`
 `;
 
 function splitStringByNumberedSentences(input: string): string[] {
-  //const regex = /^\d+\.(.*?\.)/gm;
-  const regex = /^\d+\.(.*)$/gm;
-  const matches = input.match(regex);
+    //const regex = /^\d+\.(.*?\.)/gm;
+    const regex = /^\d+\.(.*)$/gm;
+    const matches = input.match(regex);
 
-  if (!matches) {
-    return [];
-  }
+    if (!matches) {
+        return [];
+    }
 
-  return matches.map((match) => match.trim());
+    return matches.map((match) => match.trim());
 }
 function extractDoubleQuotedPart(input: string): string {
-  console.log("extractDoubleQuotedPart", input, "input")
-  const regex = /"([^"]*)"/;
-  const match = input.match(regex);
+    console.log("extractDoubleQuotedPart", input, "input")
+    const regex = /"([^"]*)"/;
+    const match = input.match(regex);
 
-  if (match && match.length >= 2) {
-    console.log("match[1]", match[1])
-    return match[1];
-  }
+    if (match && match.length >= 2) {
+        console.log("match[1]", match[1])
+        return match[1];
+    }
 
-  return "";
+    return "";
 }
 interface GiftSuggestion {
-  text: string;
-  search: string;
+    text: string;
+    search: string;
 }
 const processGiftSuggestions = (valueGiftSuggestions: string) => {
-  const giftSuggestionsParts = splitStringByNumberedSentences(valueGiftSuggestions);
+    const giftSuggestionsParts = splitStringByNumberedSentences(valueGiftSuggestions);
 
-  return giftSuggestionsParts.map((giftSuggestion, index) => {
-    giftSuggestion = giftSuggestion.replaceAll("Amazon search:", "");
-    return { text: giftSuggestion, search: extractDoubleQuotedPart(giftSuggestion) };
-  });
+    return giftSuggestionsParts.map((giftSuggestion, index) => {
+        giftSuggestion = giftSuggestion.replaceAll("Amazon search:", "");
+        return { text: giftSuggestion, search: extractDoubleQuotedPart(giftSuggestion) };
+    });
 }
 
-export default function Output({ loadReady,session, updateSession2, from, to, occasion, reflections,interests,onInterestsChange }: { loadReady:boolean,session: Options, updateSession2: any, from: string, to: string, occasion: string, reflections: string, interests: string,onInterestsChange:any }) {
-  const [value, setValue] = useState('');
-  const [loading, setLoading] = useState(false);
+export default function Output({ loadReady, session, updateSession2, from, to, occasion, reflections, interests, onInterestsChange }: { loadReady: boolean, session: Options, updateSession2: any, from: string, to: string, occasion: string, reflections: string, interests: string, onInterestsChange: any }) {
+    const [value, setValue] = useState('');
+    const [loading, setLoading] = useState(false);
 
 
- 
-  const [giftSuggestions, setGiftSuggestions] = useState(session.giftSuggestions ? processGiftSuggestions(session.giftSuggestions) : Array<GiftSuggestion>());
-  console.log("GREETING:",value, 'giftSuggestions', giftSuggestions);
-  // generate code to parse the value for double quoted strings
-  //  
-  const output = loadReady ? <><GiftSuggesstionHeader><h1>Gift Suggestions:</h1></GiftSuggesstionHeader><div> {giftSuggestions.map((suggest: GiftSuggestion, i: number) => {
-    // if (i >0)
-    //   return null;
-    return <AmazonIdeaSearch key={`amazon-idea-search-${i}`} search={suggest.search} text={suggest.text} />
-  })}</div></> : null;
-  
- 
-  return <OuterWrap>
-    <FormContainer>
-    <FormField value={interests} label="Additional Gift Considerations" onChange={onInterestsChange} help="For example: &ldquo;a middle-aged woman, likes square dancing, horse riding, sparkling wine.&rdquo;, &ldquo;a 16 year-old girl who likes music.&rdquo; &ldquo; Christian familiy man, loves fishing and hunting&ldquo;"/>
 
+    const [giftSuggestions, setGiftSuggestions] = useState(session.giftSuggestions ? processGiftSuggestions(session.giftSuggestions) : Array<GiftSuggestion>());
+    console.log("GIFT SUGGESTIONS:", value, 'giftSuggestions', giftSuggestions);
+    // generate code to parse the value for double quoted strings
+    //  
+    const output = !loading&&value ? <><GiftSuggesstionHeader><h1>Gift Suggestions:</h1></GiftSuggesstionHeader><div> {giftSuggestions.map((suggest: GiftSuggestion, i: number) => {
+        // if (i >0)
+        //   return null;
+        console.log("suggest", suggest, 'i', i)
+        return <AmazonIdeaSearch key={`amazon-idea-search-${i}`} search={suggest.search} text={suggest.text} />
+    })}</div></> : null;
+    console.log("generated output",output)
+    useEffect(() => {
+        console.log("INSIDE LOAD EFFECT",loadReady, value)
+        if (loadReady && !value){
+            console.log("calling load   ")
+            load();
+        }
+    }, [from, to, occasion, reflections, interests, loadReady, value]);
+    const load = async () => {
+        console.log("calling GIFT api with", from, to, occasion, reflections, interests);
+        setLoading(true);
+        const result = await getGiftsText({ from, to, occasion, reflections, interests, fresh: value ? true : false });
+        setLoading(false);
+        console.log("result", result, 'value:', value);
+        if (result != value) {
+            console.log("setting value", result)
 
-    {interests?<ButtonContainer><Button loading={loading}><a onClick={async () => {
-    
-    if (loading)
-      return;
-    console.log("calling api with", from, to, occasion, reflections,  interests);
-    setLoading(true);
-    const result = await getGiftsText({from, to, occasion, reflections, interests, fresh: value ? true : false });
-    setLoading(false);
-    console.log("result", result, 'value:', value);
-    if (result != value) {
-      console.log("setting value", result)
-      
-     // setGiftsText(result);
-      const valueGiftSuggestions = result;
-      updateSession2({ giftSuggestions: valueGiftSuggestions });
-      console.log("Gift Button returned", { giftSuggestions: valueGiftSuggestions })
+            // setGiftsText(result);
+            const valueGiftSuggestions = result;
+            updateSession2({ giftSuggestions: valueGiftSuggestions });
+            console.log("Gift Button returned", { giftSuggestions: valueGiftSuggestions })
 
-      setGiftSuggestions(processGiftSuggestions(value));
-      console.log("setting after processGiftSuggestions", processGiftSuggestions(value));
-      setValue(result);
+            setGiftSuggestions(processGiftSuggestions(valueGiftSuggestions));
+            console.log("setting after processGiftSuggestions", processGiftSuggestions(valueGiftSuggestions));
+            setValue(result);
+        }
     }
-  }}>{value ? 'Re-generate Gifts Suggestions' : 'Update Gift Suggestions'}!</a></Button>
-  
-  
-  </ButtonContainer>:null}
-  </FormContainer>
-    <Container>
-     
-     
-      {loading ? <GeneratingPlaceholder>We are generating the gift suggestions for you. Unfortunately, the AI is an expensive, and a limited availability resource, and it takes time.</GeneratingPlaceholder> :
-       <InnerGifts>{output}</InnerGifts>}
+    console.log("ready to display",output);
+    return <OuterWrap>
+        {value ?  <FormContainer>
+            <FormField value={interests} label="Additional Gift Selection Considerations" onChange={onInterestsChange} help="For example: &ldquo;a middle-aged woman, likes square dancing, horse riding, sparkling wine.&rdquo;, &ldquo;a 16 year-old girl who likes music.&rdquo; &ldquo; Christian familiy man, loves fishing and hunting&ldquo;" />
 
-    </Container> </OuterWrap>
+
+           <ButtonContainer><Button loading={loading}><a onClick={async () => {
+
+                if (loading)
+                    return;
+                await load();
+            }}>{value ? 'Re-generate Gifts Suggestions' : 'Update Gift Suggestions'}!</a></Button>
+
+
+            </ButtonContainer> 
+        </FormContainer>: null}
+        <Container>
+
+
+            {loading ? <GeneratingPlaceholder>We are generating the gift suggestions for you. Unfortunately, the AI is an expensive, and a limited availability resource, and it takes time.</GeneratingPlaceholder> :
+                <InnerGifts>{output}</InnerGifts>}
+
+        </Container> </OuterWrap>
 
 }

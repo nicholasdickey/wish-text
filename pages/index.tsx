@@ -154,6 +154,7 @@ export default function Home({ from: startFrom, to: startTo, occasion: startOcca
   const [from, setFrom] = useState(startFrom);
   const [to, setTo] = useState(startTo);
   const [interests, setInterests] = useState(startInterests);
+  const [loadReady, setLoadReady] = useState(false);
   const router = useRouter();
 
   //saves the changes to the session on the local web server. 
@@ -263,8 +264,8 @@ export default function Home({ from: startFrom, to: startTo, occasion: startOcca
                 
               
               </FormContainer>
-              <GreetingOutput session={session} updateSession2={updateSession2} from={from} to={to} occasion={occasion} reflections={reflections}  />
-              <GiftsOutput session={session} updateSession2={updateSession2} from={from} to={to} occasion={occasion} reflections={reflections} interests={interests} onInterestsChange={onInterestsChange} />
+              <GreetingOutput setLoadReady={setLoadReady} session={session} updateSession2={updateSession2} from={from} to={to} occasion={occasion} reflections={reflections}  />
+              <GiftsOutput loadReady={loadReady} session={session} updateSession2={updateSession2} from={from} to={to} occasion={occasion} reflections={reflections} interests={interests} onInterestsChange={onInterestsChange} />
             </Wrap>
 
           </FullPageContainer>

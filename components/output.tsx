@@ -18,43 +18,8 @@ const Container = styled.div`
     justify-content: space-between;
     align-items: center;
     width: 100%;
-   // margin-left:15px;
-   // margin-right:15px;
-   // width:100%;
-    
-    `;
-/*const InnerOutput = styled.div`
-  font-size: 14px;
- // margin-left: 160px;
-  background-color: darkgoldenrod;
-  //margin-right: 90px;
- // margin-left:10px;
-  margin-top:10px;
-  //width: 100%;
-  min-height: 400px;
-  border: 2px solid #ccc;
-  border-radius: 30px;
-  padding:20px;
-  //margin-left:20px;
-  //margin-right:20px;
-  width: 320px;
+  `;
 
-  @media(min-width: 600px) {
-    //font-size:34px;
-    width:400px;
-  }
-  @media(min-width: 900px) {
-    
-    width:480px;
-  }
-  @media(min-width: 1200px) {
-    width:520px;
-  }
-  & p{
-    margin-top:10px;
-  }
-`;
-*/
 const InnerOutput = styled.div<{ persona?: string,length:number }>`
   position: relative;
   display: flex; /* Use Flexbox */
@@ -256,7 +221,7 @@ const personaNames:Persona={
   "spock": "Leonard Nimoy as Spock",
   "birthday1":"Birthday 1",
 }
-export default function Output({ session, updateSession2, from, to, occasion, reflections }: { session: Options, updateSession2: any, from: string, to: string, occasion: string, reflections: string }) {
+export default function Output({ setLoadReady,session, updateSession2, from, to, occasion, reflections }: { setLoadReady:any,session: Options, updateSession2: any, from: string, to: string, occasion: string, reflections: string }) {
   const [value, setValue] = useState('');
   const [loading, setLoading] = useState(false);
   const [checked,setChecked] = useState(false);
@@ -282,8 +247,10 @@ export default function Output({ session, updateSession2, from, to, occasion, re
       return;
     console.log("calling api with", from, to, occasion, reflections);
     setLoading(true);
+    setLoadReady(true);
     const result = await getWishText({ style:persona&&checked?personaNames[persona]:'',from, to, occasion, reflections, fresh: value ? true : false });
     setLoading(false);
+    setLoadReady(false);
     console.log("result", result, 'value:', value);
     if (result != value) {
       console.log("setting value", result)
