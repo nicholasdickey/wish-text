@@ -523,7 +523,6 @@ export default function CardEditor({
        
       </Box>
       }
-      linkid:{linkid}
         {creatingCard && <LinearProgress />}
         {!creatingCard&&linkid&&<ToolbarShare greeting={greeting} url={`${process.env.NEXT_PUBLIC_SERVER}/card/${linkid}`}/>}
     </>
