@@ -27,7 +27,7 @@ import TextareaAutosize from '@mui/base/TextareaAutosize';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import FormHelperText from '@mui/material/FormHelperText';
 import Button from '@mui/material/Button';
-
+import LinearProgress from '@mui/material/LinearProgress';
 //third party
 import {DefaultCopyField} from '@eisberg-labs/mui-copy-field';
 
@@ -503,7 +503,7 @@ export default function CardEditor({
           <ToolbarUpload error={greeting?.length > 0 ? false : true} onUploadClick={onUpload} hasGreeting={session.greeting ? true : false} />
        
         </Box>
-        <Divider ><hr/></Divider>
+      
       </Section>
       </Box>
       <Card image={image} greeting={greeting} signature={signature} num={num} fbclid={fbclid} utm_content={utm_content} sessionid={sessionid} darkMode={darkMode} handleChange={handleChange} handleCreate={handleCreate} />
@@ -517,6 +517,7 @@ export default function CardEditor({
 
       </Box>
       }
+        {creatingCard && <LinearProgress />}
 
      
     </>

@@ -720,17 +720,7 @@ Whether it's birthdays, graduations, holidays, or moments of illness or loss, WI
         <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="canonical" href="https://www.wish-text.com/" />
-        <link
-          rel="stylesheet"
-          type="text/css"
-          //charset="UTF-8"
-          href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.6.0/slick.min.css"
-        />
-        <link
-          rel="stylesheet"
-          type="text/css"
-          href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.6.0/slick-theme.min.css"
-        />
+      
       </Head>
       <ThemeProvider theme={theme}>
         <main className={roboto.className} >
@@ -1173,11 +1163,11 @@ Whether it's birthdays, graduations, holidays, or moments of illness or loss, WI
 
           </Container>
 
-          <Container maxWidth="sm">
-            {session.greeting && <GiftsOutput loadReady={loadReady} session={session} updateSession2={updateSession2} from={from} to={to} occasion={selectedOccasion} reflections={reflections} interests={interests} onInterestsChange={onInterestsChange} />}
-          </Container>
           <Container maxWidth="md">
-          </Container>
+            {session.greeting && <GiftsOutput loadReady={loadReady} session={session} updateSession2={updateSession2} from={from} to={to} occasion={selectedOccasion} reflections={reflections} interests={interests} onInterestsChange={onInterestsChange} />}
+            </Container>
+        
+        
 
           <Footer darkmode={darkMode ? "true" : "false"}>
             {!virgin && !prompt1 && <Copyright>
