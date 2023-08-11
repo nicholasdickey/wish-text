@@ -60,7 +60,7 @@ const TextComponent: React.FC<TextComponentProps> = ({ ad }: TextComponentProps)
       } else {
         clearInterval(timer);
       }
-    }, 1000);
+    }, 100);
 
     return () => {
       clearInterval(timer);

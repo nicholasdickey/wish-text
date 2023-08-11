@@ -34,7 +34,7 @@ const Input = styled.input`
   }
 `;
 
-const HelpText = styled.p`
+const HelpText = styled.div`
   font-size: 13px;
   color: #888;
   margin-top: 8px;

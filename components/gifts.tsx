@@ -129,16 +129,16 @@ export default function Output({ loadReady, session, updateSession2, from, to, o
 
 
     const [giftSuggestions, setGiftSuggestions] = useState(session.giftSuggestions ? processGiftSuggestions(session.giftSuggestions) : Array<GiftSuggestion>());
-    console.log("GIFT SUGGESTIONS:", value, 'giftSuggestions', giftSuggestions);
+   // console.log("GIFT SUGGESTIONS:", value, 'giftSuggestions', giftSuggestions);
     // generate code to parse the value for double quoted strings
     //  
-    const output = !loading&&value ? <><GiftSuggesstionHeader><h1>Gift Suggestions:</h1></GiftSuggesstionHeader><div> {giftSuggestions.map((suggest: GiftSuggestion, i: number) => {
+    const output =<div/>;/* !loading&&value ? <><GiftSuggesstionHeader><h1>Gift Suggestions:</h1></GiftSuggesstionHeader><div> {giftSuggestions.map((suggest: GiftSuggestion, i: number) => {
         // if (i >0)
         //   return null;
-        console.log("suggest", suggest, 'i', i)
+       // console.log("suggest", suggest, 'i', i)
         return <AmazonIdeaSearch key={`amazon-idea-search-${i}`} search={suggest.search} text={suggest.text} />
-    })}</div></> : null;
-    console.log("generated output",output)
+    })}</div></> : null;*/
+   // console.log("generated output",output)
     useEffect(() => {
         console.log("INSIDE LOAD EFFECT",loadReady, value)
         if (loadReady && !value){
@@ -149,7 +149,7 @@ export default function Output({ loadReady, session, updateSession2, from, to, o
     const load = async () => {
         console.log("calling GIFT api with", from, to, occasion, reflections, interests);
         setLoading(true);
-        const result = await getGiftsText({ from, to, occasion, reflections, interests, fresh: value ? true : false });
+        const result = await getGiftsText({from, to, occasion, reflections, interests, fresh: value ? true : false });
         setLoading(false);
         console.log("result", result, 'value:', value);
         if (result != value) {
@@ -165,7 +165,7 @@ export default function Output({ loadReady, session, updateSession2, from, to, o
             setValue(result);
         }
     }
-    console.log("ready to display",output);
+   // console.log("ready to display",output);
     return <OuterWrap>
         {value ?  <FormContainer>
             <FormField value={interests} label="Additional Gift Selection Considerations" onChange={onInterestsChange} help="For example: &ldquo;a middle-aged woman, likes square dancing, horse riding, sparkling wine.&rdquo;, &ldquo;a 16 year-old girl who likes music.&rdquo; &ldquo; Christian familiy man, loves fishing and hunting&ldquo;" />
@@ -185,7 +185,7 @@ export default function Output({ loadReady, session, updateSession2, from, to, o
 
 
             {loading ? <GeneratingPlaceholder>We are generating the gift suggestions for you. Unfortunately, the AI is an expensive, and a limited availability resource, and it takes time.</GeneratingPlaceholder> :
-                <InnerGifts>{output}</InnerGifts>}
+                output?<div/>:null}
 
         </Container> </OuterWrap>
 

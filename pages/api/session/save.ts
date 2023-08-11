@@ -1,7 +1,7 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from 'next'
 import { withSessionRoute, Options } from "../../../lib/with-session";
-import {updateUserSession} from "../../../lib/api"
+import {updateSession} from "../../../lib/api"
 export default withSessionRoute(handler);
 
 /**
@@ -20,12 +20,13 @@ async function handler(
         res.status(405).send({ message: 'Only POST requests allowed' });
         return;
     }
-    let options: Options = req.session.options ? req.session.options : ({} as Options);
+    
     const body = req.body;
-    console.log("save session",body.session);
-    let inSession = body.session ? (body.session) : {};
-    req.session.options = Object.assign(options, inSession);
-    console.log("save session2", req.session.options);
+    const session=req.body.session;
+    console.log("save session",session);
+    req.session.sessionid = session.sessionid;
+    await updateSession(session.sessionid,session);
+   // console.log("save session2", session);
     await req.session.save();
    
 

@@ -1,285 +1,410 @@
-import React, { useState, FormEvent, useEffect } from "react";
+import React, { useState, useRef, useEffect, useCallback } from "react";
 import { styled } from "styled-components";
-import Element from "./element";
-import { getWishText } from "../lib/api";
-import ReactMarkdown from "react-markdown";
-import rehypeRaw from "rehype-raw";
-import AmazonIdeaSearch from "./amazonIdeaSearch";
+import Box from "@mui/material/Box";
+import Link from "@mui/material/Link";
+import Image from "next/image"; 
+import { getWishText, saveToHistory } from "../lib/api";
 import { Options } from "../lib/with-session";
-import AdIntro from "./ad-intro";
-import Select from 'react-select';
+import ToolbarAccept from "./toolbar-accept";
+import ToolbarGenerate from "./toolbar-generate";
+import ToolbarUpdateText from "./toolbar-update-text";
+import ImageStrip from "./image-strip";
+import ImageData from "../lib/image-data";
+import html2canvas from "html2canvas";
+import FileSaver from "file-saver";
+import Typography from '@mui/material/Typography';
+import ReactMarkdown from "react-markdown";
+import TextEditor, { TextEditorProps, ImageProps } from "./text-editor";
+import { recordEvent,recordSessionHistory } from '../lib/api'
+import LooksFiveOutlinedIcon from '@mui/icons-material/Looks5Outlined';
+//import ErrorOutlineOutlinedIcon from '@mui/icons-material/NextPlanOutlined';
+import ErrorOutlineOutlinedIcon from '@mui/icons-material/TipsAndUpdatesTwoTone';
+import LinearProgress from '@mui/material/LinearProgress';
+import * as ga from '../lib/ga'
+import Section from './greeting-card/editor-section';
+const Starter = styled.div`
+  display:flex;
+  justify-content:flex-start;
+  font-size:36px;
+  align-items:center;
 
-
-const Container = styled.div`
-    display: flex;
   
-    //background-color: aliceblue;
-    flex-direction: column;
-    justify-content: space-between;
-    align-items: center;
-    width: 100%;
   `;
-
-const InnerOutput = styled.div<{ persona?: string,length:number }>`
-  position: relative;
-  display: flex; /* Use Flexbox */
-  flex-direction: column; /* Arrange content vertically */
-  align-items: flex-start; /* Align content to the start of the container */
-
-  font-size:${({length})=>`${length<400?'21':length<500?'19':length<600?'16':'14'}`}px;
-  //margin-right: 20px;
-  margin-top: 10px;
-  width: 100%;
-  min-height: 420px;
-  border: 2px solid #ccc;
-  border-radius: 30px;
-  padding: 20px;
-  width: 320px;
-
-  @media (min-width: 600px) {
-    width: 400px;
-  }
-  @media (min-width: 900px) {
-    width: 480px;
-  }
-  @media (min-width: 1200px) {
-    width: 520px;
-  }
-
-  &::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.6); /* Adjust the opacity as desired */
-    border-radius: 30px;
-    z-index: 1; /* Set a higher z-index for the pseudo-element */
-  }
-
-  &::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-image: ${({ persona }) => (persona ? `url(${personaImages[persona]})` : 'none')};
-    background-size: cover;
-    opacity: 0.9; /* Adjust the opacity as desired */
-    border-radius: 30px;
-    z-index: 0; /* Set a lower z-index for the image background */
-  }
-
-  & p {
-    opacity:0.8;
-    margin-top: auto;
-    bottom:0;
-   // margin-top: 10px;
-    color: white; /* Set the text color to white */
-    position: relative;
-    z-index: 2; /* Set a higher z-index for the text to appear above the pseudo-element */
-  }
-  & div#adintro {
-    opacity:1.0;
-    
-    margin-top: 10px;
-    color: white; /* Set the text color to white */
-    position: relative;
-    z-index: 2; /* Set a higher z-index for the text to appear above the pseudo-element */
-  }
-`;
-
-
-const ButtonContainer = styled.div`
-    position:relative;
-
-    display:flex;
-    justify-content:space-around;
-    padding:20px;
-    width:100%;
-    `
-interface LoadingProps {
-  loading: boolean;
-}
-const Button = styled.button<LoadingProps>`
-  background:#048080;
-  padding:6px 20px;
-  color:${({ loading }) => !loading ? 'white' : 'grey'};
-  border-radius:10px;
-  &:hover{
-    background:${({ loading }) => !loading ? '#037070' : '#048080'};
-    cursor:pointer;
-  
-}
-`;
-const OuterWrap = styled.div`
-`;
+const StarterMessage = styled.div`
+  font-size:14px;
+  padding-left:10px;
+  padding-right:10px;
+  `;
 
 const BottomLink = styled.div`
-//position:absolute;
-//bottom:-0;
-//background-color:darkgoldenrod;
-padding:10px;
-z-index:100;
-`
-const GeneratingPlaceholder = styled.div`
-  font-size: 14px;
-  max-width:400px;
-  margin:80px;
-  `;
-  const PersonaImage = styled.img`
-  width:100%;
-  max-width:400px;
-  margin:10px;
-  `;
-function splitStringByNumberedSentences(input: string): string[] {
-  //const regex = /^\d+\.(.*?\.)/gm;
-  const regex = /^\d+\.(.*)$/gm;
-  const matches = input.match(regex);
+  padding: 10px;
 
-  if (!matches) {
-    return [];
+  & a {
+    color: white;
+    text-decoration: none;
   }
+`;
 
-  return matches.map((match) => match.trim());
-}
-function extractDoubleQuotedPart(input: string): string {
-  console.log("extractDoubleQuotedPart", input, "input")
-  const regex = /"([^"]*)"/;
-  const match = input.match(regex);
-
-  if (match && match.length >= 2) {
-    console.log("match[1]", match[1])
-    return match[1];
-  }
-
-  return "";
-}
-
-const text = ['This Amazing AI experience', 'Brought to you', 'By', 'THE', 'AMERICAN', 'OUDOORSMAN', 'NEWS', 'www.american-outdoorsman.news'];
-const loadingText = ['Preparing the inputs', 'Connecting to the NSA supercomputer in Provo, UT', 'Inserting rods', 'Cooling jets', 'Turning the crankshaft', 'Waiting for the blinking lights', 'Negotiating the protocol', 'Streaming the response']
-const personas=[
-  {
-    id:'dirtyharry',
-    name:'Dirty Harry', 
-    image:'https://ucarecdn.com/148bd941-c9b1-4a91-8adf-4a6aca24bf8e/dirtyharryfullcontempt.jpg'},
-  {
-    id:'oddball',
-    name: 'Oddball',
-    image:'https://ucarecdn.com/e2cbaf71-6dc3-444d-8bce-1f3356931912/OddballKellysHeroesDonaldSutherlandb.jpg'},
-  {
-    id:'marktwain',
-    name: 'Mark Twain',
-    image:'https://ucarecdn.com/9ef96397-179c-4afd-8245-185e23b822a8/gettyimages683484482612x612.jpg'
-  },
-{
-  id:'jessicafletcher',
-  name: 'Jessica Fletcher',
-  image:'https://ucarecdn.com/f6718963-eef0-4e28-9322-1e08d90788e2/gorgeous.jpg'
-},
-{
-  id:'rickfromcasablanca',
-  name: 'Rick from Casablanca',
-  image: "https://ucarecdn.com/b87e885e-ab91-41bc-887a-f13ae959683a/Humphrey_Bogart_in_Casablanca_trailer.jpg"
-
-},
-{
-  id:'jamesbond',
-  name: 'James Bond',
-  image: "https://ucarecdn.com/f7b6e0ac-59ce-4db4-aa8d-6a2b660a7c2a/jamesBondSean.jpg"
-},
-{
-  id:'spock',
-  name: 'Spock',
-  Image:'https://ucarecdn.com/e3ab2315-7148-4d23-a4a4-2d2d1c12e6f4/8b10a9280bd46b8874af9b5cadec91d5.webp'
-},
-{
-  id:'birthday1',
-  name: 'Birthday 1',
-  Image:'https://ucarecdn.com/7ca78240-d3ca-4169-99a5-9f15aef5c2dd/5sX1r5ThaA8iYi5lxrgN2cj2fa.jpg'
-}]
-  type Persona = {[key: string] : string}
-const personaImages:Persona={
-  "dirtyharry":'https://ucarecdn.com/148bd941-c9b1-4a91-8adf-4a6aca24bf8e/dirtyharryfullcontempt.jpg',
-  "oddball":'https://ucarecdn.com/e2cbaf71-6dc3-444d-8bce-1f3356931912/OddballKellysHeroesDonaldSutherlandb.jpg',
-  "marktwain":'https://ucarecdn.com/9ef96397-179c-4afd-8245-185e23b822a8/gettyimages683484482612x612.jpg',
-  "jessicafletcher":'https://ucarecdn.com/f6718963-eef0-4e28-9322-1e08d90788e2/gorgeous.jpg',
-  "rickfromcasablanca": "https://ucarecdn.com/b87e885e-ab91-41bc-887a-f13ae959683a/Humphrey_Bogart_in_Casablanca_trailer.jpg",
-  "jamesbond": "https://ucarecdn.com/f7b6e0ac-59ce-4db4-aa8d-6a2b660a7c2a/jamesBondSean.jpg",
-  "spock": "https://ucarecdn.com/e3ab2315-7148-4d23-a4a4-2d2d1c12e6f4/8b10a9280bd46b8874af9b5cadec91d5.webp",
-  "birthday1":"https://ucarecdn.com/7ca78240-d3ca-4169-99a5-9f15aef5c2dd/5sX1r5ThaA8iYi5lxrgN2cj2fa.jpg",
-}
-const personaNames:Persona={
-  "dirtyharry":'Clint Eastwood as Dirty Harry',
-  "oddball":'Donald Sutherland as Oddball',
-  "marktwain":'Mark Twain',
-  "jessicafletcher":'Angela Lansbury as Jessica Fletcher',
-  "rickfromcasablanca": "Humphrey Boghart as Rick from Casablanca",
-  "jamesbond": "Sean Connery as James Bond",
-  "spock": "Leonard Nimoy as Spock",
-  "birthday1":"Birthday 1",
-}
-export default function Output({ setLoadReady,session, updateSession2, from, to, occasion, reflections }: { setLoadReady:any,session: Options, updateSession2: any, from: string, to: string, occasion: string, reflections: string }) {
-  const [value, setValue] = useState('');
+export default function Output({
+  setNum,
+  setMax,
+  num,
+  max,
+  onVirgin,
+  onVirgin2,
+  virgin,
+  virgin2,
+  prompt4,
+  prompt5,
+  prompt6,
+  setMissingOccasion,
+  setLoadReady,
+  session,
+  updateSession2,
+  from,
+  to,
+  occasion,
+  naive,
+  reflections,
+  instructions,
+  inastyleof,
+  language,
+  greeting,
+  setPrompt4,
+  setPrompt5,
+  setPrompt6,
+  PlayerToolbar,
+  sharedImages,
+  darkMode,
+ // authSession
+}: {
+  setNum:any;
+  setMax:any;
+  num:number;
+  max:number;
+  onVirgin: any;
+  onVirgin2:any;
+  virgin:boolean;
+  virgin2:boolean;
+  prompt4:boolean;
+  prompt5:boolean;
+  prompt6:boolean;
+  setMissingOccasion: any;
+  setLoadReady: any;
+  session: Options;
+  updateSession2: any;
+  from: string;
+  to: string;
+  occasion: string;
+  naive: boolean;
+  reflections: string;
+  instructions: string;
+  inastyleof: string;
+  language: string;
+  greeting: string;
+  setPrompt4:any;
+  setPrompt5: any;
+  setPrompt6:any;
+  PlayerToolbar: any;
+  sharedImages:ImageData[];
+  darkMode?:boolean;
+//  authSession: any;
+}) {
+  const [value, setValue] = useState("");
+  //const [num,setNum]=useState(0);
+  //const [max,setMax]=useState(0);
   const [loading, setLoading] = useState(false);
-  const [checked,setChecked] = useState(false);
-  const [persona,setPersona] =useState('');
-  const [greeting, setGreeting] = useState(session.greeting || '');
-  console.log("GREETING:",persona, greeting, 'value', value);
-  // generate code to parse the value for double quoted strings
-  //  
- 
-  const handleChange = () => {
-    setChecked(!checked);
+  const [gift, setGift] = useState('');
+  const [openLogin, setOpenLogin] = useState(false);
+  const [selectedOccasion, setSelectedOccasion] = useState<string>('');
+  const [editing, setEditing] = useState(false);
+  const [selectedImage, setSelectedImage] = useState<ImageData>({
+    url: '',
+    publicId: '',
+    height: 0,
+    width: 0,
+    thumbnailUrl: '',
+    original_filename: ''
+  });
+  const [images, setImages] = useState<ImageData[]>([]);
+  const [convertedImage, setConvertedImage] = useState('');
+
+  const canvasRef = useRef<HTMLDivElement>(null);
+
+ // console.log("RENDER output",greeting,value)
+  const convertDivToPng = async (div: any) => {
+    const canvas = await html2canvas(div, {
+      useCORS: true,
+      logging: true,
+      width: div.width,
+      height: div.height,
+      scale: window.devicePixelRatio,
+    });
+    const image = canvas.toDataURL("image/png", 1.0);
+    return image;
   };
-  type MyOption = {label: string, value: string}
-  const handleSelectChange = (selected?: MyOption  | null) => {
-    if (selected==null)
-    return
-    console.log("handleSelectChange", selected);
-    setPersona(selected?.value || '');
-  }
-  return <OuterWrap data-id="Greetings-Output:OuterWrap">
-    <ButtonContainer><Button loading={loading}><a onClick={async () => {
-    if (loading)
+
+  const stripClickHandler = (image: ImageData | null): void => {
+    ga.event({
+      action: "stipClickHandler",
+      params : {
+        sessionid: session.sessionid,
+        image: image?.url,
+      }
+    })
+    if(image?.url)
+      setPrompt6(true)
+    setTimeout(async ()=>await recordEvent(session.sessionid, 'stripClickHandler',image?.url||''),1000);
+   // console.log("image-stripClickHandler", image);    
+    if (image == null) {
+      image = {
+        url: '',
+        publicId: '',
+        height: 0,
+        width: 0,
+        thumbnailUrl: '',
+        original_filename: ''
+      }
+    }
+
+    //setSelectedImage(image);
+   // if (image?.url)
+      updateSession2({ selectedImage: JSON.stringify(image) });
+  };
+ 
+  useEffect(() => {
+    //console.log("useEffect", greeting)
+    if (!greeting && selectedImage?.url) {
+      //console.log("useEffect stripClickHandler null")
+      stripClickHandler(null);
+    }
+  }, [greeting, selectedImage, stripClickHandler]);
+
+  const handleGenerate = async () => {
+    if (loading) return;
+    if (!occasion) {
+      setMissingOccasion(true);
       return;
-    console.log("calling api with", from, to, occasion, reflections);
+    }
+   // console.log("handle generate", occasion)
     setLoading(true);
     setLoadReady(true);
-    const result = await getWishText({ style:persona&&checked?personaNames[persona]:'',from, to, occasion, reflections, fresh: value ? true : false });
+    onVirgin();
+    if(greeting){
+      onVirgin2();
+    }
+    setTimeout(async ()=>await recordEvent(session.sessionid, 'generate',JSON.stringify({
+      from,
+      to,
+      occasion,
+      naive,
+      reflections,
+      instructions,
+      inastyleof,
+      language,
+      fresh: value ? true : false,
+      sessionid:session.sessionid,
+    },null,4)),1000);
+  
+    const {content:result,num} = await getWishText({
+      style: "",
+      from,
+      to,
+      occasion,
+      naive,
+      reflections,
+      instructions,
+      inastyleof,
+      language,
+      fresh: value ? true : false,
+      sessionid:session.sessionid,
+    });
     setLoading(false);
     setLoadReady(false);
-    console.log("result", result, 'value:', value);
-    if (result != value) {
-      console.log("setting value", result)
-      setGreeting(result);
-      setValue(result);
-    }
-  }}>{value ? 'Try again' : 'Generate'}!</a></Button>
-  
-  {process.env.EXPERIMENT?<><label>
-        <input
-          type="checkbox"
-          checked={checked}
-          onChange={handleChange}
-        />
-        As Persona
-      </label>
-  <div style={{color:'black', zIndex:1001}}><Select  onChange={handleSelectChange} options={personas.map(m=>{return {value:m.id,label:m.name}})} /></div>
-  </>:null}
-  </ButtonContainer>
-    <Container>
-     
-      <InnerOutput data-id="GreetingsOutput:InnerOutput"  length={greeting.length}>
-        {!loading ? <ReactMarkdown rehypePlugins={[rehypeRaw]} >{loading ? 'Generating...' : greeting}</ReactMarkdown>
-          : <div style={{width:'100%',position:'relative'}} id="adintro"><AdIntro ad={{ text, bottomLink: 'https://www.american-outdoorsman.news', loadingText }} /> </div>}
-
-      </InnerOutput>
-      {loading ? null : <BottomLink><a href="https://www.american-outdoorsman.news">Sponsor: www.american-outdoorsman.news</a></BottomLink>}
-
+    console.log("handleGenerate", result,num);
+    if (result !== value && result) {
+      updateSession2({ greeting: result,num ,max:num});
       
-    </Container> </OuterWrap>
+      setValue(result);
+      setNum(num);
+      setMax(num);
+      setLoadReady(true);
+      const elem = document.getElementById('wt-output');
+      //elem?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      setTimeout(()=>
+      /*window.scrollTo({
+        top:(elem?.getBoundingClientRect().top),//-200,
+        behavior: "smooth",
+      })*/ elem?.scrollIntoView({ behavior: 'smooth', block: 'center' }),100); 
+    }
+    ga.event({
+      action: "generate",
+      params : {
+        sessionid: session.sessionid,
+        greeting: result,
+        occasion,
+        from,
+        to,
+        reflections,
+        instructions,
+        inastyleof,
+        language,
+        fresh: value ? true : false,
+      }
+    })
+  };
 
+  const handleAccept: () => void = async () => {
+    let image = '';
+    if (selectedImage.url) {
+      image = await convertDivToPng(canvasRef.current);
+    }
+   // await saveToHistory(authSession.username, greeting, occasion, to, image, gift);
+  };
+  const onTextEditorClick=()=>{
+    setTimeout(async ()=>await recordEvent(session.sessionid, 'clickOnTextEditor',''),1000);
+    setPrompt5(true);
+    updateSession2({ prompt5: true });
+  }
+  const handleCopy: () => void = () => {
+    // Add your implementation here
+    setTimeout(async ()=>await recordEvent(session.sessionid, 'copyToClipboard',''),1000);
+    setPrompt5(true);
+    updateSession2({ prompt5: true });
+  };
+
+  const handleDownload = async () => {
+    try {
+      const data = await convertDivToPng(canvasRef.current);
+
+      var randomstring = () => Math.random().toString(8).substring(2, 7) + Math.random().toString(8).substring(2, 7);
+
+      const filename = `${randomstring()}-wt2.png`;
+      ga.event({
+        action: "download",
+        params : {
+          sessionid: session.sessionid,
+      
+        }
+      })
+      setTimeout(async ()=>await recordEvent(session.sessionid, 'download',''),1000);
+   
+      if (window.saveAs) {
+        window.saveAs(data, 'a' + filename);
+      } else {
+        FileSaver.saveAs(data, filename);
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  const onUpload = (result: any, widget: any) => {
+    const { secure_url: url, public_id: publicId, height, width, thumbnail_url: thumbnailUrl, original_filename: originalFilename } = result.info;
+    
+    onVirgin2();
+    
+    ga.event({
+      action: "upload",
+      params : {
+        sessionid: session.sessionid,
+        url: url,
+        original_filename: originalFilename,
+      }
+    })
+    setTimeout(async ()=>await recordEvent(session.sessionid, 'upload',`${originalFilename};${url}`),1000);
+   
+    const newImage: ImageData = {
+      url,
+      publicId,
+      height,
+      width,
+      thumbnailUrl,
+      original_filename: originalFilename,
+    };
+
+    setImages([...images, newImage]);
+    setSelectedImage(newImage);
+    updateSession2({ imagesString: JSON.stringify([...images, newImage]), selectedImage: JSON.stringify(newImage) });
+  };
+
+  /*useEffect(() => {
+    setImages(session.imagesString ? JSON.parse(session.imagesString) : []);
+    setSelectedImage(session.selectedImage ? JSON.parse(session.selectedImage) : { url: "", publicId: "" });
+  }, [session.imagesString, session.selectedImage]);*/
+  //console.log('error', occasion?.length>0?false:true)
+  //console.log("OUTPUT",greeting)
+  return (
+    <>
+      {occasion&&!session.greeting&&<ToolbarGenerate error={occasion?.length>0?false:true} onGenerateClick={handleGenerate} onUploadClick={onUpload} hasGreeting={session.greeting ? true : false} />}
+      {loading&&!session.greeting && <LinearProgress />}
+     
+     
+      {greeting&&<Section darkMode={darkMode ? true : false}>
+      {!prompt5&&session.greeting&&!loading  ? <Box sx={{ mt: 1,mb:1, width: 1 }}>
+            <Starter onClick={()=>setPrompt5(true)}><ErrorOutlineOutlinedIcon fontSize="inherit" color='success' />
+              <StarterMessage><Typography fontSize="inherit"  color="secondary"/*color="#ffee58"*/>Click or tap on message to manually edit. </Typography></StarterMessage></Starter></Box> : null}
+     
+      <Box sx={{ my: 3,  }} textAlign="center">
+       
+      {greeting&&PlayerToolbar}
+      
+            
+        <TextEditor  editing={editing} setEditing={setEditing} onClick={onTextEditorClick} session={session} text={session.greeting || ''} onChange={(text: string) => { updateSession2({ greeting: text }); }} image={selectedImage} loading={loading} canvasRef={canvasRef} />
+        <div  />
+        {false&&virgin&&!prompt5 && !loading ? <Box sx={{ mt: 0, width: 1 }}>
+            <Starter onClick={()=>setPrompt5(true)}><ErrorOutlineOutlinedIcon fontSize="inherit" color='success' />
+              <StarterMessage><Typography fontSize="inherit"  color="secondary"/*color="#ffee58"*/>Copy message to clipboard to be used with your favorite messenger or social media app.</Typography></StarterMessage></Starter></Box> : null}
+             
+        {!editing&&session.greeting && !loading && <ToolbarAccept session={session} text={session.greeting} selected={selectedImage.url?true:false}  onGenerateClick={handleGenerate} onDownloadClick={handleDownload} onAcceptClick={handleAccept} onCopyClick={handleCopy} />}
+        {editing&&session.greeting && !loading && <ToolbarUpdateText onUpdateClick={
+          async ()=>{
+            setEditing(false)
+            const params={
+              to:session.to,
+              from:session.from,
+              occasion:session.occasion,
+              reflections:session.reflections,
+              instructions:session.instructions,
+              inastyleof:session.inastyleof,
+              language:session.language,
+              fresh:value?true:false,
+            }
+            const {success,num} = await recordSessionHistory(session.sessionid,session.greeting||'',session.occasion||'',JSON.stringify(params)||'')
+      
+            if(success){
+              setNum(num);
+              setMax(num);
+              updateSession2({num:num,max:num});
+            }
+
+        }}
+        />}
+      
+        {!loading && false && (
+          <BottomLink>
+            <Link href="https://www.american-outdoorsman.news">Sponsor: www.american-outdoorsman.news</Link>
+          </BottomLink>
+        )}
+      </Box>
+      {session.greeting && !prompt4 ? <Box sx={{ mt: 1, width: 1, color: 'white', backgroundColor: 'secondary' }}>
+                  <Starter onClick={() => setPrompt4(true)}><ErrorOutlineOutlinedIcon fontSize="inherit" color='success' />
+                    <StarterMessage><Typography fontSize="inherit" color="secondary"/*color="#ffee58"*/>
+                      Remember, these are only suggestions to get you going! Customize them to fit your personality and style. Try at least several suggestions to see if any of them resonate with you.</Typography></StarterMessage></Starter></Box> : null}
+             
+          
+      </Section>}
+      {false&&<div>
+      {!prompt6&&value&&virgin&&!loading  ? <Box sx={{ mt: 0, width: 1 }}>
+            <Starter onClick={()=>setPrompt6(true)}><ErrorOutlineOutlinedIcon fontSize="inherit" color='success' />
+              <StarterMessage><Typography fontSize="inherit"  color="secondary"/*color="#ffee58"*/>Use stock AI-generated images or upload your own:</Typography></StarterMessage></Starter></Box> : null}
+     
+ 
+      <Box sx={{ my: 4, width: { xs: 1 } }} textAlign="center">
+        {(images.length > 0 ||sharedImages.length>0)&& session.greeting&&<ImageStrip sharedImages={sharedImages} images={images} onImageClick={stripClickHandler} />}
+      </Box>
+      </div>}
+     
+        </>
+  );
 }
