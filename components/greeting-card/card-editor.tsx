@@ -7,6 +7,7 @@ import FileSaver from "file-saver";
 import { getSessionCards, addSessionImage } from "../../lib/api";
 import { Options } from "../../lib/with-session";
 import ToolbarUpload from "../toolbar-upload";
+import ToolbarShare from "../toolbar-share";
 import ImageStrip from "../image-strip";
 import ImageData from "../../lib/image-data";
 import CardData from "../../lib/card-data";
@@ -16,6 +17,7 @@ import * as ga from '../../lib/ga'
 import CardPlayerToolbar from "../toolbar-card-player";
 import Section from "./editor-section";
 //mui
+import IosShareOutlinedIcon from '@mui/icons-material/IosShareOutlined';
 import TextField from '@mui/material/TextField';
 import Box from "@mui/material/Box";
 import Link from "@mui/material/Link";
@@ -30,6 +32,7 @@ import Button from '@mui/material/Button';
 import LinearProgress from '@mui/material/LinearProgress';
 //third party
 import {DefaultCopyField} from '@eisberg-labs/mui-copy-field';
+import { RWebShare } from "react-web-share";
 
 const TooblarPlaceholder = styled.div`
   height: 48px;
@@ -48,10 +51,13 @@ display:none;
 @media (max-width: 768px) {
     display:block;
 }
-
-
 `;
-
+interface WebShareProps {
+    color: string;
+  }
+  const WebShare = styled.div<WebShareProps>`
+    color:${props => props.color};
+  `;
 export default function CardEditor({
   num,
   greeting,
@@ -514,12 +520,12 @@ export default function CardEditor({
       {!creatingCard && !linkid && <Box sx={{ mt: 1, width: 1 }}>
     
         <Button fullWidth variant="contained" onClick={handleCreate}>Create a public link</Button>
-
+       
       </Box>
       }
+      linkid:{linkid}
         {creatingCard && <LinearProgress />}
-
-     
+        {!creatingCard&&linkid&&<ToolbarShare greeting={greeting} url={`${process.env.NEXT_PUBLIC_SERVER}/card/${linkid}`}/>}
     </>
   );
 }

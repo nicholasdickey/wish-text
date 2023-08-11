@@ -1348,7 +1348,7 @@ export const getServerSideProps = withSessionSsr(
       inastyleof = inastyleof || options.inastyleof || '';
       language = language || options.language || '';
       interests = interests || options.interests || '';
-
+      console.log("linlid:",linkid,options.linkid)
       linkid = linkid || options.linkid || '';
       //console.log("dark=", dark)
       // console.log("SSR return max=",max)
