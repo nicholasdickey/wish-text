@@ -29,6 +29,7 @@ interface CardProps extends CardData {
     utm_content: string;
     sessionid: string;
     darkMode: boolean;
+    canvasRef: React.RefObject<HTMLDivElement>;
 }
 /********************************************************************************/
 const Card: React.FC<CardProps> = ({
@@ -39,14 +40,15 @@ const Card: React.FC<CardProps> = ({
     num,
     handleChange, handleCreate,
     fbclid,utm_content,darkMode,
-    sessionid,   
+    sessionid,  
+    canvasRef 
 }) => {
     const theme = useTheme();
 
     return <OuterWrapper>
         
         <Box sx={{ mt: 2, mb: 2 }} textAlign="center">         
-            <CardControl startOpen={true} large={true} fbclid={fbclid} utm_content={utm_content} dark={darkMode ? "true" : "false"} text={greeting || ""} image={image} signature={signature} />
+            <CardControl canvasRef={canvasRef} startOpen={true} large={true} fbclid={fbclid} utm_content={utm_content} dark={darkMode ? "true" : "false"} text={greeting || ""} image={image} signature={signature} />
         </Box>
     </OuterWrapper>
 }

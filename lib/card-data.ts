@@ -5,5 +5,6 @@ export default interface CardData {
     num?: number;  //session_history ordinal
     linkid?:string;
     greeting?:string;
+    metaimage?:string;
   }
   

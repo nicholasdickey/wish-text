@@ -236,10 +236,11 @@ export const deleteSessionCards = async (sessionid: string) => {
   // console.log("deleteSessionCards", sessionid, res.data.success,res.data);
   return res.data;
 }
-export const recordSessionCard = async (sessionid: string, card: CardData) => {
+export const recordSessionCard = async (sessionid: string, card: CardData):Promise<{success:boolean,cardNum:number,linkid:string}> => {
   const url = `${process.env.NEXT_PUBLIC_LAKEAPI}/api/v1/wishtext/cards/record-session-card?sessionid=${sessionid}`;
+  console.log("calling recordSessionCard:", url, card);
   const res = await axios.post(url, { card });
-  // console.log("recordSessionCard", sessionid, res.data.success,res.data);
+   console.log(">>>recordSessionCard", sessionid, res.data.success,res.data);
   return res.data;
 }
 export const addSessionImage = async (sessionid: string, image: ImageData): Promise<{ success: boolean, images: ImageData[] }> => {
@@ -268,5 +269,6 @@ export const getSharedCard = async (sessionid: string, id: string=''): Promise<{
   console.log("getSessionCards", sessionid, id, res.data.success, res.data);
   return res.data;
 }
+
 
 

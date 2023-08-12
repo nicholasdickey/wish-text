@@ -185,7 +185,7 @@ export default function Output({
 
   return (
     <OuterWrap>
-      <Container maxWidth="sm">
+    
       <Typography>
         {loading ? (
           <PlaceholderOuterContainer>
@@ -194,8 +194,10 @@ export default function Output({
         ) : output ? (
           <InnerGifts>{output}</InnerGifts>
         ) : null}
+       
       </Typography>
-
+     
+      <Container maxWidth="sm">
       {value ? (
         <FormContainer>
           <Box sx={{ my: 4 }}>

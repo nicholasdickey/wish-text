@@ -168,6 +168,7 @@ export default function CardEditor({
 
   const theme = useTheme();
   const canvasRef = useRef<HTMLDivElement>(null);
+  const [imageData, setImageData] = useState(null as any);
 
   const emptyImage = {
     url: '',
@@ -179,6 +180,7 @@ export default function CardEditor({
   }
   // console.log("RENDER output",greeting,value)
   const convertDivToPng = async (div: any) => {
+    console.log("div=>:",div,div.width,div.height,div.scale,div)
     const canvas = await html2canvas(div, {
       useCORS: true,
       logging: true,
@@ -186,7 +188,8 @@ export default function CardEditor({
       height: div.height,
       scale: window.devicePixelRatio,
     });
-    const image = canvas.toDataURL("image/png", 1.0);
+    console.log("canvase:",canvas)
+    const image = canvas.toDataURL("image/png", 0.3);
     return image;
   };
 
@@ -401,12 +404,15 @@ export default function CardEditor({
     console.log("handleCreate:", { num, image, signature, greeting })
     setCreatingCard(true);
     setTimeout(async () => await recordEvent(session.sessionid, 'create-card', ''), 1000);
+    const metaimage=await captureImage();
     let card: CardData = {
       num,
       image,
       signature,
       greeting,
+      metaimage
     }
+    
     const { success, linkid, cardNum } = await recordSessionCard(sessionid, card);
     setCreatingCard(false);
     setLinkid(linkid);
@@ -419,23 +425,24 @@ export default function CardEditor({
       setCardMax(cardNum);
       updateSession2({ linkid, hasNewCard: false, newCardStackString: '', cardNum, cardMax: cardNum });
     }
+  
   }
-
+  const captureImage=async()=>{
+    return  convertDivToPng(canvasRef.current);
+  }
   const handleDownload = async () => {
     try {
+      console.log("callig convertDivToPng",canvasRef.current )  
       const data = await convertDivToPng(canvasRef.current);
-
+      setImageData(data);
+      console.log(
+        "handleDownload:",canvasRef.current,data
+    )
       var randomstring = () => Math.random().toString(8).substring(2, 7) + Math.random().toString(8).substring(2, 7);
 
       const filename = `${randomstring()}-wt2.png`;
-      ga.event({
-        action: "download",
-        params: {
-          sessionid: session.sessionid,
-
-        }
-      })
-      setTimeout(async () => await recordEvent(session.sessionid, 'download', ''), 1000);
+     
+      setTimeout(async () => await recordEvent(session.sessionid, ' card meta download', ''), 1000);
 
       if (window.saveAs) {
         window.saveAs(data, 'a' + filename);
@@ -490,6 +497,7 @@ export default function CardEditor({
 
   //console.log("RENDER currentCard:", currentCard, "newCardStack:", newCardsStack, "num:", num);
   ;
+
   return (
     <>
       <div>
@@ -512,8 +520,10 @@ export default function CardEditor({
       
       </Section>
       </Box>
-      <Card image={image} greeting={greeting} signature={signature} num={num} fbclid={fbclid} utm_content={utm_content} sessionid={sessionid} darkMode={darkMode} handleChange={handleChange} handleCreate={handleCreate} />
-    
+      <div ref={canvasRef} style={{paddingLeft:20,paddingRight:20}}>
+      
+      <Card canvasRef={canvasRef} image={image} greeting={greeting} signature={signature} num={num} fbclid={fbclid} utm_content={utm_content} sessionid={sessionid} darkMode={darkMode} handleChange={handleChange} handleCreate={handleCreate} />
+       </div> 
       {linkid&&<CopyField
         label="Share Card Link"
         value={`${process.env.NEXT_PUBLIC_SERVER}/card/${linkid}`} />}
@@ -523,6 +533,8 @@ export default function CardEditor({
        
       </Box>
       }
+   
+
         {creatingCard && <LinearProgress />}
         {!creatingCard&&linkid&&<ToolbarShare greeting={greeting} url={`${process.env.NEXT_PUBLIC_SERVER}/card/${linkid}`}/>}
     </>

@@ -1,6 +1,6 @@
 
 import styled from "styled-components";
-import React from "react";
+import React,{useRef} from "react";
 import Typography from "@mui/material/Typography";
 
 import { useTheme } from '@mui/material/styles';
@@ -319,8 +319,9 @@ interface BandProps {
   signature: string,
   startOpen?: boolean
   delayOpen?:boolean;
+  canvasRef: React.RefObject<HTMLDivElement>;
 }
-const GreetingCard: React.FC<BandProps> = ({ delayOpen=false,startOpen = false, loading = false, large: startLarge = false, dark, fbclid, utm_content, text, image, signature }) => {
+const GreetingCard: React.FC<BandProps> = ({ canvasRef,delayOpen=false,startOpen = false, loading = false, large: startLarge = false, dark, fbclid, utm_content, text, image, signature }) => {
   const [open, setOpen] = React.useState(startOpen);
   const [large, setLarge] = React.useState(startLarge);
   const [hugeLeft, setHugeLeft] = React.useState(false);
@@ -343,16 +344,17 @@ const GreetingCard: React.FC<BandProps> = ({ delayOpen=false,startOpen = false, 
     setDOpen(false);
     setTimeout(()=>setOpen(true), 500);
   }
+ 
  // console.log("open=", open, ";large=", large, "signature:", signature)
   const signatureText = signature ? signature.split('\n').map((m,i) => <SignatureLine id={"wt-signature-line"+i} key={i} l={signature.length} large={large}>{m}</SignatureLine>) : [];
   //console.log("signatureText=", signatureText)
   return (
-    <BandContainer darktext={dark} open={open} large={large} onClick={()=>console.log("CLICK")}>
+    <BandContainer darktext={dark} open={open} large={large} onClick={()=>console.log("CLICK")} >
       <Outer>
-        <Body >
+        <Body  >
           <PopoutCard open={hugeLeft||hugeRight} isLeft={hugeLeft} card={{text,image:image||EmptyImage,signature}} close={()=>{setHugeLeft(false);setHugeRight(false);}} />
-          <Card large={large} open={open} dark={dark} >
-            <div className={`card__container js-card-opener ${open ? "open" : ""}`}>
+          <Card large={large} open={open} dark={dark}  >
+            <div className={`card__container js-card-opener ${open ? "open" : ""}`}  >
               <div className={`card ${open ? "open" : ""}`} >
                 <div className={`card__panel card__panel--front ${open ? "open" : ""}`}>
                   {image?.url && <Image large={large} open={open} src={image?.url} />}
