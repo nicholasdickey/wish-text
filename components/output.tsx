@@ -144,7 +144,7 @@ export default function Output({
     return image;
   };
 
-  const stripClickHandler = (image: ImageData | null): void => {
+  const stripClickHandler =useCallback( (image: ImageData | null): void => {
     ga.event({
       action: "stipClickHandler",
       params : {
@@ -170,7 +170,7 @@ export default function Output({
     //setSelectedImage(image);
    // if (image?.url)
       updateSession2({ selectedImage: JSON.stringify(image) });
-  };
+  },[session.sessionid,updateSession2,setPrompt6]);
  
   useEffect(() => {
     //console.log("useEffect", greeting)

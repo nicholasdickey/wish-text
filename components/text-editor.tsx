@@ -271,7 +271,7 @@ const TextEditor: React.FC<TextEditorProps> = ({  editing, setEditing,session, i
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, [canvasRef]);
+  }, [canvasRef,setEditing]);
   text = text.replaceAll('\n\n', '\n');
   const tw = text.split('\n');
   const headline=tw.length>1?tw[0]:'';

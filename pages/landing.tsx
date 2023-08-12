@@ -42,7 +42,7 @@ import { withSessionSsr, Options } from '../lib/with-session';
 import { isbot } from '../lib/isbot';
 import Band from '../components/band';
 import BandCard from '../components/band-card';
-import Card from '../components/greeting-card/card';
+import Card from '../components/greeting-card/ui';
 interface BackgroundMode {
     colorDark: string;
     colorLight: string;
@@ -190,7 +190,14 @@ height:${777 / 3}px;
   }
 margin-top:40px;
 `;
-
+const demoImage = {
+    url: 'https://res.cloudinary.com/dhmqojhnk/image/upload/v1690915099/r34orqivo5jbw2wgbmki.jpg',
+    publicId: 'r34orqivo5jbw2wgbmki',
+    height: 576,
+    width: 448,
+    thumbnailUrl: 'https://res.cloudinary.com/dhmqojhnk/image/upload/c_limit,h_60,w_90/v1690915099/r34orqivo5jbw2wgbmki.jpg',
+    original_filename: '9YdrCeYYIiPp121N7nAL--1--6k1ra'
+  }
 
 const Body = styled.div`
   width:100%;
@@ -262,6 +269,10 @@ export default function Home({ dark, fresh, fbclid, utm_content, isbot, isfb, se
     const line3=`Gift suggestions with no effort.   
         Happy or sad, the AI assistant will help you find the right gifts. 
     `
+    const greeting='';
+    const signature='';
+    const image='';
+    const canvasRef = React.useRef<HTMLDivElement>(null);
     return (
         <>
             <Head>
@@ -371,8 +382,13 @@ Whether it's birthdays, graduations, holidays, or moments of illness or loss, WI
                         </BandContainer>
                        
                         <BandCard 
-                        card={ <Card signature="Demo" fbclid={fbclid} utm_content={utm_content}  dark={"true"} text={"🎉 Happy 59th Birthday, old buddy! 🎉 You're halfway to being cool, but we'll still celebrate! Have a fantastic day surrounded by family, friends, and endless amounts of cake 🍰🎈 Keep rocking those dad jokes and conquering life! Cheers! 🍻"}/>} 
-                        fresh={fresh} fbclid={fbclid} utm_content={utm_content} isbot={isbot} isfb={isfb} sessionid={sessionid} dark={"true"} 
+                        dark="true" 
+                        card={ 
+                            <Card canvasRef={canvasRef} delayOpen={true} large={true} signature={signature} fbclid={fbclid} utm_content={utm_content} dark={darkMode ? "true" : "false"} text={greeting || '' } image={demoImage}  />}
+          
+
+
+                        fresh={fresh} fbclid={fbclid} utm_content={utm_content} isbot={isbot} isfb={isfb} sessionid={sessionid} 
                         title="Create Virtual Wishing Cards" subtitle={"Create beautiful wish cards"} cta="Create a Greeting Card Now!"/>
                            
                       
