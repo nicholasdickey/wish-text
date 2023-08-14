@@ -1,6 +1,6 @@
 
 import styled from "styled-components";
-import React,{useRef} from "react";
+import React, { useRef } from "react";
 import Typography from "@mui/material/Typography";
 
 import { useTheme } from '@mui/material/styles';
@@ -52,10 +52,10 @@ const TextBody = styled.div<BodyProps>`
   //padding-bottom:20px;
   //margin-bottom: 40px;
   @media (min-width:600px) and (max-width: 990px) {
-    font-size:${({ l, large }) => large ? (l > 600 ? 9 : l > 400 ? 10 : l > 300 ? 11 : l > 200 ? 12: 13) : (l > 600 ?2 : l > 400 ? 3 : l > 300 ? 4 : l > 200 ? 5 : 6)}px;
+    font-size:${({ l, large }) => large ? (l > 600 ? 9 : l > 400 ? 10 : l > 300 ? 11 : l > 200 ? 12 : 13) : (l > 600 ? 2 : l > 400 ? 3 : l > 300 ? 4 : l > 200 ? 5 : 6)}px;
   }
   @media (max-width: 600px) {
-    font-size:${({ l, large }) => large ? (l > 600 ? 2 : l > 400 ? 3 : l > 300 ? 4 : l > 200 ? 5 : 7) : (l > 600 ?2 : l > 400 ? 3 : l > 300 ? 4 : l > 200 ? 5 : 6)}px;
+    font-size:${({ l, large }) => large ? (l > 600 ? 2 : l > 400 ? 3 : l > 300 ? 4 : l > 200 ? 5 : 7) : (l > 600 ? 2 : l > 400 ? 3 : l > 300 ? 4 : l > 200 ? 5 : 6)}px;
   }
 `;
 
@@ -70,6 +70,7 @@ const Image = styled.img<LargeProps>`
     max-height: ${({ large }) => large ? 4 * 110 : 320}px;
     width:100%;//${({ large }) => large ? 50 : 45}vw;
     height:100%;// ${({ large }) => large ? 75 : 60}vw;
+    margin-left:5px;
    // border-radius: 5px;  
     transform: rotateY(180deg);  
 
@@ -77,11 +78,12 @@ const Image = styled.img<LargeProps>`
 `;
 const Card = styled.div<LargeProps>`
 position:relative;
-margin-top:0px;
+margin-top:20px;
 display: flex;
 flex-direction: column;
 align-items: center;
 justify-content: space-between;
+
 
 //box-shadow: inset 0 0 10px #000000;
 &body {
@@ -90,10 +92,14 @@ justify-content: space-between;
   }
   .card__container {
     cursor: pointer;
+
     position: absolute;
-    left: 0%;
-    top: 50%;
-    transform: ${({ open, large }) => `translate(-${open ? large ? 19 : 26 : large ? 65 : 70}%, -50%)`};
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    left: 0px;//0%;
+    top: 0px;//50%;
+    transform: ${({ open, large }) => `translate(-${open ? large ? 0 : 0 : large ? 25 : 30}%, -50%)`};
     perspective: 3700px;
     transition: all 0.2s ease;
     margin-top:${({ open, large }) => open ? large ? 120 : 120 : 40}px;
@@ -115,9 +121,10 @@ justify-content: space-between;
     }
   }
   .card {
-    max-width: ${({ large }) => large ? 3 * 100 : 240}px;
+    margin:5px;
+    max-width: ${({ large }) => large ? 2 * 3 * 100 : 240}px;
     max-height: ${({ large }) => large ? 4 * 100 : 320}px;
-    width:${({ large }) => large ? 16 * 3 : 45}vw;
+    width:${({ large }) => large ? 2 * 16 * 3+20 : 45}vw;
     height: ${({ large }) => large ? 16 * 4 : 60}vw;
     transform-style: preserve-3d;
     transform: rotateX(65deg);
@@ -125,7 +132,7 @@ justify-content: space-between;
    // box-shadow: 0 3px 10px rgb(0 0 0 / 0.8);
     //transform: translate(0%, 0%);
     @media (min-width: 768px) {
-        width:${({ large }) => large ? 80 :60}vw;
+        width:${({ large }) => large ? 2 * 80 : 60}vw;
         height: ${({ large }) => large ? 60 : 45}vw;     
   }
   }
@@ -136,8 +143,8 @@ justify-content: space-between;
    // border: 1px solid black;
     position: absolute;
     top: 0;
-    left: 20%;
-    width: 100%;
+    left: 50%;
+    width: 50%;
     height: 100%;
     display: flex;
     justify-content: space-between;
@@ -149,22 +156,32 @@ justify-content: space-between;
     transform: rotate3d(0, 1, 0, 0deg);
   }
   .card__panel--front {
+    left: 50px;
+    visibility:hidden;
     backface-visibility: hidden;
     background: #6288e6;
     z-index: 1; 
+    margin-left:-15px;
+    
   }
   .open .card__panel--front {
+    left: 50%;
+    margin-left:-15px;
     transform: rotate3d(0, 1, 0, -170deg);   
   }
   .card__panel--inside-left {
+    left: 50%;
     background: #fff;
     z-index: 0;
+    
   }
   .open .card__panel--inside-left {
+    left: 50%;
     transform: rotate3d(0, 1, 0, -170deg);
     box-shadow: 0 3px 10px rgb(${({ dark }) => (dark == 'true') ? '255 255 255' : '0 0 0'} / 0.2);
   }
   .card__panel--inside-right {
+    left: 50%;
     border-left: none;
     background: #fff;
     z-index: -1;
@@ -175,12 +192,15 @@ justify-content: space-between;
 const BandContainer = styled.div<{ darktext?: string, background?: string, open?: boolean, large?: boolean }>`
     display: flex;
     position:relative;
+   
    //padding-top:100px;
    // margin-top: 80px;
    // margin-right:5%;
     flex-direction: column;
     align-items: center;
     justify-content: flex-start;
+    margin-bottom:300px;
+    margin-top:40px;
     //padding-left:1%;
    // padding-right:4%;
    // padding: 14rem 2rem;
@@ -191,14 +211,17 @@ const BandContainer = styled.div<{ darktext?: string, background?: string, open?
   //  background-repeat: repeat;
   //  min-height:300px;
     width:100%;
-     height:${({ open, large }) => open ? large ? 200 : 250 : large ? 200 : 120}px;
+   
+    // height:${({ open, large }) => open ? large ? 200 : 250 : large ? 200 : 120}px;
 
     @media (min-width: 900px) {
-      height:${({ open, large }) => open ? large ? 290 : 250 : large ? 200 : 120}px;
+      margin-bottom:100px;
+      height:${({ open, large }) => open ? large ? 290 : 300 : large ? 200 : 120}px;
 
     }
     @media (min-width: 600px) {
       height:${({ open, large }) => open ? large ? 280 : 250 : large ? 200 : 120}px;
+      margin-bottom:150px;
 
     }
    // padding-bottom:40px;
@@ -274,7 +297,7 @@ const Signature = styled.div`
     justify-content:center;
     //align-items:flex-begin;
    // padding:4px;
-    font-family:cursive;
+    font-family:Caveat;
     color:#63599d;
     -ms-transform: rotate(-10deg); /* IE 9 */
     -webkit-transform: rotate(-10deg); /* Chrome, Safari, Opera */
@@ -288,10 +311,12 @@ const Signature = styled.div`
     }
     `;
 
-const SignatureLine = styled(Typography)<BodyProps>`
+const SignatureLine = styled(Typography) <BodyProps>`
     padding:0px;
     text-align:left;
-    //font-size:${({large})=>large?3:9}px !important;
+    font-family:Caveat;
+    font-size:28px;
+    //font-size:${({ large }) => large ? 3 : 9}px !important;
     @media (max-width: 769px) {    
        font-size:11px;
     }
@@ -318,64 +343,64 @@ interface BandProps {
   image?: ImageData,
   signature: string,
   startOpen?: boolean
-  delayOpen?:boolean;
+  delayOpen?: boolean;
   canvasRef: React.RefObject<HTMLDivElement>;
 }
-const GreetingCard: React.FC<BandProps> = ({ canvasRef,delayOpen=false,startOpen = false, loading = false, large: startLarge = false, dark, fbclid, utm_content, text, image, signature }) => {
+const GreetingCard: React.FC<BandProps> = ({ canvasRef, delayOpen = false, startOpen = false, loading = false, large: startLarge = false, dark, fbclid, utm_content, text, image, signature }) => {
   const [open, setOpen] = React.useState(startOpen);
   const [large, setLarge] = React.useState(startLarge);
   const [hugeLeft, setHugeLeft] = React.useState(false);
   const [hugeRight, setHugeRight] = React.useState(false);
   const [dOpen, setDOpen] = React.useState(delayOpen);
   const theme = useTheme();
-  const router = useRouter();    
+  const router = useRouter();
   const size = useWindowSize();
   const handleCTAClick = () => {
     router.push(`/?fbclid=${fbclid}&utm_content=${utm_content}`);
   };
- // console.log("large=", large, "greeting=", text)
+  // console.log("large=", large, "greeting=", text)
   text = text.replace(/\n\n/g, '\n');
   const tw = text.split('\n');
   const headline = tw.length > 1 ? tw[0] : '';
   const body = tw.length > 1 ? tw.slice(1).join('\n') : tw[0];
   const handleTextClick = () => {
   }
-  if(dOpen){
+  if (dOpen) {
     setDOpen(false);
-    setTimeout(()=>setOpen(true), 500);
+    setTimeout(() => setOpen(true), 500);
   }
- 
- // console.log("open=", open, ";large=", large, "signature:", signature)
-  const signatureText = signature ? signature.split('\n').map((m,i) => <SignatureLine id={"wt-signature-line"+i} key={i} l={signature.length} large={large}>{m}</SignatureLine>) : [];
+
+  // console.log("open=", open, ";large=", large, "signature:", signature)
+  const signatureText = signature ? signature.split('\n').map((m, i) => <SignatureLine id={"wt-signature-line" + i} key={i} l={signature.length} large={large}>{m}</SignatureLine>) : [];
   //console.log("signatureText=", signatureText)
   return (
-    <BandContainer darktext={dark} open={open} large={large} onClick={()=>console.log("CLICK")} >
-      <Outer>
-        <Body  >
-          <PopoutCard open={hugeLeft||hugeRight} isLeft={hugeLeft} card={{text,image:image||EmptyImage,signature}} close={()=>{setHugeLeft(false);setHugeRight(false);}} />
-          <Card large={large} open={open} dark={dark}  >
-            <div className={`card__container js-card-opener ${open ? "open" : ""}`}  >
-              <div className={`card ${open ? "open" : ""}`} >
+    <BandContainer id="band-container-wt" darktext={dark} open={open} large={large} onClick={() => console.log("CLICK")} >
+    
+        <Body id="body-wt" style={{ width: '100vw', height: '100hw' }}  >
+          <PopoutCard open={hugeLeft || hugeRight} isLeft={hugeLeft} card={{ text, image: image || EmptyImage, signature }} close={() => { setHugeLeft(false); setHugeRight(false); }} />
+          <Card style={{ width: '100vw', height: '100hw' }} large={large} open={open} dark={dark}  >
+            <div style={{ width: '100vw', height: '100hw' }} className={`card__container js-card-opener ${open ? "open" : ""}`}  >
+              <div ref={canvasRef} className={`card ${open ? "open" : ""}`} >
                 <div className={`card__panel card__panel--front ${open ? "open" : ""}`}>
                   {image?.url && <Image large={large} open={open} src={image?.url} />}
                 </div>
                 <div className={`card__panel card__panel--inside-left ${open ? "open" : ""}`} onClick={() => {
-                console.log("LEFT CLICK")
-                if(size?.width>size?.height) 
-                    setLarge(large); 
-                else 
+                  console.log("LEFT CLICK")
+                  if (size?.width > size?.height)
+                    setLarge(large);
+                  else
                     setHugeLeft(!hugeLeft);
                 }}>
                   {image?.url && <Image large={large} open={open} src={image?.url} />}
                 </div>
                 <div className={`card__panel card__panel--inside-right ${open ? "open" : ""}`} onClick={() => {
-                 console.log("RIGHT CLICK")
-               if(size?.width>size?.height) 
-                    setLarge(large); 
-                else 
+                  console.log("RIGHT CLICK")
+                  if (size?.width > size?.height)
+                    setLarge(large);
+                  else
                     setHugeRight(!hugeRight);
                 }}>
-         
+
                   <Inner><Mark image={"false"} onClick={() => handleTextClick()} >
                     <Headline l={headline.length} large={large} className="q-h">
                       <ReactMarkdown>
@@ -397,7 +422,7 @@ const GreetingCard: React.FC<BandProps> = ({ canvasRef,delayOpen=false,startOpen
                   </Mark></Inner>
                 </div>
               </div>
-             {false&& <CTAButton onClick={() => setOpen(!open)}> {`${open ? "Close" : "Open"} Card`}</CTAButton>}
+              {false && <CTAButton onClick={() => setOpen(!open)}> {`${open ? "Close" : "Open"} Card`}</CTAButton>}
 
             </div>
 
@@ -405,7 +430,7 @@ const GreetingCard: React.FC<BandProps> = ({ canvasRef,delayOpen=false,startOpen
 
 
         </Body>
-      </Outer>
+      
     </BandContainer>
 
 

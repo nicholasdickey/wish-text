@@ -6,7 +6,7 @@ import FileCopyIcon from '@mui/icons-material/FileCopy';
 import CheckIcon from '@mui/icons-material/Check';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import TextFieldsIcon from '@mui/icons-material/TextFields';
-
+import CancelIcon from '@mui/icons-material/Cancel';
 import * as ga from '../lib/ga';
 const ToolbarContainer = styled.div`
   display: flex;
@@ -29,16 +29,22 @@ const ToolbarText = styled.span`
 interface ToolbarProps {
   
   onUpdateClick: () => void;
+  onCancelClick: () => void;
   
 }
 
 const Toolbar: React.FC<ToolbarProps> = ({
-  onUpdateClick
+  onUpdateClick,
+  onCancelClick
 }) => {
 
  
   return (
     <ToolbarContainer>
+      <ToolbarButton   color={"info"} size="large" onClick={onCancelClick}>
+        <CancelIcon />
+        <ToolbarText> Cancel</ToolbarText>
+      </ToolbarButton>
       <ToolbarButton   color={"success"} size="large" onClick={onUpdateClick}>
         <TextFieldsIcon />
         <ToolbarText> Update Message</ToolbarText>

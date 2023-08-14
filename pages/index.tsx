@@ -720,7 +720,9 @@ Whether it's birthdays, graduations, holidays, or moments of illness or loss, WI
         <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="canonical" href="https://www.wish-text.com/" />
-      
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" />
+        <link href="https://fonts.googleapis.com/css2?family=Caveat&display=swap" rel="stylesheet" />
       </Head>
       <ThemeProvider theme={theme}>
         <main className={roboto.className} >
@@ -1080,7 +1082,7 @@ Whether it's birthdays, graduations, holidays, or moments of illness or loss, WI
                   interests,
                   card: true
                 })
-              }}>Open Greeting Card Composer</OvalButton>
+              }}>Open Wish Card Composer</OvalButton>
             </Box>}
             {session.card && <Box sx={{ mt: 1, width: 1 }}>
               <OvalButton fullWidth size="small" variant="contained" onClick={() => {
@@ -1098,7 +1100,7 @@ Whether it's birthdays, graduations, holidays, or moments of illness or loss, WI
                   interests,
                   card: true
                 })
-              }}>Close Greeting Card Composer</OvalButton>
+              }}>Close Wish Card Composer</OvalButton>
             </Box>
             }
 
@@ -1165,9 +1167,9 @@ Whether it's birthdays, graduations, holidays, or moments of illness or loss, WI
 
           <Container maxWidth="md">
             {session.greeting && <GiftsOutput loadReady={loadReady} session={session} updateSession2={updateSession2} from={from} to={to} occasion={selectedOccasion} reflections={reflections} interests={interests} onInterestsChange={onInterestsChange} />}
-            </Container>
-        
-        
+          </Container>
+
+
 
           <Footer darkmode={darkMode ? "true" : "false"}>
             {!virgin && !prompt1 && <Copyright>
@@ -1348,7 +1350,7 @@ export const getServerSideProps = withSessionSsr(
       inastyleof = inastyleof || options.inastyleof || '';
       language = language || options.language || '';
       interests = interests || options.interests || '';
-      console.log("linlid:",linkid,options.linkid)
+      console.log("linlid:", linkid, options.linkid)
       linkid = linkid || options.linkid || '';
       //console.log("dark=", dark)
       // console.log("SSR return max=",max)

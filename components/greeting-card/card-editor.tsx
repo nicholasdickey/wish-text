@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect, useCallback } from "react";
 import { styled } from "styled-components";
-import html2canvas from "html2canvas";
+import html2canvas from  "../html2canvas";
 import FileSaver from "file-saver";
 
 //project
@@ -189,7 +189,8 @@ export default function CardEditor({
       scale: window.devicePixelRatio,
     });
     console.log("canvase:",canvas)
-    const image = canvas.toDataURL("image/png", 0.3);
+    const image = canvas.toDataURL("image/jpeg", 0.3);
+    console.log("imageLength:",image.length)
     return image;
   };
 
@@ -404,6 +405,7 @@ export default function CardEditor({
     console.log("handleCreate:", { num, image, signature, greeting })
     setCreatingCard(true);
     setTimeout(async () => await recordEvent(session.sessionid, 'create-card', ''), 1000);
+    //await handleDownload();
     const metaimage=await captureImage();
     let card: CardData = {
       num,
@@ -428,7 +430,9 @@ export default function CardEditor({
   
   }
   const captureImage=async()=>{
-    return  convertDivToPng(canvasRef.current);
+    const data = await convertDivToPng(canvasRef.current);
+    setImageData(data);
+    return data;
   }
   const handleDownload = async () => {
     try {
@@ -520,21 +524,19 @@ export default function CardEditor({
       
       </Section>
       </Box>
-      <div ref={canvasRef} style={{paddingLeft:20,paddingRight:20}}>
       
       <Card canvasRef={canvasRef} image={image} greeting={greeting} signature={signature} num={num} fbclid={fbclid} utm_content={utm_content} sessionid={sessionid} darkMode={darkMode} handleChange={handleChange} handleCreate={handleCreate} />
-       </div> 
       {linkid&&<CopyField
         label="Share Card Link"
         value={`${process.env.NEXT_PUBLIC_SERVER}/card/${linkid}`} />}
+      {false&&linkid&& <img width={600} height={'auto'} src={imageData}/> }
       {!creatingCard && !linkid && <Box sx={{ mt: 1, width: 1 }}>
     
         <Button fullWidth variant="contained" onClick={handleCreate}>Create a public link</Button>
        
       </Box>
       }
-   
-
+      
         {creatingCard && <LinearProgress />}
         {!creatingCard&&linkid&&<ToolbarShare greeting={greeting} url={`${process.env.NEXT_PUBLIC_SERVER}/card/${linkid}`}/>}
     </>

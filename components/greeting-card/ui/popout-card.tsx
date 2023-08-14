@@ -54,7 +54,7 @@ const Image = styled.img`
    // max-width: ${3 * 310}px;
    // max-height: ${4 * 310}px;
     width:100%;
-    height:110vh;
+    height:130vh;
     //z-index:101;
    // border-radius: 5px;  
    // transform: rotateY(180deg);  

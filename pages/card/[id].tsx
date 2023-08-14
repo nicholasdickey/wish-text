@@ -254,8 +254,8 @@ const CardWrap = styled.div`
 
 `;
 const Wrap = styled.div`
-    position:absolute;
-    bottom:0;
+    //position:absolute;
+    //bottom:0px;
     width:100%;
   
    
@@ -265,6 +265,15 @@ const Wrap = styled.div`
     align-items: center;
     justify-content: flex-end;
 `
+const OuterWrapper = styled.div`
+    position:relative;
+    width:100%;
+    height:100%;
+    display:flex;
+    flex-direction:column;
+    justify-content: space-between;
+    `;
+
 const roboto = Roboto({ subsets: ['latin'], weight: ['300', '400', '700'], style: ['normal', 'italic'] })
 let v = false;
 export default function Home({ id, card, dark, fresh, fbclid, utm_content, isbot, isfb, sessionid, ironsession: startSession }:
@@ -352,16 +361,16 @@ export default function Home({ id, card, dark, fresh, fbclid, utm_content, isbot
   return (
     <>
       <Head>
-        <title>Wish Text</title>
+        <title>A Wish Card</title>
         <meta name="name" content="Wish Text" />
         <meta name="slogan" content="Greetings Text" />
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:site" content="@wishtext" />
-        <meta name="twitter:title" content="A Wish For You" />
+        <meta name="twitter:title" content="A Wish Card" />
         <meta name="twitter:description" content={card.greeting} />
         <meta name="twitter:image" content={`${process.env.NEXT_PUBLIC_SERVER}/api/image/${card.linkid}.png`} />
-        <meta name="title" content="A Wish For You" />
-        <meta property="og:title" content="A Wish For You" />
+        <meta name="title" content="A Wish Card" />
+        <meta property="og:title" content="A Wish Card" />
         <meta property="og:url" content={`https://www.wish-text.com/card/${card.linkid}`} />
         <meta property="og:image" content={`${process.env.NEXT_PUBLIC_SERVER}/api/image/${card.linkid}.png`} />
         <meta name="description" content={card.greeting} />
@@ -372,7 +381,10 @@ export default function Home({ id, card, dark, fresh, fbclid, utm_content, isbot
 
         <meta name="viewport" content="width=device-width" />
         <link rel="canonical" href={`https://www.wish-text.com/card/${card.linkid}`} />
-
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com"  />
+        <link href="https://fonts.googleapis.com/css2?family=Caveat&display=swap" rel="stylesheet" />
+    
       </Head>
       <ThemeProvider theme={theme}>
         <main className={roboto.className} >
@@ -383,7 +395,7 @@ export default function Home({ id, card, dark, fresh, fbclid, utm_content, isbot
 
 
           </div>
-          <div >
+        
             <Script src={`https://www.googletagmanager.com/gtag/js?${process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS}`} />
             <Script id="google-analytics">
               {`
@@ -394,10 +406,10 @@ export default function Home({ id, card, dark, fresh, fbclid, utm_content, isbot
           gtag('config', '${process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS}');
         `}
             </Script>
-          </div>
-          <Body>
+          <OuterWrapper>
+          <Body id="body-wt">
             <Wide>
-              {!matches&&<Create>
+              {false&&<Create>
                 <Link href={`/?fbclid=${fbclid}&utm_content=${utm_content}`}>
                    <Button color={"inherit"} onClick={() => {
                    // router.push(`/?fbclid=${fbclid}&utm_content=${utm_content}`);
@@ -420,7 +432,7 @@ export default function Home({ id, card, dark, fresh, fbclid, utm_content, isbot
           
           </Body>
           
-          {matches ? <Wrap><Footer darkmode={"false"}>
+          <Wrap><Footer darkmode={"false"}>
           <ToolbarCreate url={`/?fbclid=${fbclid}&utm_content=${utm_content}`} />
             <Copyright>
 
@@ -436,7 +448,7 @@ export default function Home({ id, card, dark, fresh, fbclid, utm_content, isbot
                 Crafted in Northern Minnesota, USA.
               </Typography></Sub>
             </Copyright>
-          </Footer></Wrap>:<br/>}
+          </Footer></Wrap> </OuterWrapper>
         </main>
 
       </ThemeProvider>

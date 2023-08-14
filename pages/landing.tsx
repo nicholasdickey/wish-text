@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { useRef, useEffect, useState } from 'react';
 import Container from '@mui/material/Container';
 import Accordion from '@mui/material/Accordion';
 import AccordionDetails from '@mui/material/AccordionDetails';
@@ -21,7 +22,7 @@ import MenuIcon from '@mui/icons-material/Menu';
 import Toolbar from '@mui/material/Toolbar';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
-import { useState, useCallback, useEffect } from "react"
+
 import { useRouter } from 'next/router'
 import { fetchSession, recordEvent, updateSession, deleteSessionHistories, getSessionHistory } from '../lib/api'
 import styled from 'styled-components';
@@ -71,17 +72,17 @@ const Sub = styled.div`
 
 interface FooterProps {
     darkmode: string;
-  };
-  const Footer=styled.div<FooterProps>`
+};
+const Footer = styled.div<FooterProps>`
     padding:10px 10rem;
     width:100%;
     color:rgb(44, 46, 56);
-    background-color: ${({darkmode})=>darkmode=="true"?'#252330':'rgb(232, 236, 239)'};
+    background-color: ${({ darkmode }) => darkmode == "true" ? '#252330' : 'rgb(232, 236, 239)'};
     @media (max-width:990px){
         padding:10px;
     }
     `;
-  const LineContainer=styled.div<FooterProps>`
+const LineContainer = styled.div<FooterProps>`
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -89,19 +90,19 @@ interface FooterProps {
     padding:8px;  
     text-align: center;
     color:#2d2b38;
-    background-color: ${({darkmode})=>darkmode=="true"?'#999':'rgb(232, 236, 239)'};
+    background-color: ${({ darkmode }) => darkmode == "true" ? '#999' : 'rgb(232, 236, 239)'};
   `;
-  
-const BandContainer = styled.div<{ darktext?: string,background?:string }>`
+
+const BandContainer = styled.div<{ darktext?: string, background?: string }>`
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   padding: 4rem 2rem;
   text-align: center;
-  color: ${({ darktext }) => (darktext=="true" ? '#fff' : '#2d2b38')};
-  background-color: ${({ darktext }) => (darktext=="true" ? '#2d2b38' : '#fff')};
-  background-image: ${({background})=>background?`linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url(${background})`:null}; 
+  color: ${({ darktext }) => (darktext == "true" ? '#fff' : '#2d2b38')};
+  background-color: ${({ darktext }) => (darktext == "true" ? '#2d2b38' : '#fff')};
+  background-image: ${({ background }) => background ? `linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url(${background})` : null}; 
   background-repeat: repeat;
   background-size: 900px 491px;
 
@@ -190,14 +191,22 @@ height:${777 / 3}px;
   }
 margin-top:40px;
 `;
-const demoImage = {
+/*const demoImage = {
     url: 'https://res.cloudinary.com/dhmqojhnk/image/upload/v1690915099/r34orqivo5jbw2wgbmki.jpg',
     publicId: 'r34orqivo5jbw2wgbmki',
     height: 576,
     width: 448,
     thumbnailUrl: 'https://res.cloudinary.com/dhmqojhnk/image/upload/c_limit,h_60,w_90/v1690915099/r34orqivo5jbw2wgbmki.jpg',
     original_filename: '9YdrCeYYIiPp121N7nAL--1--6k1ra'
-  }
+}*/
+const demoImage={
+    publicId:'iouobvcdnozd6kkxp2yy',
+    url:'https://res.cloudinary.com/dhmqojhnk/image/upload/v1689786872/iouobvcdnozd6kkxp2yy.jpg',
+    height:1152,
+    width:832,
+    thumbnailUrl:'https://res.cloudinary.com/dhmqojhnk/image/upload/c_limit,h_60,w_90/v1689786872/iouobvcdnozd6kkxp2yy.jpg' ,
+    original_filename:'2wgwijScIBqFIAlyGlG6--1--5xj0f'
+}
 
 const Body = styled.div`
   width:100%;
@@ -207,14 +216,22 @@ const roboto = Roboto({ subsets: ['latin'], weight: ['300', '400', '700'], style
 let v = false;
 export default function Home({ dark, fresh, fbclid, utm_content, isbot, isfb, sessionid }:
     { dark: number, fresh: boolean, fbclid: string, utm_content: string, isbot: number, isfb: number, sessionid: string }) {
-
+    const myRef = useRef(null);
+    const [myElementIsVisible, updateMyElementIsVisible] = useState(false);
     const [darkMode, setDarkMode] = React.useState(true);
     const [systemMode, setSystemMode] = React.useState(false);
     const router = useRouter();
     const handleCTAClick = () => {
         router.push(`/?fbclid=${fbclid}&utm_content=${utm_content}`);
     };
-
+    useEffect(() => {
+        const observer = new IntersectionObserver((entries, observer) => {
+            const entry = entries[0];
+            updateMyElementIsVisible(entry.isIntersecting);
+        });
+        if (myRef.current)
+            observer.observe(myRef.current);
+    }, []);
     let theme: any;
     if (darkMode) {
         theme = createTheme({
@@ -257,21 +274,21 @@ export default function Home({ dark, fresh, fbclid, utm_content, isbot, isfb, se
         return () => matchMedia.removeEventListener("change", modeMe);
     }, [darkMode]);
 
-    const line1=`Find the right words with the assistance of the award winning AI.   
+    const line1 = `Find the right words with the assistance of the award winning AI.   
     Optimized for social media and messengers.   
     Emojis galore:
     🎑 🎃 👻 🎅 🎄 🎁   
     Best of all: It's free!    
     `
-    const line2=`Begin by simply selecting the occasion.   
+    const line2 = `Begin by simply selecting the occasion.   
     Explore what is possible with advanced customization options.`
 
-    const line3=`Gift suggestions with no effort.   
+    const line3 = `Gift suggestions with no effort.   
         Happy or sad, the AI assistant will help you find the right gifts. 
     `
-    const greeting='';
-    const signature='';
-    const image='';
+    const greeting = "🎉 Happy 12th Birthday to my awesome son! 🎂 Hope you have a fantastic day filled with fun, laughter, and loads of cake! 🎈🍰 You're growing up so fast, but always remember to stay true to yourself and keep spreading those infectious smiles. 😄 Love you to the 🌙 and back!";
+    const signature = 'Enjoy and be happy,\n your Dad!';
+    const image = '';
     const canvasRef = React.useRef<HTMLDivElement>(null);
     return (
         <>
@@ -297,7 +314,10 @@ Whether it's birthdays, graduations, holidays, or moments of illness or loss, WI
                 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
 
                 <meta name="viewport" content="width=device-width, initial-scale=1" />
-                <link rel="canonical" href="https://www.wish-text.com/landing"/>
+                <link rel="canonical" href="https://www.wish-text.com/landing" />
+                <link rel="preconnect" href="https://fonts.googleapis.com" />
+                <link rel="preconnect" href="https://fonts.gstatic.com" />
+                <link href="https://fonts.googleapis.com/css2?family=Caveat&display=swap" rel="stylesheet" />
 
             </Head>
             <ThemeProvider theme={theme}>
@@ -329,7 +349,7 @@ Whether it's birthdays, graduations, holidays, or moments of illness or loss, WI
                             </Toolbar>
                         </AppBar>
 
-                       
+
 
                     </div>
                     <div >
@@ -346,14 +366,14 @@ Whether it's birthdays, graduations, holidays, or moments of illness or loss, WI
                     </div>
                     <Body>
                         <FirstBandContainer>
-                        Craft Personalized Messages with Ease! 
+                            Craft Personalized Messages with Ease!
                         </FirstBandContainer>
-                        {false&&<LineContainer darkmode={"false"}/>}
-                        <Band card={ null} fresh={fresh} fbclid={fbclid} utm_content={utm_content} isbot={isbot} isfb={isfb} sessionid={sessionid} dark={"true"} title="Wish&nbsp;It? Text&nbsp;It!" subtitle={line1} cta="Create a Message"/>
+                        {false && <LineContainer darkmode={"false"} />}
+                        <Band card={null} fresh={fresh} fbclid={fbclid} utm_content={utm_content} isbot={isbot} isfb={isfb} sessionid={sessionid} dark={"true"} title="Wish&nbsp;It? Text&nbsp;It!" subtitle={line1} cta="Create a Message" />
+
                         
-                     
-                        
-                         <SecondBandContainer>
+
+                        <SecondBandContainer>
                             <Title variant="h3">
                                 Messages To Celebrate,<br />
                                 To Comfort, To Encourage.
@@ -361,42 +381,35 @@ Whether it's birthdays, graduations, holidays, or moments of illness or loss, WI
                             <Subtitle variant="h5">
                                 <ReactMarkdown>{line2}</ReactMarkdown>
                             </Subtitle>
-                           
+
                             <CTAButton variant="contained" color="primary" onClick={handleCTAClick}>
                                 Start Creating Now!
                             </CTAButton>
                         </SecondBandContainer>
-                       
-                      
-                           <BandContainer darktext={"true"} background={"gifts-candles-wide.jpg"}>
+
+                        <div ref={myRef} >
+                            {myElementIsVisible && <BandCard
+                                dark="true"
+                                card={
+                                    <Card canvasRef={canvasRef} delayOpen={true} large={true} signature={signature} fbclid={fbclid} utm_content={utm_content} dark={darkMode ? "true" : "false"} text={greeting || ''} image={demoImage} />}
+                                fresh={fresh} fbclid={fbclid} utm_content={utm_content} isbot={isbot} isfb={isfb} sessionid={sessionid}
+                                title="Create Virtual Wishing Cards" subtitle={"Create beautiful wish cards"} cta="Create a Wish Card Now!" />
+                            }
+                        </div>
+                        <BandContainer darktext={"true"} background={"gifts-candles-wide.jpg"}>
                             <Title variant="h3">
-                            Gift Recommendations For Any Occasion
+                                Gift Recommendations For Any Occasion
                             </Title>
                             <Subtitle variant="h5">
-                               <ReactMarkdown>{line3}</ReactMarkdown>
+                                <ReactMarkdown>{line3}</ReactMarkdown>
                             </Subtitle>
                             <CTAButton variant="contained" color="primary" onClick={handleCTAClick}>
-                               Begin Now
+                                Begin Now
                             </CTAButton>
-                           
+
                         </BandContainer>
-                       
-                        <BandCard 
-                        dark="true" 
-                        card={ 
-                            <Card canvasRef={canvasRef} delayOpen={true} large={true} signature={signature} fbclid={fbclid} utm_content={utm_content} dark={darkMode ? "true" : "false"} text={greeting || '' } image={demoImage}  />}
-          
-
-
-                        fresh={fresh} fbclid={fbclid} utm_content={utm_content} isbot={isbot} isfb={isfb} sessionid={sessionid} 
-                        title="Create Virtual Wishing Cards" subtitle={"Create beautiful wish cards"} cta="Create a Greeting Card Now!"/>
-                           
-                      
-                      
-                      
-                     
-                     
-                        {false&&<BandContainer>
+                   
+                        {false && <BandContainer>
                             <Title variant="h3">
                                 Upload your images and create greeting cards
                             </Title>
@@ -418,7 +431,7 @@ Whether it's birthdays, graduations, holidays, or moments of illness or loss, WI
                                 Let us show you how!
                             </CTAButton>
                         </BandContainer>}
-                     
+
                     </Body>
                     <Footer darkmode={"false"}>
                         <Copyright>
@@ -427,7 +440,7 @@ Whether it's birthdays, graduations, holidays, or moments of illness or loss, WI
                                 <Typography variant="caption" gutterBottom>Create the &quot;wishing&quot; or greeting text for you to paste into your favorite messaging app.
                                     AI will provide the helpful suggestions that you can edit by clicking on the suggestion.
 
-                                    Additionally, Wish Text Composer can generate a &apos;wish card&apos; greeting using stock or an uploaded image. 
+                                    Additionally, Wish Text Composer can generate a &apos;wish card&apos; greeting using stock or an uploaded image.
                                     Utilizing AI, it also provides the gift suggestions.
                                 </Typography>
                             </Sub>

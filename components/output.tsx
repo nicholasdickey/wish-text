@@ -357,7 +357,7 @@ export default function Output({
               <StarterMessage><Typography fontSize="inherit"  color="secondary"/*color="#ffee58"*/>Copy message to clipboard to be used with your favorite messenger or social media app.</Typography></StarterMessage></Starter></Box> : null}
              
         {!editing&&session.greeting && !loading && <ToolbarAccept session={session} text={session.greeting} selected={selectedImage.url?true:false}  onGenerateClick={handleGenerate} onDownloadClick={handleDownload} onAcceptClick={handleAccept} onCopyClick={handleCopy} />}
-        {editing&&session.greeting && !loading && <ToolbarUpdateText onUpdateClick={
+        {editing&&session.greeting && !loading && <ToolbarUpdateText onCancelClick={()=>setEditing(false)}onUpdateClick={
           async ()=>{
             setEditing(false)
             const params={
