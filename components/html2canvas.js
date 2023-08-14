@@ -3759,7 +3759,7 @@
         }
         return CSSParsedCounterDeclaration;
     }());
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    // @ts-ignore
     var parse = function (context, descriptor, style) {
         var tokenizer = new Tokenizer();
         var value = style !== null && typeof style !== 'undefined' ? style.toString() : descriptor.initialValue;
@@ -4398,7 +4398,7 @@
             return value;
         },
         get SUPPORT_NATIVE_TEXT_SEGMENTATION() {
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            // @ts-ignore
             var value = !!(typeof Intl !== 'undefined' && Intl.Segmenter);
             Object.defineProperty(FEATURES, 'SUPPORT_NATIVE_TEXT_SEGMENTATION', { value: value });
             return value;
@@ -4474,20 +4474,20 @@
     };
     var segmentGraphemes = function (value) {
         if (FEATURES.SUPPORT_NATIVE_TEXT_SEGMENTATION) {
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            // @ts-ignore
             var segmenter = new Intl.Segmenter(void 0, { granularity: 'grapheme' });
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+           // @ts-ignore
             return Array.from(segmenter.segment(value)).map(function (segment) { return segment.segment; });
         }
         return splitGraphemes(value);
     };
     var segmentWords = function (value, styles) {
         if (FEATURES.SUPPORT_NATIVE_TEXT_SEGMENTATION) {
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          // @ts-ignore
             var segmenter = new Intl.Segmenter(void 0, {
                 granularity: 'word'
             });
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            // @ts-ignore
             return Array.from(segmenter.segment(value)).map(function (segment) { return segment.segment; });
         }
         return breakWords(value, styles);
@@ -5739,7 +5739,7 @@
         function Cache(context, _options) {
             this.context = context;
             this._options = _options;
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+           // @ts-ignore
             this._cache = {};
         }
         Cache.prototype.addImage = function (src) {
@@ -5755,7 +5755,7 @@
             }
             return result;
         };
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        // @ts-ignore
         Cache.prototype.match = function (src) {
             return this._cache[src];
         };
@@ -6822,7 +6822,7 @@
                                     if (styles.webkitTextStrokeWidth && text.text.trim().length) {
                                         _this.ctx.strokeStyle = asString(styles.webkitTextStrokeColor);
                                         _this.ctx.lineWidth = styles.webkitTextStrokeWidth;
-                                        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                                       // @ts-ignore
                                         _this.ctx.lineJoin = !!window.chrome ? 'miter' : 'round';
                                         _this.ctx.strokeText(text.text, text.bounds.left, text.bounds.top + baseline);
                                     }
@@ -7690,7 +7690,7 @@
             this.enabled = enabled;
             this.start = Date.now();
         }
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      // @ts-ignore
         Logger.prototype.debug = function () {
             var args = [];
             for (var _i = 0; _i < arguments.length; _i++) {
@@ -7710,30 +7710,30 @@
         Logger.prototype.getTime = function () {
             return Date.now() - this.start;
         };
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+       // @ts-ignore
         Logger.prototype.info = function () {
             var args = [];
             for (var _i = 0; _i < arguments.length; _i++) {
                 args[_i] = arguments[_i];
             }
             if (this.enabled) {
-                // eslint-disable-next-line no-console
+               // @ts-ignore
                 if (typeof window !== 'undefined' && window.console && typeof console.info === 'function') {
-                    // eslint-disable-next-line no-console
+                    // @ts-ignore
                     console.info.apply(console, __spreadArray([this.id, this.getTime() + "ms"], args));
                 }
             }
         };
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+       // @ts-ignore
         Logger.prototype.warn = function () {
             var args = [];
             for (var _i = 0; _i < arguments.length; _i++) {
                 args[_i] = arguments[_i];
             }
             if (this.enabled) {
-                // eslint-disable-next-line no-console
+              // @ts-ignore
                 if (typeof window !== 'undefined' && window.console && typeof console.warn === 'function') {
-                    // eslint-disable-next-line no-console
+                   // @ts-ignore
                     console.warn.apply(console, __spreadArray([this.id, this.getTime() + "ms"], args));
                 }
                 else {
@@ -7741,16 +7741,16 @@
                 }
             }
         };
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+       // @ts-ignore
         Logger.prototype.error = function () {
             var args = [];
             for (var _i = 0; _i < arguments.length; _i++) {
                 args[_i] = arguments[_i];
             }
             if (this.enabled) {
-                // eslint-disable-next-line no-console
+             // @ts-ignore
                 if (typeof window !== 'undefined' && window.console && typeof console.error === 'function') {
-                    // eslint-disable-next-line no-console
+                    // @ts-ignore
                     console.error.apply(console, __spreadArray([this.id, this.getTime() + "ms"], args));
                 }
                 else {
