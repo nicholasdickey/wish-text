@@ -44,19 +44,17 @@ const TextBody = styled.div<BodyProps>`
   width:100%;
   display:flex;
   justify-content:center;
-  font-size:${({ l, large }) => large ? (l > 600 ? 11 : l > 400 ? 12 : l > 300 ? 13 : l > 200 ? 14 : 16) : (l > 600 ? 5 : l > 400 ? 6 : l > 300 ? 7 : l > 200 ? 9 : 10)}px;
+  font-size:${({ l, large }) => large ? (l > 600 ? 2 : l > 400 ? 3 : l > 300 ? 4 : l > 200 ? 5 : 7) : (l > 600 ? 2 : l > 400 ? 3 : l > 300 ? 4 : l > 200 ? 5 : 6)}px;
   font-weight: 400;
   line-height: 1.7;
   font-family: "Roboto", "Helvetica", "Arial", sans-serif;
   padding-top:1px;
   //padding-bottom:20px;
   //margin-bottom: 40px;
-  @media (min-width:600px) and (max-width: 990px) {
+  @media (min-width:600px) {
     font-size:${({ l, large }) => large ? (l > 600 ? 9 : l > 400 ? 10 : l > 300 ? 11 : l > 200 ? 12 : 13) : (l > 600 ? 2 : l > 400 ? 3 : l > 300 ? 4 : l > 200 ? 5 : 6)}px;
   }
-  @media (max-width: 600px) {
-    font-size:${({ l, large }) => large ? (l > 600 ? 2 : l > 400 ? 3 : l > 300 ? 4 : l > 200 ? 5 : 7) : (l > 600 ? 2 : l > 400 ? 3 : l > 300 ? 4 : l > 200 ? 5 : 6)}px;
-  }
+ 
 `;
 
 interface LargeProps {
@@ -409,7 +407,7 @@ const GreetingCard: React.FC<BandProps> = ({ canvasRef, delayOpen = false, start
                     </Headline>
 
                     {loading && <LinearProgress />}
-                    <TextBody large={large} l={text.length} id='wt-output'>
+                    <TextBody large={large} l={text.length} id='wt-output-body'>
                       <ReactMarkdown>
                         {loading ? "Generating..." : body}
                       </ReactMarkdown>

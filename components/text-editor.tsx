@@ -45,14 +45,15 @@ const Body = styled.div<BodyProps>`
   display:flex;
   justify-content:center;
   font-size:18px;
+  font-size:${({l})=>l>600?11:l>400?12:l>300?13:l>200?13:16}px;
   font-weight: 400;
   line-height: 1.7;
   font-family: "Roboto", "Helvetica", "Arial", sans-serif;
   padding-top:1px;
   padding-bottom:20px;
   margin-bottom: 20px;
-  @media (max-width: 990px) {
-    font-size:${({l})=>l>600?11:l>400?12:l>300?13:l>200?14:16}px;
+  @media (-width: 990px) {
+    font-size:${({l})=>l>600?11:l>400?12:l>300?13:l>200?13:16}px;
   }
 `;
 
@@ -102,7 +103,7 @@ const InnerOutput = styled.div<InnerOutputProps>`
   overflow-wrap: break-word;
   font-size: ${({ length, horiz }) =>{
     const h=horiz=="true";
-    return `${length > 600 ? (h ? '12' : '19') : length > 500 ? (h ? '12' : '20') : length > 100 ? (h? '12' : '12') : h ? '12' : '12'}`}}px;  
+    return `${length > 600 ? (h ? '10' : '17') : length > 500 ? (h ? '11' : '12') : length > 100 ? (h? '12' : '12') : h ? '12' : '12'}`}}px;  
   width:100%;
   height:${({adjheight})=>adjheight};
   @media (max-width: 990px) {
