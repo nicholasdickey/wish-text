@@ -384,7 +384,7 @@ const GreetingCard: React.FC<BandProps> = ({ canvasRef, delayOpen = false, start
                 </div>
                 <div className={`card__panel card__panel--inside-left ${open ? "open" : ""}`} onClick={() => {
                   console.log("LEFT CLICK")
-                  if (size?.width > size?.height)
+                  if (size?.width > size?.height&&size?.width>600)
                     setLarge(large);
                   else
                     setHugeLeft(!hugeLeft);
@@ -393,7 +393,7 @@ const GreetingCard: React.FC<BandProps> = ({ canvasRef, delayOpen = false, start
                 </div>
                 <div className={`card__panel card__panel--inside-right ${open ? "open" : ""}`} onClick={() => {
                   console.log("RIGHT CLICK")
-                  if (size?.width > size?.height)
+                  if (size?.width > size?.height&&size?.width>600)
                     setLarge(large);
                   else
                     setHugeRight(!hugeRight);

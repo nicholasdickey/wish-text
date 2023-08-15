@@ -132,7 +132,7 @@ const Signature = styled.div`
     justify-content:center;
     //align-items:flex-begin;
    // padding:4px;
-    font-family:cursive;
+    font-family:Caveat;
     color:#63599d;
     -ms-transform: rotate(-10deg); /* IE 9 */
     -webkit-transform: rotate(-10deg); /* Chrome, Safari, Opera */
