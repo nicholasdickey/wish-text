@@ -153,6 +153,8 @@ const Signature = styled.div`
 const SignatureLine = styled(Typography) <BodyProps>`
     padding:0px;
     text-align:left;
+    font-family:Caveat;
+    font-size:28px;
      font-size:${({ large }) => large ? 26 : 9}px !important;
      @media (min-width: 600px) {
       //  padding-top:40px;

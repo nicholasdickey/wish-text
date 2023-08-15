@@ -54,13 +54,14 @@ interface BandProps {
     sessionid: string,
     title:string,
     subtitle:string,
-    cta:string
+    cta:string,
+    extra:string
 }
-const Band: React.FC<BandProps> = ({card, dark, fresh, fbclid, utm_content, isbot, isfb, sessionid,title,subtitle,cta }) => {
+const Band: React.FC<BandProps> = ({extra,card, dark, fresh, fbclid, utm_content, isbot, isfb, sessionid,title,subtitle,cta }) => {
     const theme = useTheme();
     const router = useRouter();
     const handleCTAClick = () => {
-        router.push(`/?fbclid=${fbclid}&utm_content=${utm_content}`);
+        router.push(`/?fbclid=${fbclid}&utm_content=${utm_content}&${extra}`);
     };
     return (
 

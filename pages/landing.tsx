@@ -389,6 +389,7 @@ Whether it's birthdays, graduations, holidays, or moments of illness or loss, WI
 
                         <div ref={myRef} >
                             {myElementIsVisible && <BandCard
+                                extra="card=true"
                                 dark="true"
                                 card={
                                     <Card canvasRef={canvasRef} delayOpen={true} large={true} signature={signature} fbclid={fbclid} utm_content={utm_content} dark={darkMode ? "true" : "false"} text={greeting || ''} image={demoImage} />}
