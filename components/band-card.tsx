@@ -61,7 +61,7 @@ const Band: React.FC<BandProps> = ({extra,card, dark, fresh, fbclid, utm_content
     const theme = useTheme();
     const router = useRouter();
     const handleCTAClick = () => {
-        router.push(`/?fbclid=${fbclid}&utm_content=${utm_content}&${extra}`);
+        router.push(`/start?fbclid=${fbclid}&utm_content=${utm_content}&${extra}`);
     };
     return (
 
