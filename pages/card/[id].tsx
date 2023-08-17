@@ -433,7 +433,7 @@ export default function Home({ id, card, dark, fresh, fbclid, utm_content, isbot
           </Body>
           
           <Wrap><Footer darkmode={"false"}>
-          <ToolbarCreate url={`/?fbclid=${fbclid}&utm_content=${utm_content}`} />
+          <ToolbarCreate url={`/start?fbclid=${fbclid}&utm_content=${utm_content}`} />
             <Copyright>
 
 
