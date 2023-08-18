@@ -492,7 +492,7 @@ export const getServerSideProps = withSessionSsr(
       if (!botInfo.bot && fresh) {
         console.log('ssr-landing-init');
         try {
-          recordEvent(sessionid, 'ssr-card-init', `{id:"${id}","fbclid":"${fbclid}","ua":"${ua}","utm_content":"${utm_content}"}`);
+          recordEvent(sessionid, 'ssr-card-init', `{"id":"${id}","fbclid":"${fbclid}","ua":"${ua}","utm_content":"${utm_content}"}`);
         } catch (x) {
           console.log('ssr-landing-init-error', x);
         }
@@ -500,7 +500,7 @@ export const getServerSideProps = withSessionSsr(
 
       if (botInfo.bot && fresh) {
         try {
-          await recordEvent(sessionid, 'ssr-bot-card-init', `{{id:"${id}","fbclid":"${fbclid}","ua":"${ua}","utm_content":"${utm_content}"}`);
+          await recordEvent(sessionid, 'ssr-bot-card-init', `{{"id":"${id}","fbclid":"${fbclid}","ua":"${ua}","utm_content":"${utm_content}"}`);
         } catch (x) {
           console.log('ssr-bot-landing-init-error', x);
         }
