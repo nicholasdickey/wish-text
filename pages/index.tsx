@@ -372,7 +372,7 @@ Whether it's birthdays, graduations, holidays, or moments of illness or loss, WI
                             Craft Personalized Messages with Ease!
                         </FirstBandContainer>
                         {false && <LineContainer darkmode={"false"} />}
-                        <Band card={null} fresh={fresh} fbclid={fbclid} utm_content={utm_content} isbot={isbot} isfb={isfb} sessionid={sessionid} dark={"true"} title="Wish&nbsp;It? Text&nbsp;It!" subtitle={line1} cta="Create a Message" />
+                        <Band setLoading={setLoading} loading={loading} card={null} fresh={fresh} fbclid={fbclid} utm_content={utm_content} isbot={isbot} isfb={isfb} sessionid={sessionid} dark={"true"} title="Wish&nbsp;It? Text&nbsp;It!" subtitle={line1} cta="Create a Message" />
 
                         
 
@@ -392,6 +392,8 @@ Whether it's birthdays, graduations, holidays, or moments of illness or loss, WI
 
                         <div ref={myRef} >
                             {myElementIsVisible && <BandCard
+                                setLoading={setLoading}
+                                loading={loading}
                                 extra="card=true"
                                 dark="true"
                                 card={

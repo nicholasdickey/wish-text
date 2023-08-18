@@ -357,7 +357,10 @@ export default function Home({ id, card, dark, fresh, fbclid, utm_content, isbot
     return () => matchMedia.removeEventListener("change", modeMe);
   }, [systemMode, darkMode, session?.mode, modeIsSet]);
   const { signature, greeting, image } = card;
-
+  const text = (greeting||"").replaceAll('\n\n', '\n');
+  const tw = text.split('\n');
+  const headline=tw.length>1?tw[0]:'';
+  const body=tw.length>1?tw.slice(1).join('\n'):tw[0];
   return (
     <>
       <Head>
@@ -366,15 +369,15 @@ export default function Home({ id, card, dark, fresh, fbclid, utm_content, isbot
         <meta name="slogan" content="Greetings Text" />
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:site" content="@wishtext" />
-        <meta name="twitter:title" content="A Wish Card" />
-        <meta name="twitter:description" content={card.greeting} />
+        <meta name="twitter:title" content={headline?headline:"A Wish Card"} />
+        <meta name="twitter:description" content={headline?body:card.greeting} />
         <meta name="twitter:image" content={`${process.env.NEXT_PUBLIC_SERVER}/api/image/${card.linkid}.png`} />
-        <meta name="title" content="A Wish Card" />
-        <meta property="og:title" content="A Wish Card" />
+        <meta name="title" content={headline?headline:"A Wish Card"} />
+        <meta property="og:title" content={headline?headline:"A Wish Card"} />
         <meta property="og:url" content={`https://www.wish-text.com/card/${card.linkid}`} />
         <meta property="og:image" content={`${process.env.NEXT_PUBLIC_SERVER}/api/image/${card.linkid}.png`} />
-        <meta name="description" content={card.greeting} />
-        <meta property="og:description" content={card.greeting} />
+        <meta name="description" content={headline?body:card.greeting} />
+        <meta property="og:description" content={headline?body:card.greeting} />
         <link rel="icon" href={systemMode ? "/wbLogo.png" : "/bwLogo.png"} sizes="64x63" type="image/png" />
         <meta name="theme-color" content={theme.palette.background.default} />
         <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />

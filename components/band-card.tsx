@@ -10,8 +10,9 @@ import * as ga from '../lib/ga';
 import Button from '@mui/material/Button';
 import { useRouter } from 'next/router';
 import ReactMarkdown from "react-markdown";
+import LinearProgress from '@mui/material/LinearProgress';
 
-const BandContainer = styled.div<{ darktext?: string, background?: string }>`
+const BandContainer = styled.div<{ darktext?: string, background?: string,loading?:boolean }>`
     display: flex;
     position:relative;
     flex-direction: column;
@@ -55,12 +56,15 @@ interface BandProps {
     title:string,
     subtitle:string,
     cta:string,
-    extra:string
+    extra:string,
+    loading:boolean,
+    setLoading:React.Dispatch<React.SetStateAction<boolean>>
 }
-const Band: React.FC<BandProps> = ({extra,card, dark, fresh, fbclid, utm_content, isbot, isfb, sessionid,title,subtitle,cta }) => {
+const Band: React.FC<BandProps> = ({setLoading,loading,extra,card, dark, fresh, fbclid, utm_content, isbot, isfb, sessionid,title,subtitle,cta }) => {
     const theme = useTheme();
     const router = useRouter();
     const handleCTAClick = () => {
+      setLoading(true);
         router.push(`/start?fbclid=${fbclid}&utm_content=${utm_content}&${extra}`);
     };
     return (
@@ -74,9 +78,9 @@ const Band: React.FC<BandProps> = ({extra,card, dark, fresh, fbclid, utm_content
             </Subtitle>:null}
            
             {card}
-            <CTAButton variant="contained" color="primary" onClick={handleCTAClick}>
+            {loading ? <LinearProgress />:<CTAButton variant="contained" color="primary" onClick={handleCTAClick}>
                {cta}
-            </CTAButton>
+            </CTAButton>}
 
         </BandContainer>
     );

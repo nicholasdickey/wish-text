@@ -10,6 +10,7 @@ import * as ga from '../lib/ga';
 import Button from '@mui/material/Button';
 import { useRouter } from 'next/router';
 import ReactMarkdown from "react-markdown";
+import LinearProgress from '@mui/material/LinearProgress';
 
 const BandContainer = styled.div<{ darktext?: string, background?: string }>`
     display: flex;
@@ -54,12 +55,15 @@ interface BandProps {
     sessionid: string,
     title:string,
     subtitle:string,
-    cta:string
+    cta:string,
+    loading:boolean,
+    setLoading:React.Dispatch<React.SetStateAction<boolean>>
 }
-const Band: React.FC<BandProps> = ({card, dark, fresh, fbclid, utm_content, isbot, isfb, sessionid,title,subtitle,cta }) => {
+const Band: React.FC<BandProps> = ({setLoading,loading,card, dark, fresh, fbclid, utm_content, isbot, isfb, sessionid,title,subtitle,cta }) => {
     const theme = useTheme();
     const router = useRouter();
     const handleCTAClick = () => {
+        setLoading(true);
         router.push(`/start?fbclid=${fbclid}&utm_content=${utm_content}`);
     };
     return (
@@ -73,9 +77,9 @@ const Band: React.FC<BandProps> = ({card, dark, fresh, fbclid, utm_content, isbo
             </Subtitle>:null}
            
             {card}
-            <CTAButton variant="contained" color="primary" onClick={handleCTAClick}>
+            {loading ? <LinearProgress />:<CTAButton variant="contained" color="primary" onClick={handleCTAClick}>
                {cta}
-            </CTAButton>
+            </CTAButton>}
 
         </BandContainer>
     );
