@@ -354,7 +354,7 @@ const GreetingCard: React.FC<BandProps> = ({ canvasRef, delayOpen = false, start
   const router = useRouter();
   const size = useWindowSize();
   const handleCTAClick = () => {
-    router.push(`/?fbclid=${fbclid}&utm_content=${utm_content}`);
+    router.push(`/start?fbclid=${fbclid}&utm_content=${utm_content}`);
   };
   // console.log("large=", large, "greeting=", text)
   text = text.replace(/\n\n/g, '\n');

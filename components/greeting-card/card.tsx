@@ -47,7 +47,7 @@ const Card: React.FC<CardProps> = ({
 
     return <OuterWrapper>
         
-        <Box sx={{ mt: 2, mb: 2 }} textAlign="center">         
+        <Box sx={{ mt: 14, mb: 2 }} textAlign="center">         
             <CardControl canvasRef={canvasRef} startOpen={true} large={true} fbclid={fbclid} utm_content={utm_content} dark={darkMode ? "true" : "false"} text={greeting || ""} image={image} signature={signature} />
         </Box>
     </OuterWrapper>

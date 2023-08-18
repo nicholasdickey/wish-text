@@ -71,7 +71,14 @@ import PlayerToolbar from "../components/toolbar-player";
 import Section from "../components/greeting-card/editor-section";
 
 const OvalButton = styled(Button)`
+  height:60px;
+  font-size:18px;
   border-radius: 14px;
+  @media (max-width: 700px) {
+    height:40px;
+    font-size:14px;
+   
+  }
   `;
 const ModeSwitch = styled.div`
   position:absolute;
@@ -971,7 +978,7 @@ Whether it's birthdays, graduations, holidays, or moments of illness or loss, WI
                 </AccordionDetails>
               </Accordion> : null}
 
-            {virgin && session.greeting ?
+            {false && virgin && session.greeting ?
               <Accordion sx={{ my: 5 }} expanded={expanded === 'advanced'} onChange={handleAccordeonChange('advanced')}>
                 <AccordionSummary
                   expandIcon={<ExpandMoreIcon />}

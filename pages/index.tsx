@@ -44,6 +44,7 @@ import { isbot } from '../lib/isbot';
 import Band from '../components/band';
 import BandCard from '../components/band-card';
 import Card from '../components/greeting-card/ui';
+import LinearProgress from '@mui/material/LinearProgress';
 interface BackgroundMode {
     colorDark: string;
     colorLight: string;
@@ -220,8 +221,10 @@ export default function Home({ dark, fresh, fbclid, utm_content, isbot, isfb, se
     const [myElementIsVisible, updateMyElementIsVisible] = useState(false);
     const [darkMode, setDarkMode] = React.useState(true);
     const [systemMode, setSystemMode] = React.useState(false);
+    const [loading,setLoading]=React.useState(false);
     const router = useRouter();
     const handleCTAClick = () => {
+        setLoading(true);
         router.push(`/start?fbclid=${fbclid}&utm_content=${utm_content}`);
     };
     useEffect(() => {
@@ -381,10 +384,10 @@ Whether it's birthdays, graduations, holidays, or moments of illness or loss, WI
                             <Subtitle variant="h5">
                                 <ReactMarkdown>{line2}</ReactMarkdown>
                             </Subtitle>
-
+                            {loading ? <LinearProgress />:
                             <CTAButton variant="contained" color="primary" onClick={handleCTAClick}>
                                 Start Creating Now!
-                            </CTAButton>
+                            </CTAButton>}
                         </SecondBandContainer>
 
                         <div ref={myRef} >
@@ -404,9 +407,10 @@ Whether it's birthdays, graduations, holidays, or moments of illness or loss, WI
                             <Subtitle variant="h5">
                                 <ReactMarkdown>{line3}</ReactMarkdown>
                             </Subtitle>
+                            {loading ? <LinearProgress />:
                             <CTAButton variant="contained" color="primary" onClick={handleCTAClick}>
                                 Begin Now
-                            </CTAButton>
+                            </CTAButton>}
 
                         </BandContainer>
                    
@@ -428,9 +432,9 @@ Whether it's birthdays, graduations, holidays, or moments of illness or loss, WI
                                 </ImageDemo>
 
                             </Subtitle>
-                            <CTAButton variant="contained" color="primary" onClick={handleCTAClick}>
+                            {loading ? <LinearProgress />:<CTAButton variant="contained" color="primary" onClick={handleCTAClick}>
                                 Let us show you how!
-                            </CTAButton>
+                            </CTAButton>}
                         </BandContainer>}
 
                     </Body>

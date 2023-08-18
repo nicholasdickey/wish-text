@@ -93,7 +93,7 @@ const Card: React.FC<CardProps> = ({
                 value={signature}
                 variant="outlined"
             />
-            <FormHelperText sx={{ width: 1, m: 1, p: 0 }}>For example: Love, Mom &amp; Dad!</FormHelperText>
+            <FormHelperText sx={{ width: 1, m: 1, p: 0 }}>Personal note. For example: Love, Mom &amp; Dad!</FormHelperText>
         </CursiveEditorBox>
     </Section>
 }
