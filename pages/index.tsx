@@ -496,7 +496,7 @@ export const getServerSideProps = withSessionSsr(
             var randomstring = () => Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
             let sessionid = context.req.session?.sessionid || randomstring();
             const fresh = !context.req.session.sessionid;
-            if (!botInfo.bot && fresh) {
+            if (!botInfo.bot) {
                 console.log('ssr-landing-init');
                 try {
                     recordEvent(sessionid, 'ssr-landing-init', `{"fbclid":"${fbclid}","ua":"${ua}","utm_content":"${utm_content}"}`);
@@ -505,7 +505,7 @@ export const getServerSideProps = withSessionSsr(
                 }
 
             }
-            if (botInfo.bot && fresh) {
+            if (botInfo.bot) {
                 try {
                     await recordEvent(sessionid, 'ssr-bot-landing-init', `{"fbclid":"${fbclid}","ua":"${ua}","utm_content":"${utm_content}"}`);
                 } catch (x) {
