@@ -1300,7 +1300,7 @@ export const getServerSideProps = withSessionSsr(
       //console.log("startSession=", startoptions)
       const ua = context.req.headers['user-agent'];
       const botInfo = isbot({ ua });
-      if (!botInfo.bot && !context.req.session.sessionid) {
+      if (!botInfo.bot) {
         try {
           await recordEvent(sessionid, 'ssr-index-init', `{"fbclid":"${fbclid}","ua":"${ua}","utm_content":"${utm_content}"}`);
         }
@@ -1308,7 +1308,7 @@ export const getServerSideProps = withSessionSsr(
           console.log("record event error", e)
         }
       }
-      if (botInfo.bot && !context.req.session.sessionid) {
+      if (botInfo.bot ) {
         try {
           await recordEvent(sessionid, 'ssr-bot-index-init', `{"fbclid":"${fbclid}","ua":"${ua}","utm_content":"${utm_content}"}`);
         }
