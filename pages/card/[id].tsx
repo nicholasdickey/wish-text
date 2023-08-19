@@ -489,16 +489,16 @@ export const getServerSideProps = withSessionSsr(
       }
 
       const fresh = !context.req.session.sessionid;
-      if (!botInfo.bot && fresh) {
-        console.log('ssr-landing-init');
+      if (!botInfo.bot ) {
+        console.log('ssr-card-init');
         try {
           recordEvent(sessionid, 'ssr-card-init', `{"id":"${id}","fbclid":"${fbclid}","ua":"${ua}","utm_content":"${utm_content}"}`);
         } catch (x) {
-          console.log('ssr-landing-init-error', x);
+          console.log('ssr-card-init-error', x);
         }
       }
 
-      if (botInfo.bot && fresh) {
+      if (botInfo.bot) {
         try {
           await recordEvent(sessionid, 'ssr-bot-card-init', `{"id":"${id}","fbclid":"${fbclid}","ua":"${ua}","utm_content":"${utm_content}"}`);
         } catch (x) {
