@@ -978,7 +978,7 @@ Whether it's birthdays, graduations, holidays, or moments of illness or loss, WI
                 </AccordionDetails>
               </Accordion> : null}
 
-            {false && virgin && session.greeting ?
+            { virgin && session.greeting ?
               <Accordion sx={{ my: 5 }} expanded={expanded === 'advanced'} onChange={handleAccordeonChange('advanced')}>
                 <AccordionSummary
                   expandIcon={<ExpandMoreIcon />}
@@ -1074,9 +1074,15 @@ Whether it's birthdays, graduations, holidays, or moments of illness or loss, WI
           </Container>
           <Container maxWidth="sm" sx={{ mt: 10 }}>
             {session.greeting && !session.card && <Box sx={{ mt: 1, width: 1 }}>
-              <OvalButton fullWidth size="small" variant="contained" onClick={() => {
+              <OvalButton fullWidth size="small" variant="contained" onClick={async () => {
                 updateSession2({ card: true });
                 setCard(true);
+                try {
+                  await recordEvent(session.sessionid, 'open-card-editor', `{"fbclid":"${fbclid}","utm_content":"${utm_content}"}`);
+                }
+                catch (e) {
+                  console.log("record event error", e)
+                }
                 updateRoute({
                   from,
                   to,
@@ -1092,9 +1098,15 @@ Whether it's birthdays, graduations, holidays, or moments of illness or loss, WI
               }}>Open Wish Card Composer</OvalButton>
             </Box>}
             {session.card && <Box sx={{ mt: 1, width: 1 }}>
-              <OvalButton fullWidth size="small" variant="contained" onClick={() => {
+              <OvalButton fullWidth size="small" variant="contained" onClick={async () => {
                 updateSession2({ card: false });
                 setCard(false);
+                try {
+                  await recordEvent(session.sessionid, 'close-card-editor', `{"fbclid":"${fbclid}","utm_content":"${utm_content}"}`);
+                }
+                catch (e) {
+                  console.log("record event error", e)
+                }
                 updateRoute({
                   from,
                   to,
