@@ -404,7 +404,7 @@ export default function CardEditor({
   const handleCreate: () => void = async () => {
     console.log("handleCreate:", { num, image, signature, greeting })
     setCreatingCard(true);
-    setTimeout(async () => await recordEvent(session.sessionid, 'create-card', ''), 1000);
+   // setTimeout(async () => await recordEvent(session.sessionid, 'create-card', ''), 1000);
     //await handleDownload();
     const metaimage=await captureImage();
     let card: CardData = {
@@ -416,6 +416,8 @@ export default function CardEditor({
     }
     
     const { success, linkid, cardNum } = await recordSessionCard(sessionid, card);
+   
+    setTimeout(async () => await recordEvent(session.sessionid, 'create-card', linkid), 1000);
     setCreatingCard(false);
     setLinkid(linkid);
     setNewCardsStack([]);

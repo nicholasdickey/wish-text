@@ -269,6 +269,12 @@ export const getSharedCard = async (sessionid: string, id: string=''): Promise<{
   console.log("getSessionCards", sessionid, id, res.data.success, res.data);
   return res.data;
 }
+export const getReport = async (): Promise<{ success: boolean, report: any }> => {
+  const url = `${process.env.NEXT_PUBLIC_LAKEAPI}/api/v1/wishtext/events/report`;
+  console.log("getReport:", url);
+  const res = await axios.get(url);
+ return res.data;
+}
 
 
 
