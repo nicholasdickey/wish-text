@@ -75,7 +75,7 @@ const ReportItem= function(name:string,expanded:string,setExpanded:any,sessionid
         });
 
   
-    return <Accordion key={name} style={{ background:'#844',color:"white",  borderRadius: 14 }} sx={{ mt: 5 }} expanded={expanded == sessionid} onChange={()=>setExpanded(sessionid)}>
+    return <Accordion key={name} style={{ background:'#844',color:"white",  borderRadius: 14 }} sx={{ mt: 5 }} expanded={expanded == sessionid} onChange={()=>setExpanded(expanded==sessionid?'':sessionid)}>
                 <AccordionSummary
                   expandIcon={<ExpandMoreIcon />}
                   aria-controls="panel4bh-content"
