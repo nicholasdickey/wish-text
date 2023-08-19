@@ -49,7 +49,7 @@ import Paper from '@mui/material/Paper';
 
 const ReportItem= function(name:string,expanded:string,setExpanded:any,sessionid:string,reportItem:any){
     const items=reportItem.items.map((record:any,i:number)=>{
-        const {name:eventName,image='',occasion,naive='',text='',params='',fbclid='',ad='',stamp='',signature='',greeting='',metaimage=''}=record;
+        const {name:eventName,image='',occasion,naive='',text='',params='',fbclid='',ad='',stamp='',signature='',greeting='',metaimage='',cta_tag=''}=record;
         console.log("ReportItem",record,greeting,name)
 
         return (
@@ -64,9 +64,10 @@ const ReportItem= function(name:string,expanded:string,setExpanded:any,sessionid
                 {stamp&&<Typography>stamp:{stamp}</Typography>}
                 {signature&&<div>Signature:{signature}</div>}
                 {greeting&&<div>Greeting:{greeting}</div>}
+                {cta_tag&&<div>CTA Tag:{cta_tag}</div>}
                
                 {image&&<img width={4*64} height={3*64} src={image} alt={"Image"}/>}
-                 {metaimage&&<img width={64*8} height={64*3} src={metaimage} alt={"Image"}/>}
+                {metaimage&&<img width={64*8} height={64*3} src={metaimage} alt={"Image"}/>}
                 
 
                 

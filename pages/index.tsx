@@ -200,13 +200,13 @@ margin-top:40px;
     thumbnailUrl: 'https://res.cloudinary.com/dhmqojhnk/image/upload/c_limit,h_60,w_90/v1690915099/r34orqivo5jbw2wgbmki.jpg',
     original_filename: '9YdrCeYYIiPp121N7nAL--1--6k1ra'
 }*/
-const demoImage={
-    publicId:'iouobvcdnozd6kkxp2yy',
-    url:'https://res.cloudinary.com/dhmqojhnk/image/upload/v1689786872/iouobvcdnozd6kkxp2yy.jpg',
-    height:1152,
-    width:832,
-    thumbnailUrl:'https://res.cloudinary.com/dhmqojhnk/image/upload/c_limit,h_60,w_90/v1689786872/iouobvcdnozd6kkxp2yy.jpg' ,
-    original_filename:'2wgwijScIBqFIAlyGlG6--1--5xj0f'
+const demoImage = {
+    publicId: 'iouobvcdnozd6kkxp2yy',
+    url: 'https://res.cloudinary.com/dhmqojhnk/image/upload/v1689786872/iouobvcdnozd6kkxp2yy.jpg',
+    height: 1152,
+    width: 832,
+    thumbnailUrl: 'https://res.cloudinary.com/dhmqojhnk/image/upload/c_limit,h_60,w_90/v1689786872/iouobvcdnozd6kkxp2yy.jpg',
+    original_filename: '2wgwijScIBqFIAlyGlG6--1--5xj0f'
 }
 
 const Body = styled.div`
@@ -221,15 +221,27 @@ export default function Home({ dark, fresh, fbclid, utm_content, isbot, isfb, se
     const [myElementIsVisible, updateMyElementIsVisible] = useState(false);
     const [darkMode, setDarkMode] = React.useState(true);
     const [systemMode, setSystemMode] = React.useState(false);
-    const [loading,setLoading]=React.useState(false);
+    const [loading, setLoading] = React.useState(false);
     const router = useRouter();
-    const handleCTAClick = () => {
+    const handleCTAClick = (ctaTag:string) => {
         setLoading(true);
+        try {
+            recordEvent(sessionid, 'landing-cta-click', `{"fbclid":"${fbclid}","utm_content":"${utm_content}","cta_tag":"${ctaTag}"}`);
+        } catch (x) {
+            console.log('landingCardRevealError', x);
+        }
         router.push(`/start?fbclid=${fbclid}&utm_content=${utm_content}`);
     };
     useEffect(() => {
         const observer = new IntersectionObserver((entries, observer) => {
             const entry = entries[0];
+            if (entry.isIntersecting && !myElementIsVisible) {
+                try {
+                    recordEvent(sessionid, 'landing-card-reveal', `{"fbclid":"${fbclid}","utm_content":"${utm_content}"}`);
+                } catch (x) {
+                    console.log('landingCardRevealError', x);
+                }
+            }
             updateMyElementIsVisible(entry.isIntersecting);
         });
         if (myRef.current)
@@ -374,7 +386,7 @@ Whether it's birthdays, graduations, holidays, or moments of illness or loss, WI
                         {false && <LineContainer darkmode={"false"} />}
                         <Band setLoading={setLoading} loading={loading} card={null} fresh={fresh} fbclid={fbclid} utm_content={utm_content} isbot={isbot} isfb={isfb} sessionid={sessionid} dark={"true"} title="Wish&nbsp;It? Text&nbsp;It!" subtitle={line1} cta="Create a Message" />
 
-                        
+
 
                         <SecondBandContainer>
                             <Title variant="h3">
@@ -384,10 +396,10 @@ Whether it's birthdays, graduations, holidays, or moments of illness or loss, WI
                             <Subtitle variant="h5">
                                 <ReactMarkdown>{line2}</ReactMarkdown>
                             </Subtitle>
-                            {loading ? <LinearProgress />:
-                            <CTAButton variant="contained" color="primary" onClick={handleCTAClick}>
-                                Start Creating Now!
-                            </CTAButton>}
+                            {loading ? <LinearProgress /> :
+                                <CTAButton variant="contained" color="primary" onClick={()=>handleCTAClick("2")}>
+                                    Start Creating Now!
+                                </CTAButton>}
                         </SecondBandContainer>
 
                         <div ref={myRef} >
@@ -409,13 +421,13 @@ Whether it's birthdays, graduations, holidays, or moments of illness or loss, WI
                             <Subtitle variant="h5">
                                 <ReactMarkdown>{line3}</ReactMarkdown>
                             </Subtitle>
-                            {loading ? <LinearProgress />:
-                            <CTAButton variant="contained" color="primary" onClick={handleCTAClick}>
-                                Begin Now
-                            </CTAButton>}
+                            {loading ? <LinearProgress /> :
+                                <CTAButton variant="contained" color="primary" onClick={()=>handleCTAClick("4")}>
+                                    Begin Now
+                                </CTAButton>}
 
                         </BandContainer>
-                   
+
                         {false && <BandContainer>
                             <Title variant="h3">
                                 Upload your images and create greeting cards
@@ -434,7 +446,7 @@ Whether it's birthdays, graduations, holidays, or moments of illness or loss, WI
                                 </ImageDemo>
 
                             </Subtitle>
-                            {loading ? <LinearProgress />:<CTAButton variant="contained" color="primary" onClick={handleCTAClick}>
+                            {loading ? <LinearProgress /> : <CTAButton variant="contained" color="primary" onClick={()=>handleCTAClick("5")}>
                                 Let us show you how!
                             </CTAButton>}
                         </BandContainer>}

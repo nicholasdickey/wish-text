@@ -11,6 +11,7 @@ import Button from '@mui/material/Button';
 import { useRouter } from 'next/router';
 import ReactMarkdown from "react-markdown";
 import LinearProgress from '@mui/material/LinearProgress';
+import { recordEvent } from '../lib/api'
 
 const BandContainer = styled.div<{ darktext?: string, background?: string }>`
     display: flex;
@@ -45,43 +46,48 @@ const CTAButton = styled(Button)`
   margin-top: 2rem;
 `;
 interface BandProps {
-    card:any,
-    dark: string,
-    fresh: boolean, 
-    fbclid: string,
-    utm_content: string,
-    isbot: number,
-    isfb: number,
-    sessionid: string,
-    title:string,
-    subtitle:string,
-    cta:string,
-    loading:boolean,
-    setLoading:React.Dispatch<React.SetStateAction<boolean>>
+  card: any,
+  dark: string,
+  fresh: boolean,
+  fbclid: string,
+  utm_content: string,
+  isbot: number,
+  isfb: number,
+  sessionid: string,
+  title: string,
+  subtitle: string,
+  cta: string,
+  loading: boolean,
+  setLoading: React.Dispatch<React.SetStateAction<boolean>>
 }
-const Band: React.FC<BandProps> = ({setLoading,loading,card, dark, fresh, fbclid, utm_content, isbot, isfb, sessionid,title,subtitle,cta }) => {
-    const theme = useTheme();
-    const router = useRouter();
-    const handleCTAClick = () => {
-        setLoading(true);
-        router.push(`/start?fbclid=${fbclid}&utm_content=${utm_content}`);
-    };
-    return (
+const Band: React.FC<BandProps> = ({ setLoading, loading, card, dark, fresh, fbclid, utm_content, isbot, isfb, sessionid, title, subtitle, cta }) => {
+  const theme = useTheme();
+  const router = useRouter();
+  const handleCTAClick = () => {
+    setLoading(true);
+    try {
+      recordEvent(sessionid, 'landing-cta-click', `{"fbclid":"${fbclid}","utm_content":"${utm_content}","cta_tag":"Band"}`);
+    } catch (x) {
+      console.log('landingcta-click error', x);
+    }
+    router.push(`/start?fbclid=${fbclid}&utm_content=${utm_content}`);
+  };
+  return (
 
-        <BandContainer darktext={dark}>
-            <Title variant="h3">
-              {title}
-            </Title>
-           {subtitle.length>0? <Subtitle variant="h5">
-                <ReactMarkdown>{subtitle}</ReactMarkdown>
-            </Subtitle>:null}
-           
-            {card}
-            {loading ? <LinearProgress />:<CTAButton variant="contained" color="primary" onClick={handleCTAClick}>
-               {cta}
-            </CTAButton>}
+    <BandContainer darktext={dark}>
+      <Title variant="h3">
+        {title}
+      </Title>
+      {subtitle.length > 0 ? <Subtitle variant="h5">
+        <ReactMarkdown>{subtitle}</ReactMarkdown>
+      </Subtitle> : null}
 
-        </BandContainer>
-    );
+      {card}
+      {loading ? <LinearProgress /> : <CTAButton variant="contained" color="primary" onClick={handleCTAClick}>
+        {cta}
+      </CTAButton>}
+
+    </BandContainer>
+  );
 };
 export default Band;
