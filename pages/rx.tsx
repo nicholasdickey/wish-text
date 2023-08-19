@@ -49,27 +49,33 @@ import Paper from '@mui/material/Paper';
 
 const ReportItem= function(name:string,expanded:string,setExpanded:any,sessionid:string,reportItem:any){
     const items=reportItem.items.map((record:any,i:number)=>{
-        const {name:eventName,image,occasion,naive,text,params,fbclid,ad,stamp}=record;
-      
+        const {name:eventName,image='',occasion,naive='',text='',params='',fbclid='',ad='',stamp='',signature='',greeting='',metaimage=''}=record;
+        console.log("ReportItem",record,greeting,name)
 
         return (
            <Paper sx={{background:"grey",m:2,p:2,color:"white"}} key={`keyasp-${i}`}>
                 <Typography>Name: {eventName}</Typography>
                 {occasion&&<Typography>Occasion:{occasion}</Typography>}
-                {naive&&<Typography>Naive:{naive}</Typography>}
-                {text&&<Typography>Text:{text}</Typography>}
+                {naive&&<div>Naive:{naive}</div>}
+                {text&&<div>Text:{text}</div>}
                 {params&&<Typography>Params{params}</Typography>}
                 {fbclid&&<Typography>fbclid:{fbclid}</Typography>}
                 {ad&&<Typography>ad:{ad}</Typography>}
                 {stamp&&<Typography>stamp:{stamp}</Typography>}
+                {signature&&<div>Signature:{signature}</div>}
+                {greeting&&<div>Greeting:{greeting}</div>}
+               
                 {image&&<img width={128} height={128} src={image} alt={"Image"}/>}
+                 {metaimage&&<img width={64*8} height={64*3} src={metaimage} alt={"Image"}/>}
+                
+
                 
            </Paper>
         )
         });
 
   
-    return <Accordion style={{ borderRadius: 14 }} sx={{ mt: 5 }} expanded={expanded == sessionid} onChange={()=>setExpanded(sessionid)}>
+    return <Accordion key={name} style={{ borderRadius: 14 }} sx={{ mt: 5 }} expanded={expanded == sessionid} onChange={()=>setExpanded(sessionid)}>
                 <AccordionSummary
                   expandIcon={<ExpandMoreIcon />}
                   aria-controls="panel4bh-content"
@@ -323,7 +329,7 @@ const [expanded,setExpanded]=React.useState<string>("");
   for (const key in report){
     const item=report[key];
     const {sessionid,items}=item
-    itemsAll.push(ReportItem(`Session ${sessionid}`,expanded,setExpanded,sessionid,item))
+    itemsAll.push(ReportItem(`Session ${sessionid},items:${item.items.length}`,expanded,setExpanded,sessionid,item))
   };
 
 
