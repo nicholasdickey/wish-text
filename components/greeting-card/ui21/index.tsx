@@ -2,7 +2,7 @@
 import styled from "styled-components";
 import React, { useRef } from "react";
 import Typography from "@mui/material/Typography";
-
+import useMediaQuery from '@mui/material/useMediaQuery';
 import { useTheme } from '@mui/material/styles';
 import * as ga from '../../../lib/ga';
 import Button from '@mui/material/Button';
@@ -13,7 +13,10 @@ import ImageData from "../../../lib/image-data";
 import PopoutCard from "./popout-card";
 import EmptyImage from "../empty-image";
 import useWindowSize from "../../hooks/window-size";
-import { l } from "@/lib/common";
+import CardHeadline from "./editor/card-headline";
+import CardBody from "./editor/card-body";
+import CardSignature from "./editor/card-signature";
+import CardImage from "./editor/card-image";
 interface BodyProps {
   l: number;
   large?: boolean;
@@ -90,7 +93,7 @@ justify-content: space-between;
    // background: gray;   
   }
   .card__container {
-    cursor: pointer;
+    //cursor: pointer;
 
     position: absolute;
     display: flex;
@@ -123,7 +126,7 @@ justify-content: space-between;
     margin:5px;
     max-width: ${({ large }) => large ? 2 * 3 * 100 : 240}px;
     max-height: ${({ large }) => large ? 4 * 100 : 320}px;
-    width:${({ large }) => large ? 2 * 16 * 3+20 : 45}vw;
+    width:${({ large }) => large ? 2 * 16 * 3 + 20 : 45}vw;
     height: ${({ large }) => large ? 16 * 4 : 60}vw;
     transform-style: preserve-3d;
     transform: rotateX(65deg);
@@ -243,6 +246,7 @@ const Body = styled.div`
     //height:50vw;
    // padding-left:25%;
     transition: all 1s ease;
+  
     
     `;
 const Outer = styled.div`
@@ -273,14 +277,13 @@ const CTAButton = styled(Button)`
     // margin-top: 12rem;
 `;
 const Inner = styled.div`
-    position:relative;
-    display:flex;
-    flex-direction:column;
-    justify-content:space-between;
+    position:relative;  
     padding-bottom:40px;
-    padding-left: 20px;
-    padding-right: 20px;
-    
+    width:100%;
+    margin-left: 4px;
+    margin-right: 4px;
+    margin-top:4px;  
+    overflow:clip;
 `;
 const SignatureContainer = styled.div`
     display: flex;
@@ -327,12 +330,13 @@ const Mark = styled.div<MarkProps>`
     position: ${({ image }) => image == "true" ? 'absolute' : 'relative'};
     bottom:0;
     height:100%;
+    width:100%;
     display:flex;
     flex-direction:column;
     justify-content:space-between;
 `;
 
-interface BandProps {
+interface Props {
   dark: string,
   fbclid: string,
   utm_content: string,
@@ -340,18 +344,27 @@ interface BandProps {
   loading?: boolean,
   large?: boolean,
   image?: ImageData,
-  editable?:boolean,
   signature: string,
   startOpen?: boolean
   delayOpen?: boolean;
+  editable?: boolean;
+  onGreetingChange: (greeting: string) => void;
+  onImageChange: (image: ImageData) => void;
+  onSignatureChange: (signature: string) => void;
   canvasRef: React.RefObject<HTMLDivElement>;
+  session?:any;
+  images?:ImageData[];
+  sharedImages?:ImageData[];
+  onUpload?: (result:any,widget:any) => void;
 }
-const GreetingCard: React.FC<BandProps> = ({editable=false, canvasRef, delayOpen = false, startOpen = false, loading = false, large: startLarge = false, dark, fbclid, utm_content, text, image, signature }) => {
+const GreetingCard: React.FC<Props> = ({ editable = false, onGreetingChange, onImageChange, onSignatureChange, canvasRef, delayOpen = false, startOpen = false, loading = false, large: startLarge = false, dark, fbclid, utm_content, text, image, signature,session,images,sharedImages,onUpload }) => {
   const [open, setOpen] = React.useState(startOpen);
   const [large, setLarge] = React.useState(startLarge);
   const [hugeLeft, setHugeLeft] = React.useState(false);
   const [hugeRight, setHugeRight] = React.useState(false);
   const [dOpen, setDOpen] = React.useState(delayOpen);
+  const [topEditing, setTopEditing] = React.useState(false);
+  const [imageEditing, setImageEditing] = React.useState(false);
   const theme = useTheme();
   const router = useRouter();
   const size = useWindowSize();
@@ -359,84 +372,90 @@ const GreetingCard: React.FC<BandProps> = ({editable=false, canvasRef, delayOpen
     router.push(`/start?fbclid=${fbclid}&utm_content=${utm_content}`);
   };
   // console.log("large=", large, "greeting=", text)
+  if (!text)
+    text = JSON.stringify({ headline: "", body: "" });
   text = text.replace(/\n\n/g, '\n');
-  const structuredText=JSON.parse(text);
-  console.log("==2structuredText=",structuredText)
+  const structuredText = JSON.parse(text);
+  // console.log("structuredText=", structuredText)
   //const tw = text.split('\n');
-  const headline = structuredText.headline;//tw.length > 1 ? tw[0] : '';
-  const body = structuredText.body;//tw.length > 1 ? tw.slice(1).join('\n') : tw[0];
+  console.log("greeting-card render", { image, text, signature })
+  const headline = structuredText.headline || "";//tw.length > 1 ? tw[0] : '';
+  const body = structuredText.body || "";//tw.length > 1 ? tw.slice(1).join('\n') : tw[0];
   const handleTextClick = () => {
   }
   if (dOpen) {
     setDOpen(false);
     setTimeout(() => setOpen(true), 500);
   }
-
+  const onHeadlineChange = (text: string) => {
+    console.log("onHeadlineChange=", text);
+    onGreetingChange(JSON.stringify({ headline: text, body: body }));
+  }
+  const onBodyChange = (text: string) => {
+    console.log("onBodyChange=", text);
+    onGreetingChange(JSON.stringify({ headline, body: text }));
+  }
   // console.log("open=", open, ";large=", large, "signature:", signature)
   const signatureText = signature ? signature.split('\n').map((m, i) => <SignatureLine id={"wt-signature-line" + i} key={i} l={signature.length} large={large}>{m}</SignatureLine>) : [];
   //console.log("signatureText=", signatureText)
+  const mobile=useMediaQuery(theme.breakpoints.down('sm'));
   return (
     <BandContainer id="band-container-wt" darktext={dark} open={open} large={large} onClick={() => console.log("CLICK")} >
-    
-        <Body id="body-wt" style={{ width: '100vw', height: '100hw' }}  >
-          <PopoutCard open={hugeLeft || hugeRight} isLeft={hugeLeft} card={{ text, image: image || EmptyImage, signature }} close={() => { setHugeLeft(false); setHugeRight(false); }} />
-          <Card style={{ width: '100vw', height: '100hw' }} large={large} open={open} dark={dark}  >
-            <div style={{ width: '100vw', height: '100hw' }} className={`card__container js-card-opener ${open ? "open" : ""}`}  >
-              <div ref={canvasRef} className={`card ${open ? "open" : ""}`} >
-                <div className={`card__panel card__panel--front ${open ? "open" : ""}`}>
-                  {image?.url && <Image large={large} open={open} src={image?.url} />}
-                </div>
-                <div className={`card__panel card__panel--inside-left ${open ? "open" : ""}`} onClick={() => {
-                  console.log("LEFT CLICK")
-                  if (size?.width > size?.height&&size?.width>600)
-                    setLarge(large);
-                  else
-                    setHugeLeft(!hugeLeft);
-                }}>
-                  {image?.url && <Image large={large} open={open} src={image?.url} />}
-                </div>
-                <div className={`card__panel card__panel--inside-right ${open ? "open" : ""}`} onClick={() => {
+
+      <Body id="body-wt" style={{ width: '100vw', height: '100hw' }}  >
+        <PopoutCard open={hugeLeft || hugeRight} isLeft={hugeLeft} card={{ text, image: image || EmptyImage, signature }} close={() => { setHugeLeft(false); setHugeRight(false); }} />
+        <Card style={{ width: '100vw', height: '100hw' }} large={large} open={open} dark={dark}  >
+          <div style={{ width: '100vw', height: '100hw' }} className={`card__container js-card-opener ${open ? "open" : ""}`}  >
+            <div ref={canvasRef} className={`card ${open ? "open" : ""}`} >
+              <div className={`card__panel card__panel--front ${open ? "open" : ""}`}>
+                {image?.url && <Image large={large} open={open} src={image?.url} />}
+              </div>
+              <div className={`card__panel card__panel--inside-left ${open ? "open" : ""}`} onClick={() => {
+                console.log("dialog click")
+                if(topEditing)
+                  return;
+                if(mobile&&!hugeLeft){
+                  setHugeLeft(true);
+                  return;
+                }
+                else if(!topEditing&&editable){
+                  console.log("dialog: opening")
+                  setImageEditing(true);
+                  setTopEditing(true);
+                  return;
+                }
+                console.log("LEFT CLICK")
+                if (size?.width > size?.height && size?.width > 600)
+                  setLarge(large);
+                else
+                  setHugeLeft(!hugeLeft);
+              }}>
+                {image?.url && <Image large={large} open={open} src={image?.url} />}
+              </div>
+              <CardImage editable={editable} onUpload={onUpload} session={session} images={images} sharedImages={sharedImages} topEditing={topEditing} setTopEditing={setTopEditing} image={image||EmptyImage} open={imageEditing} setOpen={setImageEditing} onImageChange={onImageChange} huge={hugeLeft}  />
+            
+              <div className={`card__panel card__panel--inside-right ${open ? "open" : ""}`} onClick={() => {
+                  if(topEditing)
+                    return;
                   console.log("RIGHT CLICK")
-                  if (size?.width > size?.height&&size?.width>600)
+                  if (size?.width > size?.height && size?.width > 600)
                     setLarge(large);
                   else
                     setHugeRight(!hugeRight);
                 }}>
-
-                  <Inner><Mark image={"false"} onClick={() => handleTextClick()} >
-                    <Headline l={headline.length} large={large} className="q-h">
-                      <ReactMarkdown>
-                        {loading ? "" : headline.replace('#', '###').replace('####', '##')}
-                      </ReactMarkdown>
-                      {large&&open&&editable&&<Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>Click to edit</Typography>}
-                    </Headline>
-
-                    {loading && <LinearProgress />}
-                    <TextBody large={large} l={text.length} id='wt-output-body'>
-                      <ReactMarkdown>
-                        {loading ? "Generating..." : body}
-                      </ReactMarkdown>
-                    </TextBody>
-                    <SignatureContainer>
-                      <Signature id="wt-signatrue">
-                        {signatureText}
-                      </Signature>
-                    </SignatureContainer>
-                  </Mark></Inner>
-                </div>
+                <Inner><Mark image={"false"} onClick={() => handleTextClick()} >
+                  <CardHeadline topEditing={topEditing} setTopEditing={setTopEditing} editable={editable} onChange={onHeadlineChange} headline={headline} large={large} loading={loading} />
+                  {loading && <LinearProgress />}
+                  <CardBody topEditing={topEditing} setTopEditing={setTopEditing} editable={editable} onChange={onBodyChange} body={body} large={large} loading={loading} />
+                  <CardSignature topEditing={topEditing} setTopEditing={setTopEditing} signature={signature} editable={editable} onChange={onSignatureChange} large={large} loading={loading} />
+                </Mark></Inner>
               </div>
-              {false && <CTAButton onClick={() => setOpen(!open)}> {`${open ? "Close" : "Open"} Card`}</CTAButton>}
-
             </div>
-
-          </Card>
-
-
-        </Body>
-      
+            {false && <CTAButton onClick={() => setOpen(!open)}> {`${open ? "Close" : "Open"} Card`}</CTAButton>}
+          </div>
+        </Card>
+      </Body>
     </BandContainer>
-
-
   );
 };
 export default GreetingCard;

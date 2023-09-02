@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, use } from "react";
 import { styled } from "styled-components";
 import AdIntro from "./ad-intro";
 import ReactMarkdown from "react-markdown";
@@ -11,7 +11,7 @@ import * as ga from '../lib/ga';
 import LinearProgress from '@mui/material/LinearProgress';
 
 import Typography from '@mui/material/Typography';
-import {TextareaAutosize} from "@mui/base/TextareaAutosize";
+import { TextareaAutosize } from "@mui/base/TextareaAutosize";
 import FormControlLabel from '@mui/material/FormControlLabel';
 import FormHelperText from '@mui/material/FormHelperText';
 const Headline = styled.div`
@@ -38,14 +38,14 @@ const Headline = styled.div`
   
 `;
 interface BodyProps {
-  l:number;
+  l: number;
 }
 const Body = styled.div<BodyProps>`
   width:100%;
   display:flex;
   justify-content:center;
   font-size:18px;
-  font-size:${({l})=>l>600?11:l>400?12:l>300?13:l>200?13:16}px;
+  font-size:${({ l }) => l > 600 ? 11 : l > 400 ? 12 : l > 300 ? 13 : l > 200 ? 13 : 16}px;
   font-weight: 400;
   line-height: 1.7;
   font-family: "Roboto", "Helvetica", "Arial", sans-serif;
@@ -53,7 +53,7 @@ const Body = styled.div<BodyProps>`
   padding-bottom:20px;
   margin-bottom: 20px;
   @media (-width: 990px) {
-    font-size:${({l})=>l>600?11:l>400?12:l>300?13:l>200?13:16}px;
+    font-size:${({ l }) => l > 600 ? 11 : l > 400 ? 12 : l > 300 ? 13 : l > 200 ? 13 : 16}px;
   }
 `;
 
@@ -101,16 +101,18 @@ const InnerOutput = styled.div<InnerOutputProps>`
   white-space: pre-line;
   justify-content: flex-end;
   overflow-wrap: break-word;
-  font-size: ${({ length, horiz }) =>{
-    const h=horiz=="true";
-    return `${length > 600 ? (h ? '10' : '17') : length > 500 ? (h ? '11' : '12') : length > 100 ? (h? '12' : '12') : h ? '12' : '12'}`}}px;  
+  font-size: ${({ length, horiz }) => {
+    const h = horiz == "true";
+    return `${length > 600 ? (h ? '10' : '17') : length > 500 ? (h ? '11' : '12') : length > 100 ? (h ? '12' : '12') : h ? '12' : '12'}`
+  }}px;  
   width:100%;
-  height:${({adjheight})=>adjheight};
+  height:${({ adjheight }) => adjheight};
   @media (max-width: 990px) {
     font-weight: 400;
-    font-size: ${({ length, horiz }) =>{
-    const h=horiz=="true";
-    return `${length < 600 ? (h ? '9' : '14') : length < 500 ? (h ? '10' : '15') : length < 400 ? (h ? '11' : '16') : h ? '7' : '12'}`}}px;
+    font-size: ${({ length, horiz }) => {
+    const h = horiz == "true";
+    return `${length < 600 ? (h ? '9' : '14') : length < 500 ? (h ? '10' : '15') : length < 400 ? (h ? '11' : '16') : h ? '7' : '12'}`
+  }}px;
   }
   &::before {
     content: '';
@@ -119,7 +121,7 @@ const InnerOutput = styled.div<InnerOutputProps>`
     left: 0;
     width: 100%;
     height: 100%; /* Set the height to 100% */
-    background: ${({ image }) => image=="true" ? `linear-gradient(to bottom, rgba(0, 0, 0, 0.1) 0%, rgba(0, 0, 0, 0.6) 60%, rgba(0, 0, 0, 1.0) 100%)` : null};
+    background: ${({ image }) => image == "true" ? `linear-gradient(to bottom, rgba(0, 0, 0, 0.1) 0%, rgba(0, 0, 0, 0.6) 60%, rgba(0, 0, 0, 1.0) 100%)` : null};
     z-index: 4;
   }
   &::after {
@@ -132,14 +134,14 @@ const InnerOutput = styled.div<InnerOutputProps>`
     z-index: 5;
   }
   & p {
-    padding-left: ${({image})=>image=="true"?20:4}px;
-    padding-right:  ${({image})=>image=="true"?10:4}px;
+    padding-left: ${({ image }) => image == "true" ? 20 : 4}px;
+    padding-right:  ${({ image }) => image == "true" ? 10 : 4}px;
     padding-top: 10px;
     opacity: 0.9;
     margin-top: auto;
     margin-bottom: 10px; /* Add margin-bottom to prevent text overflow */
     bottom: 0;
-    color:${({ image }) => image=="true" ? 'white' : null};
+    color:${({ image }) => image == "true" ? 'white' : null};
     z-index: 6;
     overflow-wrap: break-word;
     text-align: left;
@@ -169,9 +171,9 @@ export interface TextEditorProps {
   onChange: (text: string) => void;
   canvasRef: React.RefObject<HTMLDivElement>;
   session: any,
-  onClick:any;
-  editing:boolean;
-  setEditing:(editing:boolean)=>void;
+  onClick: any;
+  editing: boolean;
+  setEditing: (editing: boolean) => void;
 }
 const editorStyles = {
   color: "#fff", // Text color
@@ -180,10 +182,10 @@ const editorStyles = {
   overflow: "auto"
 };
 interface MarkProps {
-  image:string;
+  image: string;
 }
-const Mark=styled.div<MarkProps>`
-position: ${({image})=>image=="true"?'absolute':'relative'};
+const Mark = styled.div<MarkProps>`
+position: ${({ image }) => image == "true" ? 'absolute' : 'relative'};
 bottom:0;
 `;
 const MarkdownEditorWrap = styled.div`
@@ -216,7 +218,7 @@ const StyledTextareaAutosize = styled(TextareaAutosize)`
   width:100%;
   height:100%;
   `;
- const EditorBox=styled.div`
+const EditorBox = styled.div`
   width:100%;
   height:100%;
 
@@ -225,13 +227,34 @@ const StyledTextareaAutosize = styled(TextareaAutosize)`
     width:100%;
     overflow:auto;
   }
-  `; 
-const TextEditor: React.FC<TextEditorProps> = ({  editing, setEditing,session, image, text, loading, onChange, canvasRef,onClick }) => {
+  `;
+const TextEditor: React.FC<TextEditorProps> = ({ editing, setEditing, session, image, text, loading, onChange, canvasRef, onClick }) => {
   const horiz: boolean = image.width > image.height;
   const mdParser = new MarkdownIt();
 
   const theme = useTheme();
+  const [headlineEditing, setHeadlineEditing] = useState(false);
+  const [bodyEditing, setBodyEditing] = useState(false);
+  text = text.replaceAll('\n\n', '\n');
+  //const tw = text.split('\n');
+  //const headline=tw.length>1?tw[0]:'';
+  //const body=tw.length>1?tw.slice(1).join('\n'):tw[0];
+
+  const structuredText = JSON.parse(text);
+  //console.log("structuredText=", structuredText)
+  //const tw = text.split('\n');
+  const headline = structuredText.headline;//tw.length > 1 ? tw[0] : '';
+  const body = structuredText.body;//tw.length > 1 ? tw.slice(1).join('\n') : tw[0];
+  //console.log("headline=", headline,headlineEditing,editing);
   //console.log("texteditor", text);
+
+  useEffect(() => {
+    if (!editing) {
+      setHeadlineEditing(false);
+      setBodyEditing(false);
+    }
+  }, [editing]);
+
   const handleTextClick = () => {
     ga.event({
       action: "textClick",
@@ -243,12 +266,36 @@ const TextEditor: React.FC<TextEditorProps> = ({  editing, setEditing,session, i
     setEditing(true);
     onClick();
   };
+  const handleHeadlineClick = () => {
+    ga.event({
+      action: "headlineClick",
+      params: {
+        sessionid: session.sessionid,
+        text: text,
+      }
+    })
+    setEditing(true);
+    setHeadlineEditing(true);
+    onClick();
+  };
+  const handleBodyClick = () => {
+    ga.event({
+      action: "bodyClick",
+      params: {
+        sessionid: session.sessionid,
+        text: text,
+      }
+    })
+    setEditing(true);
+    setBodyEditing(true);
+    onClick();
+  };
 
   /*const handleTextChange = (value: string) => {
      onChange(value);
    };
  */
-  const handleTextChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>)  => {
+  const handleTextChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const text = event.target.value;
     ga.event({
       action: "textEditorChange",
@@ -258,6 +305,30 @@ const TextEditor: React.FC<TextEditorProps> = ({  editing, setEditing,session, i
       }
     })
     onChange(text);
+  };
+  const handleBodyChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const body = event.target.value;
+    ga.event({
+      action: "handleEditorChange",
+      params: {
+        sessionid: session.sessionid,
+        text: body,
+      }
+    })
+    const st = JSON.stringify({ headline, body });
+    onChange(st);
+  };
+  const handleHeadlineChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const headline = event.target.value;
+    ga.event({
+      action: "handleEditorChange",
+      params: {
+        sessionid: session.sessionid,
+        text: headline,
+      }
+    })
+    const st = JSON.stringify({ headline, body });
+    onChange(st);
   };
   let ref = useRef<HTMLDivElement>(null);
   useEffect(() => {
@@ -272,75 +343,91 @@ const TextEditor: React.FC<TextEditorProps> = ({  editing, setEditing,session, i
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, [canvasRef,setEditing]);
-  text = text.replaceAll('\n\n', '\n');
-  const tw = text.split('\n');
-  const headline=tw.length>1?tw[0]:'';
-  const body=tw.length>1?tw.slice(1).join('\n'):tw[0];
- // console.log('tw=>:',tw, headline,body)
- // console.log('headline=>:',headline)
+  }, [canvasRef, setEditing]);
+
+  // console.log('tw=>:',tw, headline,body)
+  // console.log('headline=>:',headline)
   //console.log('body=>:',body)
- // console.log("texteditor", text, image)
- // console.log("image:",image); 
-  const div=canvasRef.current;
-  const nominalWidth=div?div.clientWidth>500?div.clientWidth:552:552;
-  const {height,width}=image;
-  let grow= 1;//div ? div.clientWidth<nominalWidth?nominalWidth/width:1:1;
-  if(grow>1)grow=1;
+  // console.log("texteditor", text, image)
+  // console.log("image:",image); 
+  const div = canvasRef.current;
+  const nominalWidth = div ? div.clientWidth > 500 ? div.clientWidth : 552 : 552;
+  const { height, width } = image;
+  let grow = 1;//div ? div.clientWidth<nominalWidth?nominalWidth/width:1:1;
+  if (grow > 1) grow = 1;
   const ratio = height / width;
-  const minWidth=nominalWidth?nominalWidth:div?div.clientWidth:552;
-  const adjHeight= image.url?div ? `${Math.ceil(minWidth * ratio*grow)}px` : `${height}px`:'100%';
-  const adjWidth=image.url?div ? div.clientWidth<nominalWidth?`${nominalWidth}px`:'100%':'100%':'100%';
+  const minWidth = nominalWidth ? nominalWidth : div ? div.clientWidth : 552;
+  const adjHeight = image.url ? div ? `${Math.ceil(minWidth * ratio * grow)}px` : `${height}px` : '100%';
+  const adjWidth = image.url ? div ? div.clientWidth < nominalWidth ? `${nominalWidth}px` : '100%' : '100%' : '100%';
   //console.log("image-props:",{minWidth,ratio,grow,nominalWidth,divWidth:div?div.clientWidth:0,adjWidth,adjHeight});
   //console.log("text-image:",text.length,horiz)
- return (
+  return (
     <div>
-      <div data-id="canvas" style={{ position: "relative"}} ref={canvasRef}>
-     
-        
-          {!editing ? (
-             <InnerOutput image={image.url?"true":"false"} ref={ref} className="inner-output" adjheight={adjHeight}  adjwidth={adjWidth} data-id="GreetingsOutput:InnerOutput" length={text.length} horiz={horiz?"true":"false"}>
-       
+      <div data-id="canvas" style={{ position: "relative" }} ref={canvasRef}>
+
+
+        {!editing ? (
+          <InnerOutput image={image.url ? "true" : "false"} ref={ref} className="inner-output" adjheight={adjHeight} adjwidth={adjWidth} data-id="GreetingsOutput:InnerOutput" length={text.length} horiz={horiz ? "true" : "false"}>
+
             <div>
-            <Mark image={image.url?"true":"false"} onClick={() => handleTextClick()} >
-              <Headline className="q-h">
-                <ReactMarkdown>
-                {loading ? "" : headline.replace('#','###').replace('####','##')}
-              </ReactMarkdown>
-              </Headline>
-           
-              {loading&&<LinearProgress />}
-             <Body l={text.length}  id='wt-output'> 
-             <ReactMarkdown>
-                {loading ? "Generating..." : body}
-              </ReactMarkdown>
-              </Body>
-             
-            </Mark></div>
-            </InnerOutput>
-          ) : (
-            <EditorBox>
+              <Mark image={image.url ? "true" : "false"}  >
+                <Headline className="q-h" onClick={() => handleHeadlineClick()}>
+                  <ReactMarkdown>
+                    {loading ? "" : headline.replace('#', '###').replace('####', '##')}
+                  </ReactMarkdown>
+                </Headline>
+
+                {loading && <LinearProgress />}
+                <Body l={text.length} id='wt-output'  onClick={() => handleBodyClick()}>
+                  <ReactMarkdown>
+                    {loading ? "Generating..." : body}
+                  </ReactMarkdown>
+                </Body>
+
+              </Mark></div>
+          </InnerOutput>
+        ) : (
+          <div>{headlineEditing && <EditorBox>
             <FormControlLabel
-            sx={{ width: 1,m:1,p:0 }}
+              sx={{ width: 1, m: 1, p: 0 }}
               labelPlacement="top"
-              label={<Typography sx={{mb:2}} style={{ color: theme.palette.text.secondary }}></Typography>}
+              label={<Typography sx={{ mb: 2 }} style={{ color: theme.palette.text.secondary }}></Typography>}
               control={
                 <StyledTextareaAutosize
-                  aria-label="text editor"
-                  minRows={8}
-                  placeholder="Edit the message"
-                  onChange={handleTextChange}
-                  defaultValue={text}
-                
+                  aria-label="headline editor"
+                  minRows={1}
+                  placeholder="Edit the headline"
+                  onChange={handleHeadlineChange}
+                  defaultValue={headline}
+
                 />
-              }     
+              }
             />
-            <FormHelperText  sx={{ width: 1,m:1,p:0 }}>Customize the message, for advanced formatting you can use <a href="https://www.markdownguide.org/cheat-sheet/">the Markdown</a> notation.</FormHelperText>
-          </EditorBox>
-    
-          )}
-       
-        {image.url&&<BackgroundWrapper>{image && <BackgroundImage adjheight={adjHeight} adjwidth={adjWidth} div={canvasRef.current} height={image.height} width={image.width} src={image.url} />}<BackgroundFiller /></BackgroundWrapper>}
+            <FormHelperText sx={{ width: 1, m: 1, p: 0 }}>Customize the headline, for advanced formatting you can use <a href="https://www.markdownguide.org/cheat-sheet/">the Markdown</a> notation.</FormHelperText>
+          </EditorBox>}
+            {bodyEditing && <EditorBox>
+              <FormControlLabel
+                sx={{ width: 1, m: 1, p: 0 }}
+                labelPlacement="top"
+                label={<Typography sx={{ mb: 2 }} style={{ color: theme.palette.text.secondary }}></Typography>}
+                control={
+                  <StyledTextareaAutosize
+                    aria-label="text editor"
+                    minRows={4}
+                    placeholder="Edit the message"
+                    onChange={handleBodyChange}
+                    defaultValue={body}
+
+                  />
+                }
+              />
+              <FormHelperText sx={{ width: 1, m: 1, p: 0 }}>Customize the message, for advanced formatting you can use <a href="https://www.markdownguide.org/cheat-sheet/">the Markdown</a> notation.</FormHelperText>
+            </EditorBox>}
+          </div>
+
+        )}
+
+        {image.url && <BackgroundWrapper>{image && <BackgroundImage adjheight={adjHeight} adjwidth={adjWidth} div={canvasRef.current} height={image.height} width={image.width} src={image.url} />}<BackgroundFiller /></BackgroundWrapper>}
       </div>
     </div>
   );

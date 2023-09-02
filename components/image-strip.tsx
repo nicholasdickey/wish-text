@@ -101,7 +101,7 @@ const ImageStrip: React.FC<ImageStripProps> = ({ sharedImages,images, onImageCli
     }
   };
   const combinedImages=images.concat(sharedImages);
-  
+  console.log ("ImageStrip",{combinedImages,images,sharedImages})
   return (
     <Box>
       <ImageStripContainer ref={scrollContainerRef}>

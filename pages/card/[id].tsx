@@ -48,7 +48,7 @@ import { Roboto } from 'next/font/google';
 import { withSessionSsr, Options } from '../../lib/with-session';
 import { isbot } from '../../lib/isbot';
 import Band from "../../components/band";
-import Card from "../../components/greeting-card/ui";
+import Card from "../../components/greeting-card/ui21";
 import ToolbarCreate from "../../components/toolbar-create";
 
 const ModeSwitch = styled.div`
@@ -431,7 +431,7 @@ export default function Home({ id, card, dark, fresh, fbclid, utm_content, isbot
                 </Button>
               </ModeSwitch>
             </Wide>
-            <Card canvasRef={canvasRef} delayOpen={true} large={true} signature={signature} fbclid={fbclid} utm_content={utm_content} dark={darkMode ? "true" : "false"} text={greeting || ''} image={image} />
+            <Card editable={false}   onGreetingChange={()=>{}} onImageChange={()=>{}} onSignatureChange={()=>{}} canvasRef={canvasRef} delayOpen={true} large={true} signature={signature} fbclid={fbclid} utm_content={utm_content} dark={darkMode ? "true" : "false"} text={greeting || ''} image={image} />
           
           </Body>
           

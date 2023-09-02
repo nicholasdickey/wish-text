@@ -31,14 +31,14 @@ interface ToolbarProps {
 
   onUploadClick:  (result:any,widget:any) => void;
   hasGreeting:boolean,
-  error:boolean
+
 }
 
 const Toolbar: React.FC<ToolbarProps> = ({
 
   onUploadClick,
   hasGreeting,
-  error
+
 }) => {
  //console.log("Toolbar",hasGreeting)
   return (

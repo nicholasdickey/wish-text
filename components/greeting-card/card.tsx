@@ -7,7 +7,7 @@ import { useTheme } from '@mui/material/styles';
 import ImageData from "../../lib/image-data";
 import CardData from "../../lib/card-data";
 import { recordEvent, addSessionImage } from '../../lib/api'
-import CardControl from './ui';
+import CardControl from './ui21';
 
 import Box from "@mui/material/Box";
 
@@ -48,7 +48,13 @@ const Card: React.FC<CardProps> = ({
     return <OuterWrapper>
         
         <Box sx={{ mt: 14, mb: 2 }} textAlign="center">         
-            <CardControl canvasRef={canvasRef} startOpen={true} large={true} fbclid={fbclid} utm_content={utm_content} dark={darkMode ? "true" : "false"} text={greeting || ""} image={image} signature={signature} />
+            <CardControl 
+            
+            onGreetingChange={()=>{}} onImageChange={()=>{}} onSignatureChange={()=>{}} 
+            canvasRef={canvasRef} startOpen={true} large={true} 
+            fbclid={fbclid} utm_content={utm_content} 
+            dark={darkMode ? "true" : "false"} text={greeting || ""} 
+            image={image} signature={signature} />
         </Box>
     </OuterWrapper>
 }

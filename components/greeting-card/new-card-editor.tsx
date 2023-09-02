@@ -1,18 +1,18 @@
 import React, { useState, useRef, useEffect, useCallback } from "react";
 import { styled } from "styled-components";
-import html2canvas from  "../html2canvas";
+import html2canvas from "../html2canvas";
 import FileSaver from "file-saver";
 
 //project
-import { getSessionCards, addSessionImage } from "../../lib/api";
+import { getSessionCards, addSessionImage, updateSession } from "../../lib/api";
 import { Options } from "../../lib/with-session";
 import ToolbarUpload from "../toolbar-upload";
 import ToolbarShare from "../toolbar-share";
 import ImageStrip from "../image-strip";
 import ImageData from "../../lib/image-data";
 import CardData from "../../lib/card-data";
-import Card from "./card";
-import Signature from "./card-signature";
+import Card from "./ui21";
+//import Signature from "./card-signature";
 import * as ga from '../../lib/ga'
 import CardPlayerToolbar from "../toolbar-card-player";
 import Section from "./editor-section";
@@ -31,9 +31,9 @@ import FormHelperText from '@mui/material/FormHelperText';
 import Button from '@mui/material/Button';
 import LinearProgress from '@mui/material/LinearProgress';
 //third party
-import {DefaultCopyField} from '@eisberg-labs/mui-copy-field';
+import { DefaultCopyField } from '@eisberg-labs/mui-copy-field';
 import { RWebShare } from "react-web-share";
-
+import CardHeadline from "./ui21/editor/card-headline";
 const TooblarPlaceholder = styled.div`
   height: 48px;
 `;
@@ -53,13 +53,13 @@ display:none;
 }
 `;
 interface WebShareProps {
-    color: string;
-  }
-  const WebShare = styled.div<WebShareProps>`
+  color: string;
+}
+const WebShare = styled.div<WebShareProps>`
     color:${props => props.color};
   `;
 export default function CardEditor({
-  num,
+  //num,
   greeting,
   signature,
   linkid,
@@ -102,14 +102,16 @@ export default function CardEditor({
   //currentNum,
   // setCurrentGreeting,
   setImage,
+
   setSignature,
   setLinkid,
+  setGreeting,
   //setCurrentNum,
 
 }: {
 
 
-  num: number;
+ // num: number;
   image: ImageData;
   greeting: string;
   signature: string;
@@ -117,6 +119,7 @@ export default function CardEditor({
 
   setImage: (image: ImageData) => void;
   setSignature: (signature: string) => void;
+  
   setLinkid: (linkid: string) => void;
 
   max: number;
@@ -157,19 +160,20 @@ export default function CardEditor({
 
   //  authSession: any;
   setPromptImageStrip: (promptImageStrim: boolean) => void;
+  setGreeting: (greeting: string) => void;
 
 }) {
 
 
   const [prevGreeting, setPrevGreeting] = useState<string>('');
   const [creatingCard, setCreatingCard] = useState<boolean>(false);
-
+  const [cardGreeting,setCardGreeting]=useState<string>(greeting||"");
   const sessionid = session.sessionid;
 
   const theme = useTheme();
   const canvasRef = useRef<HTMLDivElement>(null);
   const [imageData, setImageData] = useState(null as any);
-
+ 
   const emptyImage = {
     url: '',
     publicId: '',
@@ -180,7 +184,7 @@ export default function CardEditor({
   }
   // console.log("RENDER output",greeting,value)
   const convertDivToPng = async (div: any) => {
-    console.log("div=>:",div,div.width,div.height,div.scale,div)
+   // console.log("div=>:", div, div.width, div.height, div.scale, div)
     const canvas = await html2canvas(div, {
       useCORS: true,
       logging: true,
@@ -188,24 +192,44 @@ export default function CardEditor({
       height: div.height,
       scale: window.devicePixelRatio,
     });
-    console.log("canvase:",canvas)
+    console.log("canvase:", canvas)
     const image = canvas.toDataURL("image/jpeg", 0.3);
-    console.log("imageLength:",image.length)
+    console.log("imageLength:", image.length)
     return image;
   };
-
+  const onGreetingChange = (value: string) => {
+    setCardGreeting(value)
+   // updateSession2({ greeting: value });
+  }
+  const onSignatureChange = (value: string) => {
+    setSignature(value);
+  }
+  const onImageChange = (image: ImageData) => {
+    setImage(image);
+  }
   const handleChange = (card: CardData) => {
-    let { signature: cardSignature, image: cardImage, linkid: cardLinkid, num: card_Num } = card;
-    // if (!greeting)
-    //  greeting = currentGreeting;
+    let { greeting:card_Greeting="",signature: cardSignature, image: cardImage, linkid: cardLinkid, num: card_Num } = card;
+    
+    
+    
+    console.log("handleChange1:",{image,cardImage,greeting,card_Greeting,signature,cardSignature, cardLinkid,card_Num});
+    
+    
+    
+    if (!card_Greeting)
+      card_Greeting = greeting;
     // if (!num)
     //   num = currentNum;
-    /* if (!image)
-       image = currentImage;
-     if (!signature)
-       signature = currentSignature; */
-    if (card_Num != num)
-      setNumPointer(card_Num||0);
+     if (!cardImage)
+      cardImage = image;
+     if (!cardSignature)
+      cardSignature = signature; 
+   // if (card_Num != num)
+    //  setNumPointer(card_Num || 0);
+    console.log("handleChange2:",{image,cardImage,greeting,signature});
+    if(card_Greeting!=cardGreeting)
+      setCardGreeting(card_Greeting); 
+
     if (cardImage != image)
       setImage(cardImage);
     if (cardSignature != signature)
@@ -215,23 +239,22 @@ export default function CardEditor({
 
 
     const newCardsLength = newCardsStack.length;
-    console.log("handleChange:", newCardsStack, cardNum)
+    console.log("handleChange111:", newCardsStack, cardNum)
     let cm = cardMax, cn = cardNum;
     let newStack = [...newCardsStack];
 
-    if (cardNum > cardMax - newCardsLength) { //if is one of the new cards
+    if (!cardLinkid|| cardNum > cardMax - newCardsLength) { //if is one of the new cards
       console.log("handleChange from newCards", newCardsStack, card)
-      //console.log("111", cardMax, cardNum)
+      console.log("111", cardMax, cardNum)
       const newCardsIndex = cardMax - cardNum - 1;
-      //  console.log("222", newCardsStack);
+        console.log("222", newCardsStack);
 
       newStack.splice(newCardsIndex, 1, card);
-      // console.log("333", newCardsStack, newStack);
+      console.log("333", newCardsStack, newStack);
       setNewCardsStack(newStack);
     }
-
     else { // if a card from history
-      console.log("handleChange from history", newCardsStack, card)
+      console.log("handleChange ==> from history", newCardsStack, card)
       cm = cardMax + 1;
       cn = cm;
       setCardMax(cm);
@@ -240,22 +263,24 @@ export default function CardEditor({
       newStack.push(card);
       setNewCardsStack(newStack);
     }
-    setTimeout(() => updateSession2({ image: cardImage, signature: cardSignature, linkid: cardLinkid, cardMax: cm, carnNum: cn, hasNewCard: true, newCardsStackString: JSON.stringify(newStack) }), 1);
+    console.log("****** ====>>>> end of handleChange:",{ greeting:card_Greeting, image: cardImage, signature: cardSignature, linkid: cardLinkid, cardMax: cm, cardNum: cn, hasNewCard: true, newCardsStackString: JSON.stringify(newStack) })
+    setTimeout(() => updateSession2({ greeting:card_Greeting, image: cardImage, signature: cardSignature, linkid: cardLinkid, cardMax: cm, cardNum: cn, hasNewCard: true, newCardsStackString: JSON.stringify(newStack) }), 1);
   }
   /**
    * When greeting changes, update the current card
    */
   useEffect(() => {
-    if (greeting !== prevGreeting) {
+    if (prevGreeting&&greeting !== prevGreeting) {
+      console.log("==> useEffect",greeting,prevGreeting);
       setPrevGreeting(greeting);
       if (prevGreeting != '_') {
-        console.log("useEffect greeting changed", { num })
+       // console.log("useEffect greeting changed", { num })
         let card = {
           greeting,
           image,
           signature,
           linkid: '',
-          num
+         
         }
 
         handleChange(card);
@@ -264,12 +289,13 @@ export default function CardEditor({
   }, [greeting]);
 
   const processCardRecord = async (record: CardData, cardNum: number) => {
-    const { image, signature, num, linkid } = record;
+    const {greeting:cardGreeting='', image, signature, num, linkid } = record;
 
     console.log("processCardRecord", { cardNum, record })
     setCardNum(cardNum);
     setPrevGreeting("_");
-    setNumPointer(num||0);
+   // setNumPointer(num || 0);
+    setCardGreeting(cardGreeting);
     setSignature(signature);
     setImage(image);
     setLinkid(linkid || '');
@@ -286,9 +312,9 @@ export default function CardEditor({
         const newCardsStackLength = newCardsStack.length;
         console.log("onPrevClick3=>", cardNum, cardMax, newCardsStackLength)
         if (cardNum - 1 > cardMax - newCardsStackLength) {
-          const nextCardIndex=cardNum-(cardMax-newCardsStackLength)-1-1;
-         // const nextCardIndex = nextCard- 1;
-          console.log("onPrevClick4=>", cardNum, cardMax, newCardsStackLength,nextCardIndex)
+          const nextCardIndex = cardNum - (cardMax - newCardsStackLength) - 1 - 1;
+          // const nextCardIndex = nextCard- 1;
+          console.log("onPrevClick4=>", cardNum, cardMax, newCardsStackLength, nextCardIndex)
           const card = newCardsStack[nextCardIndex];
           console.log("onPrevClick5=>", card, cardNum - 1, newCardsStack)
           await processCardRecord(card, cardNum - 1);
@@ -306,7 +332,6 @@ export default function CardEditor({
       const newCardsStackLength = newCardsStack.length;
       console.log("onNextClick2=>", newCardsStack, cardNum, cardMax)
       if (cardNum + 1 <= cardMax - newCardsStackLength) {
-     
         console.log("call getSessionCards=>", cardNum + 1)
         const { success, record } = await getSessionCards(session.sessionid, cardNum + 1);
         console.log("onNextClick2", success, record)
@@ -315,11 +340,10 @@ export default function CardEditor({
         }
       }
       else {
-        const nextCardIndex=cardNum-(cardMax-newCardsStackLength)-1+1;
-        console.log("onNextClick3=>", cardNum, cardMax, newCardsStackLength,nextCardIndex)
+        const nextCardIndex = cardNum - (cardMax - newCardsStackLength) - 1 + 1;
+        console.log("onNextClick3=>", cardNum, cardMax, newCardsStackLength, nextCardIndex)
         const card = newCardsStack[nextCardIndex];
         await processCardRecord(card, cardNum + 1);
-
       }
     }}
 
@@ -366,17 +390,16 @@ export default function CardEditor({
     console.log("render: setSelectedImage", image);
     // setSelectedImage(image); 
     handleChange({
-      num,
       image,
       signature,
-      greeting,
+      greeting:cardGreeting,
       linkid: ''
     });
   }
 
   useEffect(() => {
-    console.log("useEffect", greeting)
-    if (!greeting) {
+    console.log("useEffect", cardGreeting)
+    if (!cardGreeting) {
       console.log("useEffect no greeting")
       stripClickHandler(null);
       const image = {
@@ -388,7 +411,7 @@ export default function CardEditor({
         original_filename: ''
       }
       handleChange({
-        num: 0,
+        greeting: '',
         image: image,
         signature: '',
         linkid: ''
@@ -402,52 +425,53 @@ export default function CardEditor({
     updateSession2({ prompt5: true });
   }
   const handleCreate: () => void = async () => {
-    console.log("handleCreate:", { num, image, signature, greeting })
+    console.log("handleCreate:", { image, signature, cardGreeting })
     setCreatingCard(true);
-   // setTimeout(async () => await recordEvent(session.sessionid, 'create-card', ''), 1000);
+    // setTimeout(async () => await recordEvent(session.sessionid, 'create-card', ''), 1000);
     //await handleDownload();
-    const metaimage=await captureImage();
+    const metaimage = await captureImage();
     let card: CardData = {
-      num,
+   
       image,
       signature,
-      greeting,
+      greeting:cardGreeting,
       metaimage
     }
-    
+
     const { success, linkid, cardNum } = await recordSessionCard(sessionid, card);
-   
+
     setTimeout(async () => await recordEvent(session.sessionid, 'create-card', linkid), 1000);
     setCreatingCard(false);
     setLinkid(linkid);
     setNewCardsStack([]);
     // card.linkid = linkid;
-    console.log("handleCreate2:", { success, linkid, cardNum })
+    console.log("handleCreate2:", { image,signature,cardGreeting,success, linkid, cardNum,card })
     if (success) {
 
       setCardNum(cardNum);
       setCardMax(cardNum);
       updateSession2({ linkid, hasNewCard: false, newCardStackString: '', cardNum, cardMax: cardNum });
+      console.log("handleCreate after updateSession2",image)
     }
-  
+
   }
-  const captureImage=async()=>{
+  const captureImage = async () => {
     const data = await convertDivToPng(canvasRef.current);
     setImageData(data);
     return data;
   }
   const handleDownload = async () => {
     try {
-      console.log("callig convertDivToPng",canvasRef.current )  
+      console.log("callig convertDivToPng", canvasRef.current)
       const data = await convertDivToPng(canvasRef.current);
       setImageData(data);
       console.log(
-        "handleDownload:",canvasRef.current,data
-    )
+        "handleDownload:", canvasRef.current, data
+      )
       var randomstring = () => Math.random().toString(8).substring(2, 7) + Math.random().toString(8).substring(2, 7);
 
       const filename = `${randomstring()}-wt2.png`;
-     
+
       setTimeout(async () => await recordEvent(session.sessionid, ' card meta download', ''), 1000);
 
       if (window.saveAs) {
@@ -459,7 +483,7 @@ export default function CardEditor({
       console.log(e);
     }
   };
-  console.log("====> render greeting-card", { num, cardNum, cardMax, })
+  console.log("====> render greeting-card", { cardGreeting, cardNum, cardMax,image,linkid })
 
 
   const onUpload = (result: any, widget: any) => {
@@ -493,7 +517,7 @@ export default function CardEditor({
     }, 1);
 
     handleChange({
-      num,
+      greeting:cardGreeting,
       image: newImage,
       signature,
       linkid: ''
@@ -509,38 +533,57 @@ export default function CardEditor({
       <div>
         {greeting && OutputPlayerToolbar}
       </div>
-      <Signature image={image} greeting={greeting} signature={signature} num={num} fbclid={fbclid} utm_content={utm_content} sessionid={sessionid} darkMode={darkMode} handleChange={handleChange} handleCreate={handleCreate} />
-     
-      <Box sx={{mt:10}}>
-      <Section darkMode={darkMode}>
+      
+     {false&&<Box sx={{ mt: 10 }}>
+        <Section darkMode={darkMode}>
 
-        <Box sx={{ mt: 0,  width: 1 }}>
-        <Typography variant="caption" gutterBottom color="textSecondary"
-         >Use stock images or upload your own:</Typography><br/><br/>
-           <Box sx={{ mt: 1, pr: 0, width: { xs: 1 } }} textAlign="center">
-            {(images.length > 0 || sharedImages.length > 0) && session.greeting && <ImageStrip sharedImages={sharedImages} images={images} onImageClick={stripClickHandler} />}
+          <Box sx={{ mt: 0, width: 1 }}>
+            <Typography variant="caption" gutterBottom color="textSecondary"
+            >Use stock images or upload your own:</Typography><br /><br />
+            <Box sx={{ mt: 1, pr: 0, width: { xs: 1 } }} textAlign="center">
+              {(images.length > 0 || sharedImages.length > 0) && session.greeting && <ImageStrip sharedImages={sharedImages} images={images} onImageClick={stripClickHandler} />}
+            </Box>
+            <ToolbarUpload onUploadClick={onUpload} hasGreeting={session.greeting ? true : false} />
+
           </Box>
-          <ToolbarUpload error={greeting?.length > 0 ? false : true} onUploadClick={onUpload} hasGreeting={session.greeting ? true : false} />
+
+        </Section>
+      </Box>}
+
+      <Card
+        session={session}
+        images={images}
+        sharedImages={sharedImages}
+        onUpload={onUpload}
+        canvasRef={canvasRef}
+        image={image}
+        text={greeting}
+        signature={signature}
+        fbclid={fbclid}
+        utm_content={utm_content}
+        dark={darkMode ? "true" : "false"}
+        startOpen={true} 
+        large={true}
+        editable={true}
+        onGreetingChange={(value: string) => {handleChange({ greeting: value, image, signature, linkid: '' }) }}
+        onImageChange={(image: ImageData) => { handleChange({ greeting:cardGreeting, image, signature, linkid: '' }) }}
+        onSignatureChange={(value: string) => { handleChange({ greeting:cardGreeting, image, signature: value, linkid: '' }) }}
        
-        </Box>
-      
-      </Section>
-      </Box>
-      
-      <Card canvasRef={canvasRef} image={image} greeting={greeting} signature={signature} num={num} fbclid={fbclid} utm_content={utm_content} sessionid={sessionid} darkMode={darkMode} handleChange={handleChange} handleCreate={handleCreate} />
-      {linkid&&<CopyField
+      />
+
+      {linkid && <CopyField
         label="Share Card Link"
         value={`${process.env.NEXT_PUBLIC_SERVER}/card/${linkid}`} />}
-      {false&&linkid&& <img width={600} height={'auto'} src={imageData}/> }
+      {false && linkid && <img width={600} height={'auto'} src={imageData} />}
       {!creatingCard && !linkid && <Box sx={{ mt: 1, width: 1 }}>
-    
+
         <Button fullWidth variant="contained" onClick={handleCreate}>Create a public link</Button>
-       
+
       </Box>
       }
-      
-        {creatingCard && <LinearProgress />}
-        {!creatingCard&&linkid&&<ToolbarShare greeting={greeting} url={`${process.env.NEXT_PUBLIC_SERVER}/card/${linkid}`}/>}
+
+      {creatingCard && <LinearProgress />}
+      {!creatingCard && linkid && <ToolbarShare greeting={greeting} url={`${process.env.NEXT_PUBLIC_SERVER}/card/${linkid}`} />}
     </>
   );
 }

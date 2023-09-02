@@ -59,7 +59,7 @@ import axios from 'axios';
 import { deleteSessionCards, deleteSessionImages, fetchSession, fetchSessionImages, recordEvent, updateSession, deleteSessionHistories, getSessionHistory, fetchSharedImages } from '../lib/api';
 import ImageData from "../lib/image-data";
 import CardData from "../lib/card-data";
-import GreetingCard from '../components/greeting-card/card-editor';
+import GreetingCard from '../components/greeting-card/new-card-editor';
 import { withSessionSsr, Options } from '../lib/with-session';
 import GreetingOutput from "../components/output";
 import GiftsOutput from "../components/gifts";
@@ -395,11 +395,11 @@ export default function Home({ linkid: startLinkid, card: startCard = false,
     if (!updSession)
       return;
     let curSession: any;
-    setSession((session) => { curSession = session; return { ...Object.assign(session, updSession) } });
+    setSession((session) => { curSession = session; console.log("set session before assign:",session);return { ...Object.assign(session, updSession) } });
     setTimeout(async () => {
       const s = (): any => curSession;
       const ses = s();
-      console.log('===>pdate session:', updSession, "exist session", ses, curSession, session);
+      console.log('===>pdate session:', {updSession, ses, curSession, session});
 
       await axios.post(`/api/session/save`, { session: ses });
     }, 200);
@@ -1129,14 +1129,15 @@ Whether it's birthdays, graduations, holidays, or moments of illness or loss, WI
 
                 <GreetingCard
                   greeting={greeting}
-                  num={num}
+                  setGreeting={setGreeting}
                   image={image}
                   signature={signature}
                   linkid={linkid}
 
                   setImage={setImage}
                   setSignature={setSignature}
-                  setLinkid={setLinkid}
+
+                  setLinkid={setLinkid} 
 
                   newCardsStack={newCardsStack}
                   setNewCardsStack={setNewCardsStack}

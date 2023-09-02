@@ -208,7 +208,7 @@ const PopoutCard = ({ close, card, open, isLeft }: PopoutCardProps) => {
    // const headline = tw.length > 1 ? tw[0] : '';
     //const body = tw.length > 1 ? tw.slice(1).join('\n') : tw[0];
     const structuredText=JSON.parse(text);
-  console.log("==1structuredText=",structuredText)
+  console.log("==4structuredText=",structuredText)
   //const tw = text.split('\n');
   const headline = structuredText.headline;//tw.length > 1 ? tw[0] : '';
   const body = structuredText.body;//tw.length > 1 ? tw.slice(1).join('\n') : tw[0];
