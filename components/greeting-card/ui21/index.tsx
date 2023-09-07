@@ -345,19 +345,22 @@ interface Props {
   large?: boolean,
   image?: ImageData,
   signature: string,
+  animatedSignature?:number,
   startOpen?: boolean
   delayOpen?: boolean;
   editable?: boolean;
   onGreetingChange: (greeting: string) => void;
   onImageChange: (image: ImageData) => void;
   onSignatureChange: (signature: string) => void;
+  onAnimatedSignatureChange: (animatedSignature: number) => void;
   canvasRef: React.RefObject<HTMLDivElement>;
   session?:any;
   images?:ImageData[];
   sharedImages?:ImageData[];
   onUpload?: (result:any,widget:any) => void;
 }
-const GreetingCard: React.FC<Props> = ({ editable = false, onGreetingChange, onImageChange, onSignatureChange, canvasRef, delayOpen = false, startOpen = false, loading = false, large: startLarge = false, dark, fbclid, utm_content, text, image, signature,session,images,sharedImages,onUpload }) => {
+const GreetingCard: React.FC<Props> = ({ onAnimatedSignatureChange,animatedSignature=1,editable = false, onGreetingChange, onImageChange, onSignatureChange, canvasRef, delayOpen = false, startOpen = false, loading = false, large: startLarge = false, dark, fbclid, utm_content, text, image, signature,session,images,sharedImages,onUpload }) => {
+
   const [open, setOpen] = React.useState(startOpen);
   const [large, setLarge] = React.useState(startLarge);
   const [hugeLeft, setHugeLeft] = React.useState(false);
@@ -447,7 +450,7 @@ const GreetingCard: React.FC<Props> = ({ editable = false, onGreetingChange, onI
                   <CardHeadline topEditing={topEditing} setTopEditing={setTopEditing} editable={editable} onChange={onHeadlineChange} headline={headline} large={large} loading={loading} />
                   {loading && <LinearProgress />}
                   <CardBody topEditing={topEditing} setTopEditing={setTopEditing} editable={editable} onChange={onBodyChange} body={body} large={large} loading={loading} />
-                  <CardSignature topEditing={topEditing} setTopEditing={setTopEditing} signature={signature} editable={editable} onChange={onSignatureChange} large={large} loading={loading} />
+                  <CardSignature animatedSignature={animatedSignature} onAnimatedSignatureChange={onAnimatedSignatureChange} topEditing={topEditing} setTopEditing={setTopEditing} signature={signature} editable={editable} onChange={onSignatureChange} large={large} loading={loading} />
                 </Mark></Inner>
               </div>
             </div>

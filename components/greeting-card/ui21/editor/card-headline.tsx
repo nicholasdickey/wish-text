@@ -6,7 +6,8 @@ import { useTheme } from '@mui/material/styles';
 import { TextareaAutosize } from "@mui/base/TextareaAutosize";
 import FormControlLabel from '@mui/material/FormControlLabel';
 import FormHelperText from '@mui/material/FormHelperText';
-
+import { Josefin_Sans } from 'next/font/google'
+const josefin = Josefin_Sans({ subsets: ['latin'] })
 import ReactMarkdown from "react-markdown";
 interface BodyProps {
     l: number;
@@ -18,7 +19,7 @@ const Headline = styled.div<BodyProps>`
     justify-content:center;
     font-size: ${({ large }) => large ? 22 : 15}px;
     font-weight: 700;
-    font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+    //font-family: "Roboto", "Helvetica", "Arial", sans-serif;
     text-align: center;
     padding: 2px;
     z-index:100;
@@ -76,7 +77,7 @@ const Editor=styled.div<WidthProps>`
         width:${({ divwidth }) => divwidth?(divwidth-14)+'px':'100%'};
         max-width:${({ divwidth }) => divwidth?(divwidth-14)+'px':'100%'};
        // min-width:${({ divwidth }) => divwidth?divwidth+'px':'100%'};
-        font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+       // font-family: "Roboto", "Helvetica", "Arial", sans-serif;
         line-height:1.7;
         font-weight: 700;
         text-align:center;
@@ -170,7 +171,7 @@ const HeadlineEditor: React.FC<HeadlineProps> = ({ topEditing,setTopEditing,edit
         console.log("set width:", width);
     }, [ref.current]);
     return (
-        <Editor editable={editable} topEditing={topEditing} divwidth={divwidth}  ref={ref} l={text.length || 0} large={large || false}>
+        <Editor className={josefin.className} editable={editable} topEditing={topEditing} divwidth={divwidth}  ref={ref} l={text.length || 0} large={large || false}>
             {!headlineEditing&&<HeadlineWrap onClick={()=>{console.log("CLICK - headline");if(editable){setHeadlineEditing(true);setTopEditing(true);}}}>
                 <Headline l={text.length} large={large} className="q-h" >
                 <ReactMarkdown>
@@ -187,6 +188,7 @@ const HeadlineEditor: React.FC<HeadlineProps> = ({ topEditing,setTopEditing,edit
                     label={<Typography style={{ color: theme.palette.text.secondary }}></Typography>}
                     control={
                         <StyledTextareaAutosize
+                            className={josefin.className} 
                             aria-label="headline editor"
                             minRows={1}   
                             autoFocus={true}                 

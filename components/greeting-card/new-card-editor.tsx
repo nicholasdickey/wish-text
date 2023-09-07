@@ -34,6 +34,7 @@ import LinearProgress from '@mui/material/LinearProgress';
 import { DefaultCopyField } from '@eisberg-labs/mui-copy-field';
 import { RWebShare } from "react-web-share";
 import CardHeadline from "./ui21/editor/card-headline";
+import CardPreview from "./ui21/editor/card-preview";
 const TooblarPlaceholder = styled.div`
   height: 48px;
 `;
@@ -62,6 +63,7 @@ export default function CardEditor({
   //num,
   greeting,
   signature,
+  animatedSignature,
   linkid,
   image,
 
@@ -104,6 +106,7 @@ export default function CardEditor({
   setImage,
 
   setSignature,
+  setAnimatedSignature,
   setLinkid,
   setGreeting,
   //setCurrentNum,
@@ -115,10 +118,12 @@ export default function CardEditor({
   image: ImageData;
   greeting: string;
   signature: string;
+  animatedSignature:number;
   linkid: string;
 
   setImage: (image: ImageData) => void;
   setSignature: (signature: string) => void;
+  setAnimatedSignature: (animatedSignature: number) => void;
   
   setLinkid: (linkid: string) => void;
 
@@ -168,6 +173,8 @@ export default function CardEditor({
   const [prevGreeting, setPrevGreeting] = useState<string>('');
   const [creatingCard, setCreatingCard] = useState<boolean>(false);
   const [cardGreeting,setCardGreeting]=useState<string>(greeting||"");
+  //const [cardAnimatedSignature,setCardAnimatedSignature]=useState<number>(animatedSignature||0);
+  const [openCardPreview, setOpenCardPreview] = useState<boolean>(false);
   const sessionid = session.sessionid;
 
   const theme = useTheme();
@@ -208,14 +215,14 @@ export default function CardEditor({
     setImage(image);
   }
   const handleChange = (card: CardData) => {
-    let { greeting:card_Greeting="",signature: cardSignature, image: cardImage, linkid: cardLinkid, num: card_Num } = card;
+    let { greeting:card_Greeting="",signature: cardSignature, animatedSignature:cardAnimatedSignature, image: cardImage, linkid: cardLinkid, num: card_Num } = card;
     
     
     
-    console.log("handleChange1:",{image,cardImage,greeting,card_Greeting,signature,cardSignature, cardLinkid,card_Num});
+    console.log("handleChange1:",{image,cardImage,greeting,card_Greeting,signature,cardSignature, animatedSignature,cardAnimatedSignature, cardLinkid,card_Num});
     
-    
-    
+    if(! cardAnimatedSignature)
+    cardAnimatedSignature=0;    
     if (!card_Greeting)
       card_Greeting = greeting;
     // if (!num)
@@ -236,8 +243,9 @@ export default function CardEditor({
       setSignature(cardSignature);
     if (cardLinkid != linkid)
       setLinkid(cardLinkid || '');
-
-
+    if(cardAnimatedSignature!=animatedSignature)
+      setAnimatedSignature(cardAnimatedSignature);
+    //setCardAnimatedSignature(cardAnimatedSignature);
     const newCardsLength = newCardsStack.length;
     console.log("handleChange111:", newCardsStack, cardNum)
     let cm = cardMax, cn = cardNum;
@@ -263,8 +271,8 @@ export default function CardEditor({
       newStack.push(card);
       setNewCardsStack(newStack);
     }
-    console.log("****** ====>>>> end of handleChange:",{ greeting:card_Greeting, image: cardImage, signature: cardSignature, linkid: cardLinkid, cardMax: cm, cardNum: cn, hasNewCard: true, newCardsStackString: JSON.stringify(newStack) })
-    setTimeout(() => updateSession2({ greeting:card_Greeting, image: cardImage, signature: cardSignature, linkid: cardLinkid, cardMax: cm, cardNum: cn, hasNewCard: true, newCardsStackString: JSON.stringify(newStack) }), 1);
+    console.log("****** ====>>>> end of handleChange:",{ greeting:card_Greeting, image: cardImage, signature: cardSignature, animatedSignature:cardAnimatedSignature,linkid: cardLinkid, cardMax: cm, cardNum: cn, hasNewCard: true, newCardsStackString: JSON.stringify(newStack) })
+    setTimeout(() => updateSession2({ greeting:card_Greeting, image: cardImage, signature: cardSignature,animatedSignature:cardAnimatedSignature, linkid: cardLinkid, cardMax: cm, cardNum: cn, hasNewCard: true, newCardsStackString: JSON.stringify(newStack) }), 1);
   }
   /**
    * When greeting changes, update the current card
@@ -279,6 +287,7 @@ export default function CardEditor({
           greeting,
           image,
           signature,
+          animatedSignature,
           linkid: '',
          
         }
@@ -289,7 +298,7 @@ export default function CardEditor({
   }, [greeting]);
 
   const processCardRecord = async (record: CardData, cardNum: number) => {
-    const {greeting:cardGreeting='', image, signature, num, linkid } = record;
+    const {greeting:cardGreeting='', image, signature,animatedSignature=1, num, linkid } = record;
 
     console.log("processCardRecord", { cardNum, record })
     setCardNum(cardNum);
@@ -297,6 +306,7 @@ export default function CardEditor({
    // setNumPointer(num || 0);
     setCardGreeting(cardGreeting);
     setSignature(signature);
+    setAnimatedSignature(animatedSignature);
     setImage(image);
     setLinkid(linkid || '');
     updateSession2({ image, signature, linkid, cardNum });
@@ -424,8 +434,11 @@ export default function CardEditor({
     setPrompt5(true);
     updateSession2({ prompt5: true });
   }
+  const handlePreview = () => {
+    setOpenCardPreview(true);
+  }
   const handleCreate: () => void = async () => {
-    console.log("handleCreate:", { image, signature, cardGreeting })
+    console.log("handleCreate:", { image, signature, animatedSignature, cardGreeting })
     setCreatingCard(true);
     // setTimeout(async () => await recordEvent(session.sessionid, 'create-card', ''), 1000);
     //await handleDownload();
@@ -434,6 +447,7 @@ export default function CardEditor({
    
       image,
       signature,
+      animatedSignature,
       greeting:cardGreeting,
       metaimage
     }
@@ -445,7 +459,7 @@ export default function CardEditor({
     setLinkid(linkid);
     setNewCardsStack([]);
     // card.linkid = linkid;
-    console.log("handleCreate2:", { image,signature,cardGreeting,success, linkid, cardNum,card })
+    console.log("handleCreate2:", { image,signature,animatedSignature,cardGreeting,success, linkid, cardNum,card })
     if (success) {
 
       setCardNum(cardNum);
@@ -559,29 +573,37 @@ export default function CardEditor({
         image={image}
         text={greeting}
         signature={signature}
+        animatedSignature={animatedSignature}
         fbclid={fbclid}
         utm_content={utm_content}
         dark={darkMode ? "true" : "false"}
         startOpen={true} 
         large={true}
         editable={true}
-        onGreetingChange={(value: string) => {handleChange({ greeting: value, image, signature, linkid: '' }) }}
-        onImageChange={(image: ImageData) => { handleChange({ greeting:cardGreeting, image, signature, linkid: '' }) }}
-        onSignatureChange={(value: string) => { handleChange({ greeting:cardGreeting, image, signature: value, linkid: '' }) }}
-       
+        onGreetingChange={(value: string) => {handleChange({ greeting: value, image, signature, animatedSignature,linkid: '' }) }}
+        onImageChange={(image: ImageData) => { handleChange({ greeting:cardGreeting, image, signature, animatedSignature,linkid: '' }) }}
+        onSignatureChange={(value: string) => { handleChange({ greeting:cardGreeting, image, signature: value,animatedSignature, linkid: '' }) }}
+        onAnimatedSignatureChange={(value: number) => { handleChange({ greeting, image, signature, animatedSignature: value, linkid: '' }) }}
       />
 
       {linkid && <CopyField
         label="Share Card Link"
         value={`${process.env.NEXT_PUBLIC_SERVER}/card/${linkid}`} />}
       {false && linkid && <img width={600} height={'auto'} src={imageData} />}
+      
+      {!creatingCard && !linkid && <Box sx={{ mt: 1, width: 1 }}>
+
+        <Button fullWidth variant="contained" onClick={handlePreview}>Preview Card</Button>
+
+      </Box>
+      }
       {!creatingCard && !linkid && <Box sx={{ mt: 1, width: 1 }}>
 
         <Button fullWidth variant="contained" onClick={handleCreate}>Create a public link</Button>
 
       </Box>
       }
-
+      {openCardPreview&&<CardPreview  dark={darkMode ? "true" : "false"} open={openCardPreview} setOpen={setOpenCardPreview} text={cardGreeting} signature={signature} animatedSignature={animatedSignature} image={image} />}
       {creatingCard && <LinearProgress />}
       {!creatingCard && linkid && <ToolbarShare greeting={greeting} url={`${process.env.NEXT_PUBLIC_SERVER}/card/${linkid}`} />}
     </>

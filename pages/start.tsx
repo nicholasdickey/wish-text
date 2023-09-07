@@ -299,6 +299,7 @@ export default function Home({ linkid: startLinkid, card: startCard = false,
   //greeting card state:
   const [image, setImage] = useState<ImageData>(session.image || emptyImage);
   const [signature, setSignature] = useState<string>(session.signature || '');
+  const [animatedSignature, setAnimatedSignature] = useState<number>(session.animatedSignature===0?0: 1);
   const [linkid, setLinkid] = useState<string>(startLinkid);
   const [cardNum, setCardNum] = useState<number>(startCardNum);
   const [cardMax, setCardMax] = useState<number>(startCardMax);
@@ -1132,6 +1133,8 @@ Whether it's birthdays, graduations, holidays, or moments of illness or loss, WI
                   setGreeting={setGreeting}
                   image={image}
                   signature={signature}
+                  animatedSignature={animatedSignature}
+                  setAnimatedSignature={setAnimatedSignature}
                   linkid={linkid}
 
                   setImage={setImage}
@@ -1241,8 +1244,8 @@ Whether it's birthdays, graduations, holidays, or moments of illness or loss, WI
 export const getServerSideProps = withSessionSsr(
   async function getServerSideProps(context: GetServerSidePropsContext): Promise<any> {
     try {
-      let { linkid, card, signature, dark, num, max, cardNum, cardMax, prompt1, prompt2, prompt3, prompt4, prompt5, prompt6, promptImageStrip, fbclid, utm_medium, utm_campaign, utm_content, virgin, virgin2, from, to, occasion, naive, reflections, instructions, inastyleof, language, age, interests, sex }:
-        { linkid: string, card: boolean, signature: string, dark: boolean, num: number, max: number, cardNum: number, cardMax: number, prompt1: string, prompt2: string, prompt3: string, prompt4: string, prompt5: string, prompt6: string, fbclid: string, utm_medium: string, utm_campaign: string, utm_content: string, virgin: boolean, virgin2: boolean, from: string, to: string, occasion: string, naive: boolean, reflections: string, instructions: string, inastyleof: string, language: string, age: string, interests: string, sex: string, promptImageStrip: boolean } = context.query as any;
+      let { linkid, card, signature, animatedSignature,dark, num, max, cardNum, cardMax, prompt1, prompt2, prompt3, prompt4, prompt5, prompt6, promptImageStrip, fbclid, utm_medium, utm_campaign, utm_content, virgin, virgin2, from, to, occasion, naive, reflections, instructions, inastyleof, language, age, interests, sex }:
+        { linkid: string, card: boolean, signature: string, animatedSignature:number, dark: boolean, num: number, max: number, cardNum: number, cardMax: number, prompt1: string, prompt2: string, prompt3: string, prompt4: string, prompt5: string, prompt6: string, fbclid: string, utm_medium: string, utm_campaign: string, utm_content: string, virgin: boolean, virgin2: boolean, from: string, to: string, occasion: string, naive: boolean, reflections: string, instructions: string, inastyleof: string, language: string, age: string, interests: string, sex: string, promptImageStrip: boolean } = context.query as any;
 
       linkid = linkid || '';
       from = from || '';
@@ -1254,6 +1257,7 @@ export const getServerSideProps = withSessionSsr(
       virgin = virgin || false;
       virgin2 = virgin2 || false;
       signature = signature || '';
+      animatedSignature=animatedSignature===0?0:1;
 
       prompt1 = prompt1 || '';
       prompt2 = prompt2 || '';
@@ -1352,6 +1356,7 @@ export const getServerSideProps = withSessionSsr(
       virgin = options.virgin || false;
       virgin2 = options.virgin2 || false;
       signature = signature || options.signature || '';
+      animatedSignature=animatedSignature===0?0:options.animatedSignature===0?0:1
       prompt1 = prompt1 || options.prompt1 || '';
       prompt2 = prompt2 || options.prompt2 || '';
       prompt3 = prompt3 || options.prompt3 || '';
@@ -1383,6 +1388,7 @@ export const getServerSideProps = withSessionSsr(
           virgin2: virgin2,
           dark: dark,
           signature: signature,
+          animatedSignature:animatedSignature,
           prompt1: prompt1,
           prompt2: prompt2,
           prompt3: prompt3,

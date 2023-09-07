@@ -6,7 +6,8 @@ import { useTheme } from '@mui/material/styles';
 import { TextareaAutosize } from "@mui/base/TextareaAutosize";
 import FormControlLabel from '@mui/material/FormControlLabel';
 import FormHelperText from '@mui/material/FormHelperText';
-
+import { Josefin_Sans } from 'next/font/google'
+const josefin = Josefin_Sans({ subsets: ['latin'] })
 import ReactMarkdown from "react-markdown";
 interface BodyProps {
     l: number;
@@ -20,7 +21,7 @@ const TextBody = styled.div<BodyProps>`
     font-size:${({ l, large }) => large ? (l > 600 ? 2 : l > 400 ? 3 : l > 300 ? 4 : l > 200 ? 5 : 7) : (l > 600 ? 2 : l > 400 ? 3 : l > 300 ? 4 : l > 200 ? 5 : 6)}px;
     font-weight: 400;
     padding:2px;
-    font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+   // font-family: "Roboto", "Helvetica", "Arial", sans-serif;
     line-height:1.7;
   
     //padding-bottom:20px;
@@ -57,7 +58,7 @@ interface WidthProps {
     l: number;
     large: boolean;
     topEditing: boolean;
-    editable:boolean
+    editable: boolean
 }
 
 const Editor = styled.div<WidthProps>`
@@ -85,7 +86,7 @@ const Editor = styled.div<WidthProps>`
         width:${({ divwidth }) => divwidth ? (divwidth - 12) + 'px' : '100%'};
         max-width:${({ divwidth }) => divwidth ? (divwidth - 12) + 'px' : '100%'};
        // min-width:${({ divwidth }) => divwidth ? divwidth + 'px' : '100%'};
-        font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+       // font-family: "Roboto", "Helvetica", "Arial", sans-serif;
         line-height:1.7;
         text-align:center;
         font-size:${({ l, large }) => large ? (l > 600 ? 2 : l > 400 ? 3 : l > 300 ? 4 : l > 200 ? 5 : 7) : (l > 600 ? 2 : l > 400 ? 3 : l > 300 ? 4 : l > 200 ? 5 : 6)}px;
@@ -161,10 +162,10 @@ const BodyEditor: React.FC<Props> = ({ topEditing, setTopEditing, editable, body
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
             if (ref.current && !ref.current.contains(event.target as Node)) {
-               // if(editing)
-                  //  setEditing(false);
-               // if(topEditing)
-                 //   setTopEditing(false);
+                // if(editing)
+                //  setEditing(false);
+                // if(topEditing)
+                //   setTopEditing(false);
                 if (text != body)
                     onChange(text);
             }
@@ -188,7 +189,7 @@ const BodyEditor: React.FC<Props> = ({ topEditing, setTopEditing, editable, body
         console.log("set width:", width);
     }, [ref.current]);
     return (
-        <Editor editable={editable} topEditing={topEditing} divwidth={divwidth} ref={ref} l={text.length || 0} large={large || false}>
+        <Editor className={josefin.className} editable={editable} topEditing={topEditing} divwidth={divwidth} ref={ref} l={text.length || 0} large={large || false}>
             {!editing && <Wrap onClick={() => { console.log("CLICK - body"); if (editable) { setEditing(true); setTopEditing(true); } }}>
                 <TextBody l={text.length || 0} large={large || false}  >
                     <ReactMarkdown>
@@ -203,15 +204,16 @@ const BodyEditor: React.FC<Props> = ({ topEditing, setTopEditing, editable, body
 
                 <FormControlLabel
 
-                    sx={{ border:0, m: 0, p: 0 }}
+                    sx={{ border: 0, m: 0, p: 0 }}
                     labelPlacement="top"
                     label={<Typography style={{ color: theme.palette.text.secondary }}></Typography>}
                     control={
                         <StyledTextareaAutosize
                             aria-label="message editor"
+                            className={josefin.className}
                             minRows={4}
                             autoFocus={true}
-                          
+
                             // resize="none"
                             placeholder="Edit the message"
                             onChange={handleChange}

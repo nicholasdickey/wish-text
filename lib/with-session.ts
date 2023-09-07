@@ -77,6 +77,7 @@ export interface Options{
     greeting?:string,
     image?:ImageData;
     signature?:string;
+    animatedSignature?:number;
     num?:number;
     linkid?:string;
 

@@ -6,7 +6,7 @@ import AccordionDetails from '@mui/material/AccordionDetails';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import Typography from '@mui/material/Typography';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import Box from '@mui/material/Box';
+
 import { AppBar } from '@mui/material';
 import CssBaseline from '@mui/material/CssBaseline';
 import FormControlLabel from '@mui/material/FormControlLabel';
@@ -43,7 +43,7 @@ import { withSessionSsr, Options } from '../lib/with-session';
 import { isbot } from '../lib/isbot';
 import Band from '../components/band';
 import BandCard from '../components/band-card';
-import Card from '../components/greeting-card/ui';
+import Card from '../components/greeting-card/ui21';
 import LinearProgress from '@mui/material/LinearProgress';
 interface BackgroundMode {
     colorDark: string;
@@ -301,7 +301,7 @@ export default function Home({ dark, fresh, fbclid, utm_content, isbot, isfb, se
     const line3 = `Gift suggestions with no effort.   
         Happy or sad, the AI assistant will help you find the right gifts. 
     `
-    const greeting = "🎉 Happy 12th Birthday to my awesome son! 🎂 Hope you have a fantastic day filled with fun, laughter, and loads of cake! 🎈🍰 You're growing up so fast, but always remember to stay true to yourself and keep spreading those infectious smiles. 😄 Love you to the 🌙 and back!";
+    const greeting = `{"headline":"🎉 Happy 12th Birthday to my awesome son! 🎂","body":"Hope you have a fantastic day filled with fun, laughter, and loads of cake! 🎈🍰 You're growing up so fast, but always remember to stay true to yourself and keep spreading those infectious smiles. 😄 Love you to the 🌙 and back!"}`
     const signature = 'Enjoy and be happy,\n your Dad!';
     const image = '';
     const canvasRef = React.useRef<HTMLDivElement>(null);
@@ -409,7 +409,8 @@ Whether it's birthdays, graduations, holidays, or moments of illness or loss, WI
                                 extra="card=true"
                                 dark="true"
                                 card={
-                                    <Card canvasRef={canvasRef} delayOpen={true} large={true} signature={signature} fbclid={fbclid} utm_content={utm_content} dark={darkMode ? "true" : "false"} text={greeting || ''} image={demoImage} />}
+                                    //<Card animatedSignature={animatedSignature} editable={false} onAnimatedSignatureChange={()=>{}}  onGreetingChange={()=>{}} onImageChange={()=>{}} onSignatureChange={()=>{}} canvasRef={canvasRef} delayOpen={true} large={true} signature={signature} fbclid={""} utm_content={""} dark={dark} text={text || ''} image={image} />
+                                      <Card animatedSignature={1} editable={false} onAnimatedSignatureChange={()=>{}}  onGreetingChange={()=>{}} onImageChange={()=>{}} onSignatureChange={()=>{}} canvasRef={canvasRef} delayOpen={true} large={true} signature={signature} fbclid={fbclid} utm_content={utm_content} dark={darkMode ? "true" : "false"} text={greeting || ''} image={demoImage} />}
                                 fresh={fresh} fbclid={fbclid} utm_content={utm_content} isbot={isbot} isfb={isfb} sessionid={sessionid}
                                 title="Create Virtual Wishing Cards" subtitle={"Create beautiful wish cards"} cta="Create a Wish Card Now!" />
                             }

@@ -6,5 +6,6 @@ export default interface CardData {
     linkid?:string;
     greeting?:string;
     metaimage?:string;
+    animatedSignature?:number;
   }
   
