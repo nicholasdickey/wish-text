@@ -15,28 +15,19 @@ interface BodyProps {
 }
 const TextBody = styled.div<BodyProps>`
     width:100%;
-    //display:flex;
-
-    //justify-content:center;
-    font-size:${({ l, large }) => large ? (l > 600 ? 2 : l > 400 ? 3 : l > 300 ? 4 : l > 200 ? 5 : 7) : (l > 600 ? 2 : l > 400 ? 3 : l > 300 ? 4 : l > 200 ? 5 : 6)}px;
+    font-size:${({ l, large }) => large ? (l > 600 ? 12 : l > 400 ? 13 : l > 300 ? 14 : l > 200 ? 15 : 17) : (l > 600 ? 2 : l > 400 ? 3 : l > 300 ? 4 : l > 200 ? 5 : 7)}px;
     font-weight: 400;
     padding:2px;
-   // font-family: "Roboto", "Helvetica", "Arial", sans-serif;
     line-height:1.7;
-  
-    //padding-bottom:20px;
-    //margin-bottom: 40px;
     @media (min-width:600px) {
-        font-size:${({ l, large }) => large ? (l > 600 ? 9 : l > 400 ? 10 : l > 300 ? 11 : l > 200 ? 12 : 13) : (l > 600 ? 2 : l > 400 ? 3 : l > 300 ? 4 : l > 200 ? 5 : 6)}px;
-    }
- 
+        font-size:${({ l, large }) => large ? (l > 600 ? 9 : l > 400 ? 10 : l > 300 ? 11 : l > 200 ? 12 : 13) : (l > 600 ? 2 : l > 400 ? 3 : l > 300 ? 4 : l > 200 ? 15 : 16)}px;
+    } 
 `;
 
 const Wrap = styled.div`
     position:relative;
     width:100%;
-   margin-top:12px;
-   // margin-bottom:80px;
+    //margin-top:12px;
 `;
 
 const StyledTextareaAutosize = styled(TextareaAutosize)`
@@ -50,6 +41,8 @@ const StyledTextareaAutosize = styled(TextareaAutosize)`
     overflow:auto;
     min-width:100%;
     height:100%;
+
+    // font-family:"Josefin Sans",  sans-serif;
     //border:none;
    // padding:6px;
 `;
@@ -89,10 +82,10 @@ const Editor = styled.div<WidthProps>`
        // font-family: "Roboto", "Helvetica", "Arial", sans-serif;
         line-height:1.7;
         text-align:center;
-        font-size:${({ l, large }) => large ? (l > 600 ? 2 : l > 400 ? 3 : l > 300 ? 4 : l > 200 ? 5 : 7) : (l > 600 ? 2 : l > 400 ? 3 : l > 300 ? 4 : l > 200 ? 5 : 6)}px;
+        font-size:${({ l, large }) => large ? (l > 600 ? 12 : l > 400 ? 13 : l > 300 ? 14 : l > 200 ? 15 : 17) : (l > 600 ? 2 : l > 400 ? 3 : l > 300 ? 4 : l > 200 ? 5 : 6)}px;
         font-weight: 400;
         @media (min-width:600px) {
-            font-size:${({ l, large }) => large ? (l > 600 ? 9 : l > 400 ? 10 : l > 300 ? 11 : l > 200 ? 12 : 13) : (l > 600 ? 2 : l > 400 ? 3 : l > 300 ? 4 : l > 200 ? 5 : 6)}px;
+            font-size:${({ l, large }) => large ? (l > 600 ? 9 : l > 400 ? 10 : l > 300 ? 11 : l > 200 ? 12 : 13) : (l > 600 ? 9 : l > 400 ? 10 : l > 300 ? 11 : l > 200 ? 12 : 13)}px;
         }
     }
 `;
@@ -100,7 +93,7 @@ const Editor = styled.div<WidthProps>`
 const EditorBox = styled.div`
   //width:100%;
   //margin-top:0px;
-  padding-top:15px;
+ // padding-top:15px;
  // margin-left:18px;
   position:relative;
   text-align:center;
@@ -108,19 +101,16 @@ const EditorBox = styled.div`
   padding-right:0px;
   cursor: text;
   & textarea{
-    //width:100%;
     overflow:auto;
-   // padding-left:9px;
-  //  background:#ffe;
-   // resize: none;
     resize: none;
-border:none;
-
-  
+    border:none;
   }
   
   padding-left:0px;
   padding-right:0px;
+  @media (min-width:600px) {
+           padding:0px;
+        }
   //padding-top:40px;
  // padding-bottom:40px;
 `;
@@ -133,13 +123,18 @@ interface Props {
     onChange: (headline: string) => void;
     topEditing: boolean;
     setTopEditing: (editing: boolean) => void;
+    id: string;
 }
 
-const BodyEditor: React.FC<Props> = ({ topEditing, setTopEditing, editable, body, large, loading, onChange }) => {
+const BodyEditor: React.FC<Props> = ({ id, topEditing, setTopEditing, editable, body, large, loading, onChange }) => {
     const [editing, setEditing] = useState(editable);
     const [text, setText] = useState(body);
     const [divwidth, setDivWidth] = useState(0);
     const theme = useTheme();
+    if (id.indexOf("popout") >= 0)
+        large = true;
+    else
+        large = false;
     //console.log("topEditing",topEditing)
     let ref = useRef<HTMLDivElement>(null);
     /* useEffect(() => {
@@ -190,7 +185,7 @@ const BodyEditor: React.FC<Props> = ({ topEditing, setTopEditing, editable, body
     }, [ref.current]);
     return (
         <Editor className={josefin.className} editable={editable} topEditing={topEditing} divwidth={divwidth} ref={ref} l={text.length || 0} large={large || false}>
-            {!editing && <Wrap onClick={() => { console.log("CLICK - body"); if (editable) { setEditing(true); setTopEditing(true); } }}>
+            {!editable && <Wrap onClick={() => { console.log("CLICK - body"); if (editable) { setEditing(true); setTopEditing(true); } }}>
                 <TextBody l={text.length || 0} large={large || false}  >
                     <ReactMarkdown>
                         {loading ? "" : text.replace('#', '###').replace('####', '##')}
@@ -200,29 +195,26 @@ const BodyEditor: React.FC<Props> = ({ topEditing, setTopEditing, editable, body
             </Wrap>}
             {false && large && editable && !editing && <Typography variant="body2" sx={{ mt: 2 }}>Click to edit</Typography>}
 
-            {editing && <EditorBox >
-
+            {editable && <EditorBox className={josefin.className}>
                 <FormControlLabel
-
+                    className={josefin.className}
                     sx={{ border: 0, m: 0, p: 0 }}
                     labelPlacement="top"
                     label={<Typography style={{ color: theme.palette.text.secondary }}></Typography>}
                     control={
                         <StyledTextareaAutosize
                             aria-label="message editor"
+                            data-id="debug"
                             className={josefin.className}
                             minRows={4}
                             autoFocus={true}
-
                             // resize="none"
                             placeholder="Edit the message"
                             onChange={handleChange}
-
                             defaultValue={text}
                         />
                     }
                 />
-
             </EditorBox>}
         </Editor>
     )

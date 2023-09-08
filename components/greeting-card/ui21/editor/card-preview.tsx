@@ -8,7 +8,7 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import styled from 'styled-components';
-import { Box, IconButton } from '@mui/material';
+
 import ArrowLeftIcon from '@mui/icons-material/ArrowLeft';
 import ArrowRightIcon from '@mui/icons-material/ArrowRight';
 import Typography from '@mui/material/Typography';
@@ -17,6 +17,8 @@ import ToolbarUpload from "../../../toolbar-upload";
 import ImageStrip from "../../../image-strip";
 import EmptyImage from "../../empty-image";
 import Card from "../index";
+import ExitToAppIcon from '@mui/icons-material/ExitToApp';
+import IconButton from '@mui/material/IconButton';
 interface LargeProps {
   large?: boolean,
   open?: boolean,
@@ -34,6 +36,17 @@ const Image = styled.img<LargeProps>`
 
    
 `;
+const Wrap = styled.div`
+padding-left:3px;
+padding-right:3px;
+`;
+const ExitButton = styled.div`
+    position:absolute;
+    top:0px;
+    right:0px;
+    z-index:1000;
+    padding:10px;
+    `;
 interface Props {
   image: ImageData;
   dark:string;
@@ -70,7 +83,8 @@ const ImageOverlay: React.FC<Props> = ({dark,session,open,setOpen,text,signature
           {false&&<Button variant="outlined" onClick={handleClickOpen}>
             Open responsive dialog
           </Button>}
-          <Dialog
+          
+        <Dialog
             fullScreen={fullScreen}
             open={open}
             onClose={handleClose}
@@ -80,10 +94,14 @@ const ImageOverlay: React.FC<Props> = ({dark,session,open,setOpen,text,signature
               {"Card Preview"}
             </DialogTitle>
             <DialogContent>
-             
-            <Card animatedSignature={animatedSignature} editable={false} onAnimatedSignatureChange={()=>{}}  onGreetingChange={()=>{}} onImageChange={()=>{}} onSignatureChange={()=>{}} canvasRef={canvasRef} delayOpen={true} large={true} signature={signature} fbclid={""} utm_content={""} dark={dark} text={text || ''} image={image} />
-          
-             
+            <Wrap>
+            <Card animatedSignature={animatedSignature} editable={false} onAnimatedSignatureChange={()=>{}}  onGreetingChange={()=>{}} onImageChange={()=>{}} onSignatureChange={()=>{}} canvasRef={canvasRef} delayOpen={true} large={true} signature={signature} fbclid={""} utm_content={""} dark={dark} text={text || ''} image={image} id="preview" />
+            </Wrap>
+            <ExitButton>
+            <IconButton color="primary" aria-label="exit dialog" onClick={()=>setOpen(false)}>
+                <ExitToAppIcon />
+            </IconButton>
+            </ExitButton>
             </DialogContent>
           
           </Dialog>

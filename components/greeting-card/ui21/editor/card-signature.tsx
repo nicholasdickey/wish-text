@@ -3,6 +3,7 @@ import React, { useRef, useState, useEffect } from "react";
 
 import Typography from "@mui/material/Typography";
 import { useTheme } from '@mui/material/styles';
+import useMediaQuery from '@mui/material/useMediaQuery';
 import { TextareaAutosize } from "@mui/base/TextareaAutosize";
 import Checkbox from '@mui/material/Checkbox';
 import FormControlLabel from '@mui/material/FormControlLabel';
@@ -16,19 +17,9 @@ interface BodyProps {
     l: number;
     large: boolean;
 }
-
-const TextBody = styled.div<BodyProps>`
+const VaraWrap=styled.div<BodyProps>`
     width:100%;
-    font-size:${({ l, large }) => large ? (l > 600 ? 2 : l > 400 ? 3 : l > 300 ? 4 : l > 200 ? 5 : 7) : (l > 600 ? 2 : l > 400 ? 3 : l > 300 ? 4 : l > 200 ? 5 : 6)}px;
-    font-weight: 400;
-    padding:2px;
-    font-family: "Roboto", "Helvetica", "Arial", sans-serif;
-    line-height:1.7;
-    @media (min-width:600px) {
-        font-size:${({ l, large }) => large ? (l > 600 ? 9 : l > 400 ? 10 : l > 300 ? 11 : l > 200 ? 12 : 13) : (l > 600 ? 2 : l > 400 ? 3 : l > 300 ? 4 : l > 200 ? 5 : 6)}px;
-    } 
 `;
-
 const Wrap = styled.div`
     position:relative;
     width:100%;
@@ -54,11 +45,11 @@ interface WidthProps {
     l: number;
     large: boolean;
     topEditing: boolean;
-    editable: boolean
+    editable: boolean;
 }
 
 const Editor = styled.div<WidthProps>`
-    height:100%;
+   // height:100%;
     position:relative;
     display:flex;
     flex-direction:column;
@@ -66,9 +57,7 @@ const Editor = styled.div<WidthProps>`
     align-items:center;
     text-align:center;
     padding:2px;
-    margin-right:0px;
-  
-
+    margin-right:0px; 
     cursor: ${({ editable }) => editable ? 'text' : 'default'};
 
     .MuiFormControlLabel-root{
@@ -81,20 +70,29 @@ const Editor = styled.div<WidthProps>`
        // min-width:${({ divwidth }) => divwidth ? divwidth + 'px' : '100%'};
         text-align:left;
         font-family:Caveat;
-        font-size:11px;
-        line-height:1.7;
+       // font-size:10px;
+        line-height:1.2;
         text-align:center;
-        font-size:${({ l, large }) => large ? (l > 600 ? 2 : l > 400 ? 3 : l > 300 ? 4 : l > 200 ? 5 : 7) : (l > 600 ? 2 : l > 400 ? 3 : l > 300 ? 4 : l > 200 ? 5 : 6)}px;
+       
+        font-size:${({ l, large }) => large ? (l > 600 ? 12 : l > 400 ? 13 : l > 300 ? 24 : l > 200 ? 25 : 27) : (l > 600 ? 2 : l > 400 ? 3 : l > 300 ? 14 : l > 200 ? 15 : 16)}px;
         font-weight: 400;
         @media (min-width:600px) {
-            font-size:${({ l, large }) => large ? (l > 200 ? 12 : 28) : (l > 600 ? 2 : l > 400 ? 3 : l > 300 ? 4 : l > 200 ? 5 : 6)}px;
+            font-size:${({ l, large }) => large ? (l > 200 ? 12 : 28) : (l > 600 ? 12 : l > 400 ? 16 : l > 300 ? 20 : l > 200 ? 24 : 28)}px;
         }
+    }
+    min-height:${({editable,large})=>large?editable?60:300:80}px;
+    font-size:${({ l, large }) => large ? (l > 200 ? 12 : 28) : (l > 600 ? 12 : l > 400 ? 16 : l > 300 ? 20 : l > 200 ? 24 : 28)}px;
+   
+    @media (min-width:600px) {
+        font-size:${({ l, large }) => large ? (l > 200 ? 12 : 28) : (l > 600 ? 12 : l > 400 ? 16 : l > 300 ? 20 : l > 200 ? 24 : 28)}px;
+   
+      // min-height:${(large)=>large?120:0}px;
     }
 `;
 
 const EditorBox = styled.div`
   //padding-top:15px;
-  height:100%;
+ // height:100%;
   position:relative;
   text-align:center;
  
@@ -102,10 +100,7 @@ const EditorBox = styled.div`
 
   & textarea{
     overflow:auto;
-    line-height:1.1;
-    font-size:29px;
-    //background:#ffe;
-    resize: none;
+   
   }
   
   padding-left:0px;
@@ -113,10 +108,10 @@ const EditorBox = styled.div`
 
 `;
 const SignatureContainer = styled.div`
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
+    //display: flex;
+    //flex-direction: column;
+    //justify-content: center;
+    //align-items: center;
     //padding-left: 4px;
     padding-right:4px;
     & .outer{
@@ -125,9 +120,9 @@ const SignatureContainer = styled.div`
 `;
 
 const Signature = styled.div`
-    display:flex;
-    flex-direction:column;
-    justify-content:center;
+   // display:flex;
+   // flex-direction:column;
+   // justify-content:center;
     //align-items:flex-begin;
     text-align:flex-end;
     //padding:4px;
@@ -142,23 +137,31 @@ const Signature = styled.div`
     // padding-top:24px;
    //  font-size:6px !important;
      @media (max-width: 769px) {
-        padding-top:20px;
-        font-size:4px;
+       //padding-top:20px;
+        font-size:24px;
     }
+    `;
+const BottomWrap = styled.div`
+    display:flex;
+   // height:100%;
+    flex-direction:column;
+    justify-content:space-between;
+    align-items:center;
     `;
 const AnimatedSignature = styled.div`
 //position:absolute;
 //height:100%;
 //bottom:0px;
 //right:20px;
-    margin:-10px;
+   // margin:-10px;
+    padding-right:20px;
     display:flex;
     justify-content: flex-end;
     width:100%;
     font-size:8px;
     & .MuiFormControlLabel-label{
         font-size:10px !important;
-}
+    }
     `;
 
 const SignatureLine = styled(Typography) <BodyProps>`
@@ -168,10 +171,13 @@ const SignatureLine = styled(Typography) <BodyProps>`
     line-height:1.2;
     text-align:center;
     font-family:Caveat;
-    font-size:26px;
+    //font-size:26px;
     //font-size:${({ large }) => large ? 3 : 9}px !important;
-    @media (max-width: 769px) {    
-       font-size:11px;
+    font-size:${({ l, large }) => large ? (l > 200 ? 12 : 28) : (l > 600 ? 10 : l > 400 ? 12 : l > 300 ? 14 : l > 200 ? 16 : 22)}px;
+   
+    @media (max-width: 600px) {    
+        font-size:${({ l, large }) => large ? (l > 200 ? 12 : 28) : (l > 600 ? 10 : l > 400 ? 12 : l > 300 ? 14 : l > 200 ? 16 : 18)}px;
+   
     }
 `;
 function useAsyncReference(value: string, isProp = false) {
@@ -202,18 +208,24 @@ interface Props {
     setTopEditing: (editing: boolean) => void;
     animatedSignature: number;
     onAnimatedSignatureChange: (animatedSignature: number) => void;
+    id: string;
 
 }
 
-const SignatureEditor: React.FC<Props> = ({ onAnimatedSignatureChange, animatedSignature = 1, topEditing, setTopEditing, editable, signature, large, loading, onChange }) => {
+const SignatureEditor: React.FC<Props> = ({ onAnimatedSignatureChange, animatedSignature = 1, topEditing, setTopEditing, editable, signature, large, loading, onChange, id }) => {
     const [editing, setEditing] = useState(editable);
     const [drawSignature, setDrawSignature] = useState(false);
     //@ts-ignore
     const [text, setText] = useAsyncReference(signature);
     const [divwidth, setDivWidth] = useState(0);
     const [showAnimatedSignature, setShowAnimatedSignature] = useState(false);
+    if (id.indexOf("popout") >= 0)
+        large = true;
+    else
+        large = false;
     const theme = useTheme();
-    console.log("signature editor render", text.current)
+    const mobile = useMediaQuery(theme.breakpoints.down('sm'));
+    console.log("signature editor render", { text: text.current, editable, editing })
     let ref = useRef<HTMLDivElement>(null);
     const handleAnimatedSignatureChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         console.log("onAnimatedSignatureChage", event.target.checked)
@@ -264,64 +276,60 @@ const SignatureEditor: React.FC<Props> = ({ onAnimatedSignatureChange, animatedS
 
     return (
         <Editor onFocus={() => setShowAnimatedSignature(true)} onBlur={() => setShowAnimatedSignature(false)} editable={editable} topEditing={topEditing} divwidth={divwidth} ref={ref} l={text.current.length || 0} large={large || false}>
-            {!editing && drawSignature && <Wrap onClick={() => { console.log("CLICK - signature"); if (editable) { setEditing(true); setTopEditing(true); } }}>
+            {!editable && drawSignature && <Wrap onClick={() => { console.log("CLICK - signature"); if (editable) { setEditing(true); setTopEditing(true); } }}>
                 <SignatureContainer>
                     {!animatedSignature && <Signature id="wt-signatrue">
                         {signatureText ? signatureText : ''}      </Signature>}
 
                     {animatedSignature === 1 && varaText && <Signature id="wt-signatrue">
-                        <VaraText text={varaText} />
-
+                        <VaraWrap large={large || false} l={text.length}>
+                            <VaraText text={varaText} id={id} />
+                        </VaraWrap>
                     </Signature>}
 
                 </SignatureContainer>
             </Wrap>}
-
-            {editing && <EditorBox >
-
-                <SignatureContainer>
-                    <Signature>
-                        <FormControlLabel
-                            disabled={!editable}
-                            sx={{ mt: 2, p: 0 }}
-                            labelPlacement="top"
-                            label={<Typography style={{ color: theme.palette.text.secondary }}></Typography>}
-                            control={
-                                <StyledTextareaAutosize
-                                    disabled={!editable}
-                                    aria-label="signature editor"
-                                    minRows={1}
-
-                                    autoFocus={true}
-                                    placeholder="Add up to 2 lines of the handwritten signature."
-                                    onChange={handleChange}
-                                    value={text.current}
-                                />
-                            }
-                        />
-
-
-                    </Signature>
-
-                </SignatureContainer>
-
-            </EditorBox>}
-            {editing && <AnimatedSignature >
-                <FormControlLabel
-                    label="Animate handwriting"
-                    labelPlacement="start"
-                    style={{ fontSize: 8 }}
-                    onFocus={() => setShowAnimatedSignature(true)} onBlur={() => setShowAnimatedSignature(false)}
-                    control={
-                        <Checkbox
-                            sx={{ color: 'lightBlue' }}
-                            size='small'
-                            checked={animatedSignature === 1}
-                            onChange={handleAnimatedSignatureChange}
-                        />
-                    }
-                />
-            </AnimatedSignature>}
+            <BottomWrap>
+                {editable && <EditorBox >
+                    <SignatureContainer>
+                        <Signature>
+                            <FormControlLabel
+                                disabled={!editable}
+                                sx={{ mt: 2, p: 0 }}
+                                labelPlacement="top"
+                                label={<Typography style={{ color: theme.palette.text.secondary }}></Typography>}
+                                control={
+                                    <StyledTextareaAutosize
+                                        disabled={!editable}
+                                        aria-label="signature editor"
+                                        minRows={1}
+                                        autoFocus={true}
+                                        placeholder="Add up to 2 lines of the handwritten signature."
+                                        onChange={handleChange}
+                                        value={text.current}
+                                    />
+                                }
+                            />
+                        </Signature>
+                    </SignatureContainer>
+                </EditorBox>}
+                {editable && <AnimatedSignature >
+                    <FormControlLabel
+                        label="Animate handwriting"
+                        labelPlacement="start"
+                        style={{ fontSize: 8 }}
+                        onFocus={() => setShowAnimatedSignature(true)} onBlur={() => setShowAnimatedSignature(false)}
+                        control={
+                            <Checkbox
+                                sx={{ color: 'lightBlue' }}
+                                size='small'
+                                checked={animatedSignature === 1}
+                                onChange={handleAnimatedSignatureChange}
+                            />
+                        }
+                    />
+                </AnimatedSignature>}
+            </BottomWrap>
         </Editor>
     )
 }

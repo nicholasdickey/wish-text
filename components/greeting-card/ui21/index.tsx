@@ -10,7 +10,7 @@ import { useRouter } from 'next/router';
 import ReactMarkdown from "react-markdown";
 import LinearProgress from '@mui/material/LinearProgress';
 import ImageData from "../../../lib/image-data";
-import PopoutCard from "./popout-card";
+import PopoutCard from "./new-popout-card";
 import EmptyImage from "../empty-image";
 import useWindowSize from "../../hooks/window-size";
 import CardHeadline from "./editor/card-headline";
@@ -21,45 +21,6 @@ interface BodyProps {
   l: number;
   large?: boolean;
 }
-const Headline = styled.div<BodyProps>`
-  width:100%;
-  display:flex;
-  justify-content:center;
-  font-size: ${({ large }) => large ? 22 : 15}px;
-  font-weight: 700;
-  font-family: "Roboto", "Helvetica", "Arial", sans-serif;
-  text-align: center;
-  padding: 2px;
-  z-index:100;
-
-  @media (max-width: 600px) {
-    font-size:9px;
-  }
-  @media (min-width: 900px) {
-    font-size: 19px;
-  }
-  &.q-h{
-    z-index:100;
-    position:relative
-  }
-`;
-
-const TextBody = styled.div<BodyProps>`
-  width:100%;
-  display:flex;
-  justify-content:center;
-  font-size:${({ l, large }) => large ? (l > 600 ? 2 : l > 400 ? 3 : l > 300 ? 4 : l > 200 ? 5 : 7) : (l > 600 ? 2 : l > 400 ? 3 : l > 300 ? 4 : l > 200 ? 5 : 6)}px;
-  font-weight: 400;
-  line-height: 1.7;
-  font-family: "Roboto", "Helvetica", "Arial", sans-serif;
-  padding-top:1px;
-  //padding-bottom:20px;
-  //margin-bottom: 40px;
-  @media (min-width:600px) {
-    font-size:${({ l, large }) => large ? (l > 600 ? 9 : l > 400 ? 10 : l > 300 ? 11 : l > 200 ? 12 : 13) : (l > 600 ? 2 : l > 400 ? 3 : l > 300 ? 4 : l > 200 ? 5 : 6)}px;
-  }
- 
-`;
 
 interface LargeProps {
   large?: boolean,
@@ -278,40 +239,17 @@ const CTAButton = styled(Button)`
 `;
 const Inner = styled.div`
     position:relative;  
-    padding-bottom:40px;
-    width:100%;
+   /* / padding-bottom:40px; */
+  // height:100vh;
+    position:relative;
+    display:flex;
+    flex-direction:column;
+    justify-content:space-between;
     margin-left: 4px;
     margin-right: 4px;
     margin-top:4px;  
     overflow:clip;
 `;
-const SignatureContainer = styled.div`
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    padding-left: 4px;
-`;
-
-const Signature = styled.div`
-    display:flex;
-    flex-direction:column;
-    justify-content:center;
-    //align-items:flex-begin;
-   // padding:4px;
-    font-family:Caveat;
-    color:#63599d;
-    -ms-transform: rotate(-10deg); /* IE 9 */
-    -webkit-transform: rotate(-10deg); /* Chrome, Safari, Opera */
-    -moz-transform: rotate(-10deg); /*Mozilla */
-     transform: rotate(-10deg); 
-     padding-top:24px;
-   //  font-size:6px !important;
-     @media (max-width: 769px) {
-        padding-top:20px;
-        font-size:4px;
-    }
-    `;
 
 const SignatureLine = styled(Typography) <BodyProps>`
     padding:0px;
@@ -358,8 +296,9 @@ interface Props {
   images?:ImageData[];
   sharedImages?:ImageData[];
   onUpload?: (result:any,widget:any) => void;
+  id?:string;
 }
-const GreetingCard: React.FC<Props> = ({ onAnimatedSignatureChange,animatedSignature=1,editable = false, onGreetingChange, onImageChange, onSignatureChange, canvasRef, delayOpen = false, startOpen = false, loading = false, large: startLarge = false, dark, fbclid, utm_content, text, image, signature,session,images,sharedImages,onUpload }) => {
+const GreetingCard: React.FC<Props> = ({ id="view", onAnimatedSignatureChange,animatedSignature=1,editable = false, onGreetingChange, onImageChange, onSignatureChange, canvasRef, delayOpen = false, startOpen = false, loading = false, large: startLarge = false, dark, fbclid, utm_content, text, image, signature,session,images,sharedImages,onUpload }) => {
 
   const [open, setOpen] = React.useState(startOpen);
   const [large, setLarge] = React.useState(startLarge);
@@ -406,7 +345,7 @@ const GreetingCard: React.FC<Props> = ({ onAnimatedSignatureChange,animatedSigna
     <BandContainer id="band-container-wt" darktext={dark} open={open} large={large} onClick={() => console.log("CLICK")} >
 
       <Body id="body-wt" style={{ width: '100vw', height: '100hw' }}  >
-        <PopoutCard open={hugeLeft || hugeRight} isLeft={hugeLeft} card={{ text, image: image || EmptyImage, signature }} close={() => { setHugeLeft(false); setHugeRight(false); }} />
+        <PopoutCard id={id} images={images} sharedImages={sharedImages} hugeLeft={hugeLeft} hugeRight={hugeRight} topEditing={topEditing} setTopEditing={setTopEditing} imageEditing={imageEditing} setImageEditing={setImageEditing} session={session} onUpload={onUpload} onAnimatedSignatureChange={onAnimatedSignatureChange} onGreetingChange={onGreetingChange} onImageChange={onImageChange} onSignatureChange={onSignatureChange} canvasRef={canvasRef} editable={editable} open={hugeLeft || hugeRight} isLeft={hugeLeft} card={{ text, image: image || EmptyImage, signature,animatedSignature }} close={() => { setHugeLeft(false); setHugeRight(false); }} />
         <Card style={{ width: '100vw', height: '100hw' }} large={large} open={open} dark={dark}  >
           <div style={{ width: '100vw', height: '100hw' }} className={`card__container js-card-opener ${open ? "open" : ""}`}  >
             <div ref={canvasRef} className={`card ${open ? "open" : ""}`} >
@@ -446,12 +385,12 @@ const GreetingCard: React.FC<Props> = ({ onAnimatedSignatureChange,animatedSigna
                   else
                     setHugeRight(!hugeRight);
                 }}>
-                <Inner><Mark image={"false"} onClick={() => handleTextClick()} >
-                  <CardHeadline topEditing={topEditing} setTopEditing={setTopEditing} editable={editable} onChange={onHeadlineChange} headline={headline} large={large} loading={loading} />
+                <Inner>
+                  <CardHeadline id={`normal-${id}`} topEditing={topEditing} setTopEditing={setTopEditing} editable={editable&&!mobile} onChange={onHeadlineChange} headline={headline} large={large} loading={loading} />
                   {loading && <LinearProgress />}
-                  <CardBody topEditing={topEditing} setTopEditing={setTopEditing} editable={editable} onChange={onBodyChange} body={body} large={large} loading={loading} />
-                  <CardSignature animatedSignature={animatedSignature} onAnimatedSignatureChange={onAnimatedSignatureChange} topEditing={topEditing} setTopEditing={setTopEditing} signature={signature} editable={editable} onChange={onSignatureChange} large={large} loading={loading} />
-                </Mark></Inner>
+                  <CardBody id={`normal-${id}`}  topEditing={topEditing} setTopEditing={setTopEditing} editable={editable&&!mobile} onChange={onBodyChange} body={body} large={large} loading={loading} />
+                  <CardSignature id={`normal-${id}`} animatedSignature={animatedSignature} onAnimatedSignatureChange={onAnimatedSignatureChange} topEditing={topEditing} setTopEditing={setTopEditing} signature={signature} editable={editable&&!mobile} onChange={onSignatureChange} large={large} loading={loading} />
+                </Inner>
               </div>
             </div>
             {false && <CTAButton onClick={() => setOpen(!open)}> {`${open ? "Close" : "Open"} Card`}</CTAButton>}

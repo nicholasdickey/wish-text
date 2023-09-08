@@ -12,12 +12,13 @@ import ReactMarkdown from "react-markdown";
 interface BodyProps {
     l: number;
     large?: boolean;
+    
 }
 const Headline = styled.div<BodyProps>`
     width:100%;
     display:flex;
     justify-content:center;
-    font-size: ${({ large }) => large ? 22 : 15}px;
+    font-size: ${({ large }) => large ? 22 : 22}px;
     font-weight: 700;
     //font-family: "Roboto", "Helvetica", "Arial", sans-serif;
     text-align: center;
@@ -25,7 +26,7 @@ const Headline = styled.div<BodyProps>`
     z-index:100;
   
     @media (max-width: 600px) {
-      font-size:9px;
+        font-size: ${({ large }) => large ? 22 : 9}px;
     }
     @media (min-width: 900px) {
       font-size: 19px;
@@ -83,7 +84,7 @@ const Editor=styled.div<WidthProps>`
         text-align:center;
         font-size: ${({ large }) => large ? 22 : 15}px;
         @media (max-width: 600px) {
-        font-size:9px;
+            font-size:19px;
     }
     @media (min-width: 900px) {
         font-size: 19px;
@@ -114,13 +115,18 @@ interface HeadlineProps {
     topEditing:boolean;
     setTopEditing:(editing:boolean)=>void;
     onChange: (headline: string) => void;
+    id:string;
 }
 
-const HeadlineEditor: React.FC<HeadlineProps> = ({ topEditing,setTopEditing,editable,headline, large, loading,onChange }) => {
+const HeadlineEditor: React.FC<HeadlineProps> = ({ id,topEditing,setTopEditing,editable,headline, large, loading,onChange }) => {
     const [headlineEditing, setHeadlineEditing] = useState(editable);
     const [text, setText] = useState(headline);
     const [divwidth, setDivWidth] = useState(0);
     const theme = useTheme();
+    if(id.indexOf("popout")>=0)
+        large=true;
+    else
+        large=false;
 
     let ref = useRef<HTMLDivElement>(null);
    /* useEffect(() => {
@@ -172,7 +178,7 @@ const HeadlineEditor: React.FC<HeadlineProps> = ({ topEditing,setTopEditing,edit
     }, [ref.current]);
     return (
         <Editor className={josefin.className} editable={editable} topEditing={topEditing} divwidth={divwidth}  ref={ref} l={text.length || 0} large={large || false}>
-            {!headlineEditing&&<HeadlineWrap onClick={()=>{console.log("CLICK - headline");if(editable){setHeadlineEditing(true);setTopEditing(true);}}}>
+            {!editable&&<HeadlineWrap onClick={()=>{console.log("CLICK - headline");if(editable){setHeadlineEditing(true);setTopEditing(true);}}}>
                 <Headline l={text.length} large={large} className="q-h" >
                 <ReactMarkdown>
                     {loading ? "" : text.replace('#', '###').replace('####', '##')}
@@ -180,7 +186,7 @@ const HeadlineEditor: React.FC<HeadlineProps> = ({ topEditing,setTopEditing,edit
             </Headline>
             {false&&large&&editable&&!headlineEditing&&<Typography variant="body2"  sx={{ mt: 1 }}>Click to edit</Typography>}
             </HeadlineWrap>}
-            {headlineEditing && <EditorBox >
+            {editable && <EditorBox >
                 <FormControlLabel
                     ref={ref}
                     sx={{ width: 1, m: 0, p: 0 }}
