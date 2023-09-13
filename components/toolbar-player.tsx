@@ -13,12 +13,15 @@ const ToolbarContainer = styled.div`
   justify-content: center;
   align-items: center;
   z-index: 100;
+  background-color: #fafaff;
+  height:12px;
 `;
 
 const ToolbarButton = styled(IconButton)`
   display: flex;
   flex-direction: column;
   align-items: center;
+ // color: #fff;
 `;
 const ToolbarText = styled.span`
   font-size: 16px;

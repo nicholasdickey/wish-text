@@ -15,12 +15,12 @@ interface BodyProps {
 }
 const TextBody = styled.div<BodyProps>`
     width:100%;
-    font-size:${({ l, large }) => large ? (l > 600 ? 12 : l > 400 ? 13 : l > 300 ? 14 : l > 200 ? 15 : 17) : (l > 600 ? 2 : l > 400 ? 3 : l > 300 ? 4 : l > 200 ? 5 : 7)}px;
+    font-size:${({ l, large }) => large ? (l > 600 ? 12 : l > 400 ? 13 : l > 300 ? 14 : l > 200 ? 15 : 17) : (l > 600 ? 2 : l > 400 ? 3 : l > 300 ? 4 : l > 200 ? 6 : 8)}px;
     font-weight: 400;
     padding:2px;
     line-height:1.7;
     @media (min-width:600px) {
-        font-size:${({ l, large }) => large ? (l > 600 ? 9 : l > 400 ? 10 : l > 300 ? 11 : l > 200 ? 12 : 13) : (l > 600 ? 2 : l > 400 ? 3 : l > 300 ? 4 : l > 200 ? 15 : 16)}px;
+        font-size:${({ l, large }) => large ? (l > 600 ? 9 : l > 400 ? 10 : l > 300 ? 11 : l > 200 ? 12 : 13) : (l > 600 ? 10 : l > 400 ? 11 : l > 300 ? 12 : l > 200 ? 15 : 16)}px;
     } 
 `;
 
@@ -42,7 +42,7 @@ const StyledTextareaAutosize = styled(TextareaAutosize)`
     min-width:100%;
     height:100%;
 
-    // font-family:"Josefin Sans",  sans-serif;
+   
     //border:none;
    // padding:6px;
 `;
@@ -84,6 +84,7 @@ const Editor = styled.div<WidthProps>`
         text-align:center;
         font-size:${({ l, large }) => large ? (l > 600 ? 12 : l > 400 ? 13 : l > 300 ? 14 : l > 200 ? 15 : 17) : (l > 600 ? 2 : l > 400 ? 3 : l > 300 ? 4 : l > 200 ? 5 : 6)}px;
         font-weight: 400;
+        //font-family:"Josefin_Sans";
         @media (min-width:600px) {
             font-size:${({ l, large }) => large ? (l > 600 ? 9 : l > 400 ? 10 : l > 300 ? 11 : l > 200 ? 12 : 13) : (l > 600 ? 9 : l > 400 ? 10 : l > 300 ? 11 : l > 200 ? 12 : 13)}px;
         }
@@ -136,6 +137,14 @@ const BodyEditor: React.FC<Props> = ({ id, topEditing, setTopEditing, editable, 
     else
         large = false;
     //console.log("topEditing",topEditing)
+    console.log("id,large",{id,large})
+    useEffect(() => {
+        console.log("updating body:",body,text)
+        if(body!=text){
+            setText(body);
+        }
+    },[body]);
+
     let ref = useRef<HTMLDivElement>(null);
     /* useEffect(() => {
          const keyDownHandler = (event: any) => {
@@ -186,7 +195,7 @@ const BodyEditor: React.FC<Props> = ({ id, topEditing, setTopEditing, editable, 
     return (
         <Editor className={josefin.className} editable={editable} topEditing={topEditing} divwidth={divwidth} ref={ref} l={text.length || 0} large={large || false}>
             {!editable && <Wrap onClick={() => { console.log("CLICK - body"); if (editable) { setEditing(true); setTopEditing(true); } }}>
-                <TextBody l={text.length || 0} large={large || false}  >
+                <TextBody className={josefin.className} l={text.length || 0} large={large || false}  >
                     <ReactMarkdown>
                         {loading ? "" : text.replace('#', '###').replace('####', '##')}
                     </ReactMarkdown>
@@ -195,23 +204,23 @@ const BodyEditor: React.FC<Props> = ({ id, topEditing, setTopEditing, editable, 
             </Wrap>}
             {false && large && editable && !editing && <Typography variant="body2" sx={{ mt: 2 }}>Click to edit</Typography>}
 
-            {editable && <EditorBox className={josefin.className}>
+            {editable && !loading&&<EditorBox >
                 <FormControlLabel
-                    className={josefin.className}
+                   
                     sx={{ border: 0, m: 0, p: 0 }}
                     labelPlacement="top"
                     label={<Typography style={{ color: theme.palette.text.secondary }}></Typography>}
                     control={
                         <StyledTextareaAutosize
+                            className={josefin.className}    
                             aria-label="message editor"
                             data-id="debug"
-                            className={josefin.className}
                             minRows={4}
                             autoFocus={true}
                             // resize="none"
                             placeholder="Edit the message"
                             onChange={handleChange}
-                            defaultValue={text}
+                            value={text}
                         />
                     }
                 />

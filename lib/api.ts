@@ -6,6 +6,7 @@ import ImageData from "./image-data";
 // Retrieves wish text from the server
 export const getWishText = async ({ style, from, to, occasion, naive, reflections, instructions, inastyleof, language, fresh, sessionid }: { style: string, from: string, to: string, occasion: string, naive: boolean, reflections: string, instructions: string, inastyleof: string, language: string, fresh?: boolean, sessionid?: string }): Promise<{ content: string, num: number }> => {
   try {
+    console.log("getWishText!!!!!!!!!",occasion);
     // Encode the URL parameters
     from = encodeURIComponent(from || '');
     to = encodeURIComponent(to || '');
@@ -23,7 +24,7 @@ export const getWishText = async ({ style, from, to, occasion, naive, reflection
 
     // Construct the URL
     let url = `${process.env.NEXT_PUBLIC_LAKEAPI}/api/v1/openai/wish-text?sessionid=${sessionid}&from=${from}&to=${to}&occasion=${occasion}&naive=${naive}&reflections=${reflections}&instructions=${instructions}&inastyleof=${inastyleof}&language=${language}${fresh ? '&fresh=1' : ''}`;
-    // console.log("url:", url);
+     console.log("url:", url);
 
     let recovery = '';
     while (true) {

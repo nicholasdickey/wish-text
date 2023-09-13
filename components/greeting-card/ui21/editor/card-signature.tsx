@@ -80,7 +80,7 @@ const Editor = styled.div<WidthProps>`
             font-size:${({ l, large }) => large ? (l > 200 ? 12 : 28) : (l > 600 ? 12 : l > 400 ? 16 : l > 300 ? 20 : l > 200 ? 24 : 28)}px;
         }
     }
-    min-height:${({editable,large})=>large?editable?60:300:80}px;
+    min-height:${({editable,large})=>large?editable?90:300:80}px;
     font-size:${({ l, large }) => large ? (l > 200 ? 12 : 28) : (l > 600 ? 12 : l > 400 ? 16 : l > 300 ? 20 : l > 200 ? 24 : 28)}px;
    
     @media (min-width:600px) {
@@ -240,9 +240,11 @@ const SignatureEditor: React.FC<Props> = ({ onAnimatedSignatureChange, animatedS
                 //if(topEditing)
                 // setTopEditing(false);
 
-                console.log("OUTSIDE CLICK - SIGNATURE", text.current)
-                if (text.current != signature)
+                console.log("OUTSIDE CLICK - SIGNATURE", text.current,signature)
+                if (text.current != signature){
+                    console.log("call onChange signature")
                     onChange(text.current);
+                }
             }
         };
         document.addEventListener("mousedown", handleClickOutside);

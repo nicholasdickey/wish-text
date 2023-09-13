@@ -51,6 +51,7 @@ import TipsAndUpdatesTwoToneIcon from '@mui/icons-material/TipsAndUpdatesTwoTone
 import ModeNightTwoToneIcon from '@mui/icons-material/ModeNightOutlined';
 import LightModeTwoToneIcon from '@mui/icons-material/LightModeOutlined';
 
+
 //third-party
 import { RWebShare } from "react-web-share";
 import axios from 'axios';
@@ -69,6 +70,9 @@ import Combo from "../components/combo-text";
 import { isbot } from '../lib/isbot'
 import PlayerToolbar from "../components/toolbar-player";
 import Section from "../components/greeting-card/editor-section";
+import { generateText } from "../lib/generate-text";
+import Hint from "../components/greeting-card/ui21/hint";
+import GenerateToolbar from "../components/greeting-card/ui21/editor/toolbars/text"
 
 const OvalButton = styled(Button)`
   height:60px;
@@ -252,6 +256,7 @@ export default function Home({ linkid: startLinkid, card: startCard = false,
     thumbnailUrl: '',
     original_filename: ''
   };
+  const [loading, setLoading] = useState(false);
   const [session, setSession] = useState(startSession);
   const [noExplain, setNoExplain] = useState(session.noExplain || false);
   const [occasion, setOccasion] = useState(startOccasion);
@@ -299,7 +304,7 @@ export default function Home({ linkid: startLinkid, card: startCard = false,
   //greeting card state:
   const [image, setImage] = useState<ImageData>(session.image || emptyImage);
   const [signature, setSignature] = useState<string>(session.signature || '');
-  const [animatedSignature, setAnimatedSignature] = useState<number>(session.animatedSignature===0?0: 1);
+  const [animatedSignature, setAnimatedSignature] = useState<number>(session.animatedSignature === 0 ? 0 : 1);
   const [linkid, setLinkid] = useState<string>(startLinkid);
   const [cardNum, setCardNum] = useState<number>(startCardNum);
   const [cardMax, setCardMax] = useState<number>(startCardMax);
@@ -364,14 +369,33 @@ export default function Home({ linkid: startLinkid, card: startCard = false,
       }
     })
   }
-  const handleMenuClick = (item: string) => {
+  const handleRegenerateText = useCallback(async (session: any) => {
+    console.log("handleRegenerateText=>", session);
+    setLoadReady(false);
+    //setPrompt5(true);
+    setPrompt2(true);
+   
+    setLoading(true);
+    setVirgin(true);
+    const { greeting, num } = await generateText(session, true);
+    setGreeting(greeting);
+    updateSession2({ greeting, num });
+    console.log("text response:", { greeting, num })
+    setNum(num);
+    setMax(num);
+    setLoadReady(true);
+    setLoading(false);
+    setPrompt6(true);
+
+  }, []);
+  const handleMenuClick = useCallback((item: string) => {
     //console.log('handleMenuClick', item);
     if (item == 'Login') {
       // signIn();
     }
     else
       router.push(`/start${item.toLowerCase()}`);
-  }
+  }, []);
   const drawer = (
     <Box onClick={handleDrawerToggle} sx={{ textAlign: 'center' }}>
       <Typography variant="h6" sx={{ my: 2 }}>
@@ -396,11 +420,11 @@ export default function Home({ linkid: startLinkid, card: startCard = false,
     if (!updSession)
       return;
     let curSession: any;
-    setSession((session) => { curSession = session; console.log("set session before assign:",session);return { ...Object.assign(session, updSession) } });
+    setSession((session) => { curSession = session; console.log("set session before assign:", session); return { ...Object.assign(session, updSession) } });
     setTimeout(async () => {
       const s = (): any => curSession;
       const ses = s();
-      console.log('===>pdate session:', {updSession, ses, curSession, session});
+      console.log('===>pdate session:', { updSession, ses, curSession, session });
 
       await axios.post(`/api/session/save`, { session: ses });
     }, 200);
@@ -484,9 +508,11 @@ export default function Home({ linkid: startLinkid, card: startCard = false,
       })
   }, [session.sessionid, virgin]);
   const onOccasionChange = (id: string, value: string) => {
+    console.log("value=", value)
     if (value != "") {
-      // console.log("value=", value)
+    
       setMissingOccasion(false);
+     
       updateRoute({
         from,
         to,
@@ -500,12 +526,15 @@ export default function Home({ linkid: startLinkid, card: startCard = false,
       })
       setPrompt1(true);
       updateSession2({ occasion: value, prompt1: true });
+      console.log("onOccasionChange",value);
+      setTimeout(()=>setPrompt6(false),1)
     }
     setOccasion(value);
   }
 
   const onNaiveChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = !event.target.checked;
+    setPrompt6(false);
     updateRoute({
       from,
       to,
@@ -522,6 +551,7 @@ export default function Home({ linkid: startLinkid, card: startCard = false,
   }
   const onReflectionsChange = (event: any) => {
     const value = event.target.value;
+    setPrompt6(false);
     updateRoute({
       from,
       to,
@@ -538,6 +568,7 @@ export default function Home({ linkid: startLinkid, card: startCard = false,
   }
   const onInstructionsChange = (event: any) => {
     const value = event.target.value;
+    setPrompt6(false);
     updateRoute({
       from,
       to,
@@ -554,6 +585,7 @@ export default function Home({ linkid: startLinkid, card: startCard = false,
   }
   const onInastyleofChange = (event: any) => {
     const value = event.target.value;
+    setPrompt6(false);
     updateRoute({
       from,
       to,
@@ -570,6 +602,7 @@ export default function Home({ linkid: startLinkid, card: startCard = false,
   }
   const onLanguageChange = (event: any) => {
     const value = event.target.value;
+    setPrompt6(false);
     updateRoute({
       from,
       to,
@@ -586,6 +619,7 @@ export default function Home({ linkid: startLinkid, card: startCard = false,
   }
   const onFromChange = (event: any) => {
     const value = event.target.value;
+    setPrompt6(false);
     updateRoute({
       from: value,
       to,
@@ -603,6 +637,7 @@ export default function Home({ linkid: startLinkid, card: startCard = false,
   }
   const onToChange = (event: any) => {
     const value = event.target.value;
+    setPrompt6(false);
     updateRoute({
       from,
       to: value,
@@ -620,6 +655,7 @@ export default function Home({ linkid: startLinkid, card: startCard = false,
   }
   const onInterestsChange = (event: any) => {
     const value = event.target.value;
+    setPrompt6(false);
     updateRoute({
       from,
       to,
@@ -734,9 +770,6 @@ Whether it's birthdays, graduations, holidays, or moments of illness or loss, WI
       </Head>
       <ThemeProvider theme={theme}>
         <main className={roboto.className} >
-
-
-
           <CssBaseline />
           <AppBar position="absolute" component="nav">
             <Toolbar>
@@ -905,7 +938,7 @@ Whether it's birthdays, graduations, holidays, or moments of illness or loss, WI
                   <ClearText>Reset Session</ClearText>
                 </ClearButton>
               </ActionContainer> : null}
-            {!prompt1 ?
+            {!prompt1&&!occasion ?
               <Box sx={{ mt: 0, width: 1, }}>
                 <Starter>
                   <LooksOneOutlinedIcon fontSize="inherit" color='success' />
@@ -922,18 +955,18 @@ Whether it's birthdays, graduations, holidays, or moments of illness or loss, WI
               onChange={onOccasionChange}
               helperText="Required for a meaningful result. For example: &ldquo;8th Birthday for a boy&rdquo;, &ldquo;Sweet Sixteen&rdquo;, &ldquo;Illness&rdquo; &ldquo;Death in the family&rdquo;, &ldquo;Christmas&rdquo;, &ldquo;Graduation&ldquo;"
             />
-            <Box sx={{ mb: 4, color: 'primary', justifyContent: 'flex-end' }}>
+            {occasion&&<Box sx={{ mb: 4, mx:1,color: 'primary', justifyContent: 'flex-end' }}>
               <FormControlLabel
                 label={<Typography style={{ color: theme.palette.text.secondary }}>Keep it light-hearted, if possible, with emojis.</Typography>}
                 control={
                   <Checkbox
-                    sx={{ color: 'secondary' }}
+                    sx={{  mx:4,color: 'secondary' }}
                     checked={!naive}
                     onChange={onNaiveChange}
                   />
                 }
               />
-            </Box>
+            </Box>}
             {false && session.greeting && !prompt3 ?
               <Box sx={{ mt: 10, width: 1 }}>
                 <Starter onClick={() => setPrompt3(true)}>
@@ -979,7 +1012,7 @@ Whether it's birthdays, graduations, holidays, or moments of illness or loss, WI
                 </AccordionDetails>
               </Accordion> : null}
 
-            { virgin && session.greeting ?
+            {virgin && session.greeting ?
               <Accordion sx={{ my: 5 }} expanded={expanded === 'advanced'} onChange={handleAccordeonChange('advanced')}>
                 <AccordionSummary
                   expandIcon={<ExpandMoreIcon />}
@@ -1058,7 +1091,7 @@ Whether it's birthdays, graduations, holidays, or moments of illness or loss, WI
                   <StarterMessage><Typography fontSize="inherit" color="secondary"/*color="#ffee58"*/>Click or tap on the &quot;Suggest Wish Text&quot; button:</Typography></StarterMessage></Starter>
               </Box>
               : null}
-            <GreetingOutput darkMode={darkMode} sharedImages={sharedImages} PlayerToolbar={OutputPlayerToolbar} setNum={setNum} setMax={setMax} max={max} num={num} setPrompt4={setPrompt4} setPrompt5={setPrompt5} prompt4={prompt4} prompt5={prompt5} prompt6={prompt6} setPrompt6={setPrompt6} onVirgin={async () => {
+            {false&&<GreetingOutput darkMode={darkMode} sharedImages={sharedImages} PlayerToolbar={<div></div>} setNum={setNum} setMax={setMax} max={max} num={num} setPrompt4={setPrompt4} setPrompt5={setPrompt5} prompt4={prompt4} prompt5={prompt5} prompt6={prompt6} setPrompt6={setPrompt6} onVirgin={async () => {
               await recordEvent(session.sessionid, 'virgin wish-text request', `occasion:${occasion}`);
               setVirgin(true);
               setPrompt2(true);
@@ -1070,11 +1103,12 @@ Whether it's birthdays, graduations, holidays, or moments of illness or loss, WI
               setPrompt4(true);
               updateSession2({ virgin2: true, prompt4: true });
             }} virgin={virgin} virgin2={virgin2} setMissingOccasion={setMissingOccasion} setLoadReady={setLoadReady} session={session} updateSession2={updateSession2} from={from} to={to} occasion={occasion} naive={naive} reflections={reflections} instructions={instructions} inastyleof={inastyleof} language={language} /*authSession={authSession}*/ />
+          }
 
 
           </Container>
-          <Container maxWidth="sm" sx={{ mt: 10 }}>
-            {session.greeting && !session.card && <Box sx={{ mt: 1, width: 1 }}>
+          <Container maxWidth="sm" sx={{ mt: 4 }}>
+            {false && session.greeting && !session.card && <Box sx={{ mt: 1, width: 1 }}>
               <OvalButton fullWidth size="small" variant="contained" onClick={async () => {
                 updateSession2({ card: true });
                 setCard(true);
@@ -1098,7 +1132,7 @@ Whether it's birthdays, graduations, holidays, or moments of illness or loss, WI
                 })
               }}>Open Wish Card Composer</OvalButton>
             </Box>}
-            {session.card && <Box sx={{ mt: 1, width: 1 }}>
+            {false && session.card && <Box sx={{ mt: 1, width: 1 }}>
               <OvalButton fullWidth size="small" variant="contained" onClick={async () => {
                 updateSession2({ card: false });
                 setCard(false);
@@ -1123,12 +1157,14 @@ Whether it's birthdays, graduations, holidays, or moments of illness or loss, WI
               }}>Close Wish Card Composer</OvalButton>
             </Box>
             }
-
-            {session.greeting && session.card &&
+           {false&& <Hint message="Hit" prompt={prompt5} setPrompt={setPrompt5} loading={loading}/>}
+           {occasion&&!prompt6&&<Box sx={{my:6}}><GenerateToolbar session={session} onGenerateClick={handleRegenerateText} outside={true} fresh={!greeting} loading={loading}/></Box>}
+            {greeting &&
 
               <Box sx={{ my: 1 }}>
 
                 <GreetingCard
+                  PlayerToolbar={OutputPlayerToolbar}
                   greeting={greeting}
                   setGreeting={setGreeting}
                   image={image}
@@ -1140,7 +1176,7 @@ Whether it's birthdays, graduations, holidays, or moments of illness or loss, WI
                   setImage={setImage}
                   setSignature={setSignature}
 
-                  setLinkid={setLinkid} 
+                  setLinkid={setLinkid}
 
                   newCardsStack={newCardsStack}
                   setNewCardsStack={setNewCardsStack}
@@ -1158,8 +1194,7 @@ Whether it's birthdays, graduations, holidays, or moments of illness or loss, WI
                   fbclid={fbclid}
                   utm_content={utm_content}
                   sharedImages={sharedImages}
-
-                  loading={false}
+                  handleRegenerateText={handleRegenerateText}
                   max={max}
                   images={images}
                   setImages={setImages}
@@ -1244,8 +1279,8 @@ Whether it's birthdays, graduations, holidays, or moments of illness or loss, WI
 export const getServerSideProps = withSessionSsr(
   async function getServerSideProps(context: GetServerSidePropsContext): Promise<any> {
     try {
-      let { linkid, card, signature, animatedSignature,dark, num, max, cardNum, cardMax, prompt1, prompt2, prompt3, prompt4, prompt5, prompt6, promptImageStrip, fbclid, utm_medium, utm_campaign, utm_content, virgin, virgin2, from, to, occasion, naive, reflections, instructions, inastyleof, language, age, interests, sex }:
-        { linkid: string, card: boolean, signature: string, animatedSignature:number, dark: boolean, num: number, max: number, cardNum: number, cardMax: number, prompt1: string, prompt2: string, prompt3: string, prompt4: string, prompt5: string, prompt6: string, fbclid: string, utm_medium: string, utm_campaign: string, utm_content: string, virgin: boolean, virgin2: boolean, from: string, to: string, occasion: string, naive: boolean, reflections: string, instructions: string, inastyleof: string, language: string, age: string, interests: string, sex: string, promptImageStrip: boolean } = context.query as any;
+      let { linkid, card, signature, animatedSignature, dark, num, max, cardNum, cardMax, prompt1, prompt2, prompt3, prompt4, prompt5, prompt6, promptImageStrip, fbclid, utm_medium, utm_campaign, utm_content, virgin, virgin2, from, to, occasion, naive, reflections, instructions, inastyleof, language, age, interests, sex }:
+        { linkid: string, card: boolean, signature: string, animatedSignature: number, dark: boolean, num: number, max: number, cardNum: number, cardMax: number, prompt1: string, prompt2: string, prompt3: string, prompt4: string, prompt5: string, prompt6: string, fbclid: string, utm_medium: string, utm_campaign: string, utm_content: string, virgin: boolean, virgin2: boolean, from: string, to: string, occasion: string, naive: boolean, reflections: string, instructions: string, inastyleof: string, language: string, age: string, interests: string, sex: string, promptImageStrip: boolean } = context.query as any;
 
       linkid = linkid || '';
       from = from || '';
@@ -1257,7 +1292,7 @@ export const getServerSideProps = withSessionSsr(
       virgin = virgin || false;
       virgin2 = virgin2 || false;
       signature = signature || '';
-      animatedSignature=animatedSignature===0?0:1;
+      animatedSignature = animatedSignature === 0 ? 0 : 1;
 
       prompt1 = prompt1 || '';
       prompt2 = prompt2 || '';
@@ -1307,7 +1342,7 @@ export const getServerSideProps = withSessionSsr(
       } catch (error) {
         console.error("Error occurred:", error);
       }
-
+      console.log("SSR:::1", startoptions)
       startoptions = startoptions || {
         sessionid,
         noExplain: false,
@@ -1325,7 +1360,7 @@ export const getServerSideProps = withSessionSsr(
           console.log("record event error", e)
         }
       }
-      if (botInfo.bot ) {
+      if (botInfo.bot) {
         try {
           await recordEvent(sessionid, 'ssr-bot-index-init', `{"fbclid":"${fbclid}","ua":"${ua}","utm_content":"${utm_content}"}`);
         }
@@ -1336,27 +1371,67 @@ export const getServerSideProps = withSessionSsr(
 
       // if (botInfo.bot)
       //   setTimeout(async () => await recordEvent(sessionid, 'bot', `{ua:${ua},utm_medium:${utm_medium},utm_campaign:${utm_campaign},utm_content:${utm_content}}`), 100);
-
+      let options: Options = startoptions;
       if (context.req.session.sessionid != sessionid) {
         context.req.session.sessionid = sessionid;
+        let mod = false;
+        if (options.occasion != occasion) {
+          options.occasion = occasion;
+          mod = true;
+        }
+        //AI: replicate the pattern above to below:
+        if (options.to != to) {
+          options.to = to;
+          mod = true;
+        }
+        if (options.from != from) {
+          options.from = from;
+          mod = true;
+        }
+        if (options.reflections != reflections) {
+          options.reflections = reflections;
+          mod = true;
+        }
+        if (options.instructions != instructions) {
+          options.instructions = instructions;
+          mod = true;
+        }
+        if (options.inastyleof != inastyleof) {
+          options.inastyleof = inastyleof;
+          mod = true;
+        }
+        if (options.language != language) {
+          options.language = language;
+          mod = true;
+        }
+        if (options.interests != interests) {
+          options.interests = interests;
+          mod = true;
+        }
+        if (options.naive != naive) {
+          options.naive = naive;
+          mod = true;
+        }
         //await context.req.session.save();
         try {
           //console.log("session save")
           await context.req.session.save();
+          if (mod)
+            await axios.post(`/api/session/save`, { session: options })
         }
         catch (e) {
           console.log("session save error", e)
         }
       }
-      let options: Options = startoptions;
 
+      console.log("SSR:::2", startoptions)
       from = from || options.from || '';
       to = to || options.to || '';
       occasion = occasion || options.occasion || '';
       virgin = options.virgin || false;
       virgin2 = options.virgin2 || false;
       signature = signature || options.signature || '';
-      animatedSignature=animatedSignature===0?0:options.animatedSignature===0?0:1
+      animatedSignature = animatedSignature === 0 ? 0 : options.animatedSignature === 0 ? 0 : 1
       prompt1 = prompt1 || options.prompt1 || '';
       prompt2 = prompt2 || options.prompt2 || '';
       prompt3 = prompt3 || options.prompt3 || '';
@@ -1388,7 +1463,7 @@ export const getServerSideProps = withSessionSsr(
           virgin2: virgin2,
           dark: dark,
           signature: signature,
-          animatedSignature:animatedSignature,
+          animatedSignature: animatedSignature,
           prompt1: prompt1,
           prompt2: prompt2,
           prompt3: prompt3,

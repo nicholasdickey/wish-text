@@ -283,8 +283,7 @@ export default function Output({
       ga.event({
         action: "download",
         params : {
-          sessionid: session.sessionid,
-      
+          sessionid: session.sessionid,    
         }
       })
       setTimeout(async ()=>await recordEvent(session.sessionid, 'download',''),1000);
@@ -350,7 +349,7 @@ export default function Output({
       {greeting&&PlayerToolbar}
       
             
-        <TextEditor  editing={editing} setEditing={setEditing} onClick={onTextEditorClick} session={session} text={session.greeting || ''} onChange={(text: string) => { updateSession2({ greeting: text }); }} image={selectedImage} loading={loading} canvasRef={canvasRef} />
+        {false&&<TextEditor  editing={editing} setEditing={setEditing} onClick={onTextEditorClick} session={session} text={session.greeting || ''} onChange={(text: string) => { updateSession2({ greeting: text }); }} image={selectedImage} loading={loading} canvasRef={canvasRef} />}
         <div  />
         {false&&virgin&&!prompt5 && !loading ? <Box sx={{ mt: 0, width: 1 }}>
             <Starter onClick={()=>setPrompt5(true)}><ErrorOutlineOutlinedIcon fontSize="inherit" color='success' />

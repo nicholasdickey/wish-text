@@ -17,6 +17,9 @@ import CardHeadline from "./editor/card-headline";
 import CardBody from "./editor/card-body";
 import CardSignature from "./editor/card-signature";
 import CardImage from "./editor/card-image";
+import TextToolbar from "./editor/toolbars/text";
+import { Caveat } from 'next/font/google';
+const caveat = Caveat({ subsets: ['latin'] });
 interface BodyProps {
   l: number;
   large?: boolean;
@@ -151,7 +154,20 @@ justify-content: space-between;
     box-shadow: 0 3px 10px rgb(${({ dark }) => (dark == 'true') ? '255 255 255' : '0 0 0'} / 0.2);
   }
   `;
-
+const InvertText = styled.div`
+  width:100%;
+  transform: rotate3d(0, 1, 0, -170deg);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-overflow: ellipsis;
+  overflow: wrap;
+  font-size: 24px;
+  cursor: pointer;
+ 
+  z-index: 100;
+`;
 const BandContainer = styled.div<{ darktext?: string, background?: string, open?: boolean, large?: boolean }>`
     display: flex;
     position:relative;
@@ -297,8 +313,12 @@ interface Props {
   sharedImages?:ImageData[];
   onUpload?: (result:any,widget:any) => void;
   id?:string;
+  handleRegenerateText:any;
+  setLoading:any;
+  PlayerToolbar: any;
+  setPrompt: (prompt: boolean) => void;
 }
-const GreetingCard: React.FC<Props> = ({ id="view", onAnimatedSignatureChange,animatedSignature=1,editable = false, onGreetingChange, onImageChange, onSignatureChange, canvasRef, delayOpen = false, startOpen = false, loading = false, large: startLarge = false, dark, fbclid, utm_content, text, image, signature,session,images,sharedImages,onUpload }) => {
+const GreetingCard: React.FC<Props> = ({ setPrompt,PlayerToolbar,handleRegenerateText:h2,setLoading,id="view", onAnimatedSignatureChange,animatedSignature=1,editable = false, onGreetingChange, onImageChange, onSignatureChange, canvasRef, delayOpen = false, startOpen = false, loading = false, large: startLarge = false, dark, fbclid, utm_content, text, image, signature,session,images,sharedImages,onUpload }) => {
 
   const [open, setOpen] = React.useState(startOpen);
   const [large, setLarge] = React.useState(startLarge);
@@ -320,10 +340,12 @@ const GreetingCard: React.FC<Props> = ({ id="view", onAnimatedSignatureChange,an
   const structuredText = JSON.parse(text);
   // console.log("structuredText=", structuredText)
   //const tw = text.split('\n');
-  console.log("greeting-card render", { image, text, signature })
+  
   const headline = structuredText.headline || "";//tw.length > 1 ? tw[0] : '';
   const body = structuredText.body || "";//tw.length > 1 ? tw.slice(1).join('\n') : tw[0];
+  console.log("greeting-card render", { image, text, headline,body,signature })
   const handleTextClick = () => {
+    
   }
   if (dOpen) {
     setDOpen(false);
@@ -337,6 +359,14 @@ const GreetingCard: React.FC<Props> = ({ id="view", onAnimatedSignatureChange,an
     console.log("onBodyChange=", text);
     onGreetingChange(JSON.stringify({ headline, body: text }));
   }
+  const handleRegenerateText = async (session:any) => {
+    console.log("handleRegenerateText");
+    setLoading(true);
+    await h2(session);
+    setLoading(false);
+    console.log("after h2");
+  }
+
   // console.log("open=", open, ";large=", large, "signature:", signature)
   const signatureText = signature ? signature.split('\n').map((m, i) => <SignatureLine id={"wt-signature-line" + i} key={i} l={signature.length} large={large}>{m}</SignatureLine>) : [];
   //console.log("signatureText=", signatureText)
@@ -372,23 +402,30 @@ const GreetingCard: React.FC<Props> = ({ id="view", onAnimatedSignatureChange,an
                 else
                   setHugeLeft(!hugeLeft);
               }}>
-                {image?.url && <Image large={large} open={open} src={image?.url} />}
+                {image?.url ? <Image large={large} open={open} src={image?.url} />:editable&&<InvertText  className={caveat.className}>
+                 <div className={caveat.className}> Click to select.               ......................</div></InvertText>}
               </div>
               <CardImage editable={editable} onUpload={onUpload} session={session} images={images} sharedImages={sharedImages} topEditing={topEditing} setTopEditing={setTopEditing} image={image||EmptyImage} open={imageEditing} setOpen={setImageEditing} onImageChange={onImageChange} huge={hugeLeft}  />
             
               <div className={`card__panel card__panel--inside-right ${open ? "open" : ""}`} onClick={() => {
                   if(topEditing)
                     return;
+                  setTimeout(()=>setPrompt(true),10);
+                  
                   console.log("RIGHT CLICK")
                   if (size?.width > size?.height && size?.width > 600)
                     setLarge(large);
                   else
                     setHugeRight(!hugeRight);
                 }}>
-                <Inner>
+                <Inner >
+               
+     
                   <CardHeadline id={`normal-${id}`} topEditing={topEditing} setTopEditing={setTopEditing} editable={editable&&!mobile} onChange={onHeadlineChange} headline={headline} large={large} loading={loading} />
                   {loading && <LinearProgress />}
                   <CardBody id={`normal-${id}`}  topEditing={topEditing} setTopEditing={setTopEditing} editable={editable&&!mobile} onChange={onBodyChange} body={body} large={large} loading={loading} />
+                  {!loading &&editable&&PlayerToolbar}
+                  {!loading &&editable&& <TextToolbar fresh={false} outside={false} session={session} onGenerateClick={handleRegenerateText}  />}     
                   <CardSignature id={`normal-${id}`} animatedSignature={animatedSignature} onAnimatedSignatureChange={onAnimatedSignatureChange} topEditing={topEditing} setTopEditing={setTopEditing} signature={signature} editable={editable&&!mobile} onChange={onSignatureChange} large={large} loading={loading} />
                 </Inner>
               </div>

@@ -35,6 +35,7 @@ import { DefaultCopyField } from '@eisberg-labs/mui-copy-field';
 import { RWebShare } from "react-web-share";
 import CardHeadline from "./ui21/editor/card-headline";
 import CardPreview from "./ui21/editor/card-preview";
+import Hint from "./ui21/hint";
 const TooblarPlaceholder = styled.div`
   height: 48px;
 `;
@@ -89,10 +90,10 @@ export default function CardEditor({
   cardNum,
   cardMax,
   setNumPointer,
-  loading,
+  
   //currentCard,
   newCardsStack,
-
+  handleRegenerateText,
   setNewCardsStack,
   setCardNum,
   setCardMax,
@@ -110,6 +111,7 @@ export default function CardEditor({
   setLinkid,
   setGreeting,
   //setCurrentNum,
+  PlayerToolbar
 
 }: {
 
@@ -126,7 +128,7 @@ export default function CardEditor({
   setAnimatedSignature: (animatedSignature: number) => void;
   
   setLinkid: (linkid: string) => void;
-
+  handleRegenerateText:any;
   max: number;
   onVirgin: any;
   onVirgin2: any;
@@ -153,7 +155,7 @@ export default function CardEditor({
   cardNum: number;
   cardMax: number;
   setNumPointer: (num: number) => void;
-  loading: boolean;
+
   //currentCard: CardData;
   newCardsStack: CardData[];
 
@@ -166,13 +168,13 @@ export default function CardEditor({
   //  authSession: any;
   setPromptImageStrip: (promptImageStrim: boolean) => void;
   setGreeting: (greeting: string) => void;
-
+  PlayerToolbar: any;
 }) {
 
-
+  const [loading, setLoading] = useState<boolean>(false);
   const [prevGreeting, setPrevGreeting] = useState<string>('');
   const [creatingCard, setCreatingCard] = useState<boolean>(false);
-  const [cardGreeting,setCardGreeting]=useState<string>(greeting||"");
+ // const [cardGreeting,setCardGreeting]=useState<string>(greeting||"");
   //const [cardAnimatedSignature,setCardAnimatedSignature]=useState<number>(animatedSignature||0);
   const [openCardPreview, setOpenCardPreview] = useState<boolean>(false);
   const sessionid = session.sessionid;
@@ -205,7 +207,7 @@ export default function CardEditor({
     return image;
   };
   const onGreetingChange = (value: string) => {
-    setCardGreeting(value)
+    setGreeting(value)
    // updateSession2({ greeting: value });
   }
   const onSignatureChange = (value: string) => {
@@ -216,9 +218,6 @@ export default function CardEditor({
   }
   const handleChange = (card: CardData) => {
     let { greeting:card_Greeting="",signature: cardSignature, animatedSignature:cardAnimatedSignature, image: cardImage, linkid: cardLinkid, num: card_Num } = card;
-    
-    
-    
     console.log("handleChange1:",{image,cardImage,greeting,card_Greeting,signature,cardSignature, animatedSignature,cardAnimatedSignature, cardLinkid,card_Num});
     
     if(! cardAnimatedSignature)
@@ -234,8 +233,8 @@ export default function CardEditor({
    // if (card_Num != num)
     //  setNumPointer(card_Num || 0);
     console.log("handleChange2:",{image,cardImage,greeting,signature});
-    if(card_Greeting!=cardGreeting)
-      setCardGreeting(card_Greeting); 
+    if(card_Greeting!=greeting)
+      setGreeting(card_Greeting); 
 
     if (cardImage != image)
       setImage(cardImage);
@@ -304,7 +303,7 @@ export default function CardEditor({
     setCardNum(cardNum);
     setPrevGreeting("_");
    // setNumPointer(num || 0);
-    setCardGreeting(cardGreeting);
+    setGreeting(cardGreeting);
     setSignature(signature);
     setAnimatedSignature(animatedSignature);
     setImage(image);
@@ -402,14 +401,14 @@ export default function CardEditor({
     handleChange({
       image,
       signature,
-      greeting:cardGreeting,
+      greeting,
       linkid: ''
     });
   }
 
   useEffect(() => {
-    console.log("useEffect", cardGreeting)
-    if (!cardGreeting) {
+    console.log("useEffect", greeting)
+    if (!greeting) {
       console.log("useEffect no greeting")
       stripClickHandler(null);
       const image = {
@@ -438,7 +437,7 @@ export default function CardEditor({
     setOpenCardPreview(true);
   }
   const handleCreate: () => void = async () => {
-    console.log("handleCreate:", { image, signature, animatedSignature, cardGreeting })
+    console.log("handleCreate:", { image, signature, animatedSignature, greeting })
     setCreatingCard(true);
     // setTimeout(async () => await recordEvent(session.sessionid, 'create-card', ''), 1000);
     //await handleDownload();
@@ -448,7 +447,7 @@ export default function CardEditor({
       image,
       signature,
       animatedSignature,
-      greeting:cardGreeting,
+      greeting,
       metaimage
     }
 
@@ -459,7 +458,7 @@ export default function CardEditor({
     setLinkid(linkid);
     setNewCardsStack([]);
     // card.linkid = linkid;
-    console.log("handleCreate2:", { image,signature,animatedSignature,cardGreeting,success, linkid, cardNum,card })
+    console.log("handleCreate2:", { image,signature,animatedSignature,greeting,success, linkid, cardNum,card })
     if (success) {
 
       setCardNum(cardNum);
@@ -497,7 +496,7 @@ export default function CardEditor({
       console.log(e);
     }
   };
-  console.log("====> render greeting-card", { cardGreeting, cardNum, cardMax,image,linkid })
+  console.log("====> render greeting-card", { greeting, cardNum, cardMax,image,linkid })
 
 
   const onUpload = (result: any, widget: any) => {
@@ -531,7 +530,7 @@ export default function CardEditor({
     }, 1);
 
     handleChange({
-      greeting:cardGreeting,
+      greeting,
       image: newImage,
       signature,
       linkid: ''
@@ -581,15 +580,21 @@ export default function CardEditor({
         large={true}
         editable={true}
         onGreetingChange={(value: string) => {handleChange({ greeting: value, image, signature, animatedSignature,linkid: '' }) }}
-        onImageChange={(image: ImageData) => { handleChange({ greeting:cardGreeting, image, signature, animatedSignature,linkid: '' }) }}
-        onSignatureChange={(value: string) => { handleChange({ greeting:cardGreeting, image, signature: value,animatedSignature, linkid: '' }) }}
+        onImageChange={(image: ImageData) => { handleChange({ greeting, image, signature, animatedSignature,linkid: '' }) }}
+        onSignatureChange={(value: string) => { handleChange({ greeting, image, signature: value,animatedSignature, linkid: '' }) }}
         onAnimatedSignatureChange={(value: number) => { handleChange({ greeting, image, signature, animatedSignature: value, linkid: '' }) }}
-      />
+        handleRegenerateText={handleRegenerateText}
+        loading={loading}
+        setLoading={setLoading}
+        PlayerToolbar={PlayerToolbar}
+        setPrompt={setPrompt5}
+     />
 
       {linkid && <CopyField
         label="Share Card Link"
         value={`${process.env.NEXT_PUBLIC_SERVER}/card/${linkid}`} />}
       {false && linkid && <img width={600} height={'auto'} src={imageData} />}
+      {!prompt5&& <Box sx={{pb:4}}><Hint message="Click on any area to edit..." prompt={prompt5} setPrompt={setPrompt5} loading={loading}/></Box>}
       
       {!creatingCard && !linkid && <Box sx={{ mt: 1, width: 1 }}>
 
@@ -603,7 +608,7 @@ export default function CardEditor({
 
       </Box>
       }
-      {openCardPreview&&<CardPreview  dark={darkMode ? "true" : "false"} open={openCardPreview} setOpen={setOpenCardPreview} text={cardGreeting} signature={signature} animatedSignature={animatedSignature} image={image} />}
+      {openCardPreview&&<CardPreview  dark={darkMode ? "true" : "false"} open={openCardPreview} setOpen={setOpenCardPreview} text={greeting} signature={signature} animatedSignature={animatedSignature} image={image} />}
       {creatingCard && <LinearProgress />}
       {!creatingCard && linkid && <ToolbarShare greeting={greeting} url={`${process.env.NEXT_PUBLIC_SERVER}/card/${linkid}`} />}
     </>

@@ -57,11 +57,11 @@ justify-content:center;
 //min-height:100%;
 `;
 const Image = styled.img`
-    object-fit: cover;
-   // max-width: ${3 * 310}px;
+    object-fit: fill;
+    //max-width: ${3 * 310}px;
    // max-height: ${4 * 310}px;
     width:100%;
-    height:130vh;
+    //height:130vh;
     //z-index:101;
    // border-radius: 5px;  
    // transform: rotateY(180deg);  
@@ -183,7 +183,7 @@ const PopoutCard = ({id,hugeLeft,hugeRight,topEditing,setTopEditing,imageEditing
     };
     const large = true;
     const loading = false;
-    console.log("PopoutCard",{editable,card},isLeftPage,isLeft);
+    //console.log("PopoutCard",{editable,card},isLeftPage,isLeft);
     const handleTextClick = () => {
     }
     const onHeadlineChange = (text: string) => {
@@ -200,7 +200,7 @@ const PopoutCard = ({id,hugeLeft,hugeRight,topEditing,setTopEditing,imageEditing
    // const headline = tw.length > 1 ? tw[0] : '';
     //const body = tw.length > 1 ? tw.slice(1).join('\n') : tw[0];
     const structuredText=JSON.parse(text);
-  console.log("==4structuredText=",structuredText)
+  //console.log("==4structuredText=",structuredText)
   //const tw = text.split('\n');
   const headline = structuredText.headline;//tw.length > 1 ? tw[0] : '';
   const body = structuredText.body;//tw.length > 1 ? tw.slice(1).join('\n') : tw[0];
@@ -231,7 +231,7 @@ const PopoutCard = ({id,hugeLeft,hugeRight,topEditing,setTopEditing,imageEditing
             </ExitButton>
                 <SwipeableViews index={isLeftPage?0:1}>
                     <Left>
-                        {!imageEditing&&<Image src={card.image.url} />}
+                        {!imageEditing&&<div onClick={()=>{if(editable) setImageEditing(true)}}><Image src={card.image.url} /></div>}
                         
                         <CardImage editable={editable} onUpload={onUpload} session={session} images={images} sharedImages={sharedImages} topEditing={topEditing} setTopEditing={setTopEditing} image={image||EmptyImage} open={imageEditing} setOpen={setImageEditing} onImageChange={onImageChange} huge={hugeLeft}  />
             

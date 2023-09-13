@@ -53,7 +53,7 @@ const ImageOverlay: React.FC<Props> = ({editable,session,images,sharedImages,onU
     //const [open, setOpen] = React.useState(false);
     const theme = useTheme();
     const fullScreen = false;//useMediaQuery(theme.breakpoints.down('sm'));
-    console.log("ImageOverlay",{images,sharedImages,image,huge,open,setOpen,onImageChange,topEditing,setTopEditing})
+    //console.log("ImageOverlay",{images,sharedImages,image,huge,open,setOpen,onImageChange,topEditing,setTopEditing})
     if(!images) images=[];
     if(!sharedImages) sharedImages=[];
     if(!session) session={};

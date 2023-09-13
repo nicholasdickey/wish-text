@@ -95,7 +95,7 @@ const ImageOverlay: React.FC<Props> = ({dark,session,open,setOpen,text,signature
             </DialogTitle>
             <DialogContent>
             <Wrap>
-            <Card animatedSignature={animatedSignature} editable={false} onAnimatedSignatureChange={()=>{}}  onGreetingChange={()=>{}} onImageChange={()=>{}} onSignatureChange={()=>{}} canvasRef={canvasRef} delayOpen={true} large={true} signature={signature} fbclid={""} utm_content={""} dark={dark} text={text || ''} image={image} id="preview" />
+            <Card PlayerToolbar={{}} handleRegenerateText={()=>{}} setLoading={()=>{}} animatedSignature={animatedSignature} editable={false} onAnimatedSignatureChange={()=>{}}  onGreetingChange={()=>{}} onImageChange={()=>{}} onSignatureChange={()=>{}} canvasRef={canvasRef} delayOpen={true} large={true} signature={signature} fbclid={""} utm_content={""} dark={dark} text={text || ''} image={image} id="preview" />
             </Wrap>
             <ExitButton>
             <IconButton color="primary" aria-label="exit dialog" onClick={()=>setOpen(false)}>
