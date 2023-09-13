@@ -587,7 +587,7 @@ export default function CardEditor({
         loading={loading}
         setLoading={setLoading}
         PlayerToolbar={PlayerToolbar}
-        setPrompt={setPrompt5}
+        setPrompt={onTextEditorClick}
      />
 
       {linkid && <CopyField
@@ -608,7 +608,7 @@ export default function CardEditor({
 
       </Box>
       }
-      {openCardPreview&&<CardPreview  dark={darkMode ? "true" : "false"} open={openCardPreview} setOpen={setOpenCardPreview} text={greeting} signature={signature} animatedSignature={animatedSignature} image={image} />}
+      {openCardPreview&&<CardPreview  creatingCard={creatingCard} linkid={linkid} handleCreate={handleCreate} dark={darkMode ? "true" : "false"} open={openCardPreview} setOpen={setOpenCardPreview} text={greeting} signature={signature} animatedSignature={animatedSignature} image={image} />}
       {creatingCard && <LinearProgress />}
       {!creatingCard && linkid && <ToolbarShare greeting={greeting} url={`${process.env.NEXT_PUBLIC_SERVER}/card/${linkid}`} />}
     </>

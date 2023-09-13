@@ -316,7 +316,7 @@ interface Props {
   handleRegenerateText:any;
   setLoading:any;
   PlayerToolbar: any;
-  setPrompt: (prompt: boolean) => void;
+  setPrompt: () => void;
 }
 const GreetingCard: React.FC<Props> = ({ setPrompt,PlayerToolbar,handleRegenerateText:h2,setLoading,id="view", onAnimatedSignatureChange,animatedSignature=1,editable = false, onGreetingChange, onImageChange, onSignatureChange, canvasRef, delayOpen = false, startOpen = false, loading = false, large: startLarge = false, dark, fbclid, utm_content, text, image, signature,session,images,sharedImages,onUpload }) => {
 
@@ -410,7 +410,7 @@ const GreetingCard: React.FC<Props> = ({ setPrompt,PlayerToolbar,handleRegenerat
               <div className={`card__panel card__panel--inside-right ${open ? "open" : ""}`} onClick={() => {
                   if(topEditing)
                     return;
-                  setTimeout(()=>setPrompt(true),10);
+                  setTimeout(()=>setPrompt(),10);
                   
                   console.log("RIGHT CLICK")
                   if (size?.width > size?.height && size?.width > 600)

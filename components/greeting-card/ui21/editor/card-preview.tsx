@@ -8,7 +8,7 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import styled from 'styled-components';
-
+import Box from "@mui/material/Box";
 import ArrowLeftIcon from '@mui/icons-material/ArrowLeft';
 import ArrowRightIcon from '@mui/icons-material/ArrowRight';
 import Typography from '@mui/material/Typography';
@@ -37,8 +37,12 @@ const Image = styled.img<LargeProps>`
    
 `;
 const Wrap = styled.div`
-padding-left:3px;
-padding-right:3px;
+  padding-left:3px;
+  padding-right:3px;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
 `;
 const ExitButton = styled.div`
     position:absolute;
@@ -49,63 +53,68 @@ const ExitButton = styled.div`
     `;
 interface Props {
   image: ImageData;
-  dark:string;
+  dark: string;
   open: boolean;
   setOpen: (open: boolean) => void;
 
-  session?:any;
-  text:string;
-  animatedSignature?:number;
-  signature:string;
+  session?: any;
+  text: string;
+  animatedSignature?: number;
+  signature: string;
+  creatingCard?: boolean;
+  handleCreate: () => void;
+  linkid: string;
 
 }
 
-const ImageOverlay: React.FC<Props> = ({dark,session,open,setOpen,text,signature,animatedSignature,image})=>{
-    // /const [open, setOpen] = React.useState(false);
-    const theme = useTheme();
-    const fullScreen = true;//useMediaQuery(theme.breakpoints.down('sm'));
-    //console.log("ImageOverlay",{images,sharedImages,image,huge,open,setOpen,onImageChange,topEditing,setTopEditing})
-     if(!session) session={};
-    //if(!onUpload) onUpload=()=>{};
-    const handleClickOpen = () => {
-        setOpen(true);
-      };
-    
-      const handleClose = () => {
-       
-        setOpen(false);
-      };
-    console.log("Preview Dialog: open:",{open,animatedSignature});  
-   
-    const canvasRef = React.useRef<HTMLDivElement>(null);
-    return (
-        <div>
-          {false&&<Button variant="outlined" onClick={handleClickOpen}>
-            Open responsive dialog
-          </Button>}
-          
-        <Dialog
-            fullScreen={fullScreen}
-            open={open}
-            onClose={handleClose}
-            aria-labelledby="responsive-dialog-title"
-          >
-            <DialogTitle id="responsive-dialog-title">
-              {"Card Preview"}
-            </DialogTitle>
-            <DialogContent>
-            <Wrap>
-            <Card PlayerToolbar={{}} handleRegenerateText={()=>{}} setLoading={()=>{}} animatedSignature={animatedSignature} editable={false} onAnimatedSignatureChange={()=>{}}  onGreetingChange={()=>{}} onImageChange={()=>{}} onSignatureChange={()=>{}} canvasRef={canvasRef} delayOpen={true} large={true} signature={signature} fbclid={""} utm_content={""} dark={dark} text={text || ''} image={image} id="preview" />
-            </Wrap>
-            <ExitButton>
-            <IconButton color="primary" aria-label="exit dialog" onClick={()=>setOpen(false)}>
-                <ExitToAppIcon />
+const ImageOverlay: React.FC<Props> = ({ creatingCard = false, handleCreate, linkid, dark, session, open, setOpen, text, signature, animatedSignature, image }) => {
+  // /const [open, setOpen] = React.useState(false);
+  const theme = useTheme();
+  const fullScreen = true;//useMediaQuery(theme.breakpoints.down('sm'));
+  //console.log("ImageOverlay",{images,sharedImages,image,huge,open,setOpen,onImageChange,topEditing,setTopEditing})
+  if (!session) session = {};
+  //if(!onUpload) onUpload=()=>{};
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+  console.log("Preview Dialog: open:", { open, animatedSignature });
+
+  const canvasRef = React.useRef<HTMLDivElement>(null);
+  return (
+    <div>
+      {false && <Button variant="outlined" onClick={handleClickOpen}>
+        Open responsive dialog
+      </Button>}
+
+      <Dialog
+        fullScreen={fullScreen}
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="responsive-dialog-title"
+      >
+        <DialogTitle id="responsive-dialog-title">
+          {"Card Preview"}
+        </DialogTitle>
+        <DialogContent>
+          <Wrap>
+            <Card setPrompt={()=>{}} PlayerToolbar={{}} handleRegenerateText={() => { }} setLoading={() => { }} animatedSignature={animatedSignature} editable={false} onAnimatedSignatureChange={() => { }} onGreetingChange={() => { }} onImageChange={() => { }} onSignatureChange={() => { }} canvasRef={canvasRef} delayOpen={true} large={true} signature={signature} fbclid={""} utm_content={""} dark={dark} text={text || ''} image={image} id="preview" />
+            {!creatingCard && !linkid && 
+          <Button  variant="contained" onClick={() => { handleClose(); handleCreate(); }}>Create a public link</Button>
+       }
+          </Wrap>
+          <ExitButton>
+            <IconButton color="primary" aria-label="exit dialog" onClick={() => setOpen(false)}>
+              <ExitToAppIcon />
             </IconButton>
-            </ExitButton>
-            </DialogContent>
-          
-          </Dialog>
-        </div>
-      );
-  }
-  export default ImageOverlay;
+          </ExitButton>
+        </DialogContent>
+       
+      </Dialog>
+    </div>
+  );
+}
+export default ImageOverlay;
