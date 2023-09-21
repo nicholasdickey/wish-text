@@ -276,8 +276,8 @@ const OuterWrapper = styled.div`
 
 const roboto = Roboto({ subsets: ['latin'], weight: ['300', '400', '700'], style: ['normal', 'italic'] })
 let v = false;
-export default function Home({ id, card, dark, fresh, fbclid, utm_content, isbot, isfb, sessionid, ironsession: startSession }:
-  { id: string, card: CardData, dark: number, fresh: boolean, fbclid: string, utm_content: string, isbot: number, isfb: number, sessionid: string, ironsession: Options }) {
+export default function Home({ isGif,create,id, card, dark, fresh, fbclid, utm_content, isbot, isfb, sessionid, ironsession: startSession }:
+  { isGif:boolean,create:boolean,id: string, card: CardData, dark: number, fresh: boolean, fbclid: string, utm_content: string, isbot: number, isfb: number, sessionid: string, ironsession: Options }) {
 
   const [session, setSession] = useState(startSession);
   const [systemMode, setSystemMode] = React.useState(false);
@@ -289,6 +289,7 @@ export default function Home({ id, card, dark, fresh, fbclid, utm_content, isbot
     router.push(`/?fbclid=${fbclid}&utm_content=${utm_content}`);
   };
   const canvasRef = React.useRef<HTMLDivElement>(null);
+  const popoutRef=  React.useRef<HTMLDivElement>(null);
   let theme: any;
   if (darkMode) {
     theme = createTheme({
@@ -410,7 +411,7 @@ export default function Home({ id, card, dark, fresh, fbclid, utm_content, isbot
         `}
             </Script>
           <OuterWrapper>
-          <Body id="body-wt">
+          <Body id="body-wt-3">
             <Wide>
               {false&&<Create>
                 <Link href={`/?fbclid=${fbclid}&utm_content=${utm_content}`}>
@@ -431,7 +432,7 @@ export default function Home({ id, card, dark, fresh, fbclid, utm_content, isbot
                 </Button>
               </ModeSwitch>
             </Wide>
-            <Card editable={false} onAnimatedSignatureChange={()=>{}}  onGreetingChange={()=>{}} onImageChange={()=>{}} onSignatureChange={()=>{}} canvasRef={canvasRef} delayOpen={true} large={true} signature={signature} fbclid={fbclid} utm_content={utm_content} dark={darkMode ? "true" : "false"} text={greeting || ''} image={image} />
+            <Card popoutRef={popoutRef} editable={false} onAnimatedSignatureChange={()=>{}}  onGreetingChange={()=>{}} onImageChange={()=>{}} onSignatureChange={()=>{}} canvasRef={canvasRef} delayOpen={true} large={true} signature={signature} fbclid={fbclid} utm_content={utm_content} dark={darkMode ? "true" : "false"} text={greeting || ''} image={image} />
           
           </Body>
           
@@ -461,10 +462,16 @@ export default function Home({ id, card, dark, fresh, fbclid, utm_content, isbot
 export const getServerSideProps = withSessionSsr(
   async function getServerSideProps(context: GetServerSidePropsContext): Promise<any> {
     try {
-      let { fbclid, utm_content, dark }:
-        { fbclid: string, utm_content: string, dark: boolean } = context.query as any;
+      let { fbclid, utm_content, dark,create }:
+        { fbclid: string, utm_content: string, dark: boolean,create:boolean } = context.query as any;
 
       let id: string = (context.params?.id || '') as string;
+      let isGif=false;
+      if(id.indexOf('.gif')>0){
+        isGif=true;
+        id=id.replace('.gif','');
+      }
+
       utm_content = utm_content || '';
       dark = dark || false;
       fbclid = fbclid || '';
@@ -528,7 +535,9 @@ export const getServerSideProps = withSessionSsr(
           dark: dark || 0,
           id,
           card,
-          ironsession
+          ironsession,
+          isGif,
+          create
         }
       }
     } catch (x) {

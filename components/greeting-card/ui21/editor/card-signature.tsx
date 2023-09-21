@@ -225,10 +225,10 @@ const SignatureEditor: React.FC<Props> = ({ onAnimatedSignatureChange, animatedS
         large = false;
     const theme = useTheme();
     const mobile = useMediaQuery(theme.breakpoints.down('sm'));
-    console.log("signature editor render", { text: text.current, editable, editing })
+    //console.log("signature editor render", { text: text.current, editable, editing })
     let ref = useRef<HTMLDivElement>(null);
     const handleAnimatedSignatureChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        console.log("onAnimatedSignatureChage", event.target.checked)
+      //  console.log("onAnimatedSignatureChage", event.target.checked)
         onAnimatedSignatureChange(event.target.checked ? 1 : 0);
     }
     useEffect(() => {
@@ -240,9 +240,9 @@ const SignatureEditor: React.FC<Props> = ({ onAnimatedSignatureChange, animatedS
                 //if(topEditing)
                 // setTopEditing(false);
 
-                console.log("OUTSIDE CLICK - SIGNATURE", text.current,signature)
+                //console.log("OUTSIDE CLICK - SIGNATURE", text.current,signature)
                 if (text.current != signature){
-                    console.log("call onChange signature")
+                   // console.log("call onChange signature")
                     onChange(text.current);
                 }
             }
@@ -261,20 +261,20 @@ const SignatureEditor: React.FC<Props> = ({ onAnimatedSignatureChange, animatedS
             t = t.substring(0, t.length - 1);
 
         setText(t);
-        console.log("click setText:", { text: event.target.value, t, tooLong })
+       // console.log("click setText:", { text: event.target.value, t, tooLong })
     };
 
     useEffect(() => {
         const div = ref?.current;
-        console.log("width-div", div);
+       // console.log("width-div", div);
         const width = div?.clientWidth || 0;// ? div.clientWidth > 500 ? div.clientWidth : 552 : 552;
         setDivWidth(width + 10 - 4);
-        console.log("set width:", width);
+       // console.log("set width:", width);
     }, [ref.current]);
-    console.log("creating signatureText", text.current)
+   // console.log("creating signatureText", text.current)
     const signatureText = text?.current ? text.current.split('\n').map((m: string, i: number) => <SignatureLine id={"wt-signature-line" + i} key={i} l={signature.length} large={large}>{m}</SignatureLine>) : null;
     const varaText: string[] = text && text?.current ? text.current.split('\n') : [''] || [''];
-    console.log("varaText", varaText, typeof varaText);
+    //console.log("varaText", varaText, typeof varaText);
 
     return (
         <Editor onFocus={() => setShowAnimatedSignature(true)} onBlur={() => setShowAnimatedSignature(false)} editable={editable} topEditing={topEditing} divwidth={divwidth} ref={ref} l={text.current.length || 0} large={large || false}>

@@ -137,15 +137,15 @@ const Mark = styled.div<MarkProps>`
 
 interface PopoutCardProps {
     close: () => void;
-    session?:any;
+    session?: any;
     card: {
         text: string;
         image: ImageData;
-        signature: string;   
-        animatedSignature?:number, 
+        signature: string;
+        animatedSignature?: number,
     };
     open: boolean;
-    isLeft:boolean; 
+    isLeft: boolean;
     editable?: boolean;
     onGreetingChange: (greeting: string) => void;
     onImageChange: (image: ImageData) => void;
@@ -156,12 +156,12 @@ interface PopoutCardProps {
     setTopEditing: (topEditing: boolean) => void;
     imageEditing: boolean;
     setImageEditing: (imageEditing: boolean) => void;
-    images?:ImageData[];
-    sharedImages?:ImageData[];
-    onUpload?: (result:any,widget:any) => void;
-    hugeLeft?:boolean;
-    hugeRight?:boolean;
-    id:string;
+    images?: ImageData[];
+    sharedImages?: ImageData[];
+    onUpload?: (result: any, widget: any) => void;
+    hugeLeft?: boolean;
+    hugeRight?: boolean;
+    id: string;
 }
 const ExitButton = styled.div`
     position:absolute;
@@ -170,9 +170,9 @@ const ExitButton = styled.div`
     z-index:1000;
     padding:10px;
     `;
-const PopoutCard = ({id,hugeLeft,hugeRight,topEditing,setTopEditing,imageEditing,setImageEditing,session, close, card, open, isLeft,onUpload,images,sharedImages,onAnimatedSignatureChange,editable = false, onGreetingChange, onImageChange, onSignatureChange, canvasRef }: PopoutCardProps) => {
+const PopoutCard = ({ id, hugeLeft, hugeRight, topEditing, setTopEditing, imageEditing, setImageEditing, session, close, card, open, isLeft, onUpload, images, sharedImages, onAnimatedSignatureChange, editable = false, onGreetingChange, onImageChange, onSignatureChange, canvasRef }: PopoutCardProps) => {
     const [isLeftPage, setIsLeftPage] = useState(isLeft);
-   // console.log("=====>isLeftPage", isLeft)
+    // console.log("=====>isLeftPage", isLeft)
     const settings = {
         // dots: true,
         //infinite: true,
@@ -189,28 +189,28 @@ const PopoutCard = ({id,hugeLeft,hugeRight,topEditing,setTopEditing,imageEditing
     const onHeadlineChange = (text: string) => {
         console.log("onHeadlineChange=", text);
         onGreetingChange(JSON.stringify({ headline: text, body: body }));
-      }
-      const onBodyChange = (text: string) => {
+    }
+    const onBodyChange = (text: string) => {
         console.log("onBodyChange=", text);
         onGreetingChange(JSON.stringify({ headline, body: text }));
-      }
-    let { text, image, signature,animatedSignature } = card;
+    }
+    let { text, image, signature, animatedSignature } = card;
     text = text.replace(/\n\n/g, '\n');
     const tw = text.split('\n');
-   // const headline = tw.length > 1 ? tw[0] : '';
+    // const headline = tw.length > 1 ? tw[0] : '';
     //const body = tw.length > 1 ? tw.slice(1).join('\n') : tw[0];
-    const structuredText=JSON.parse(text);
-  //console.log("==4structuredText=",structuredText)
-  //const tw = text.split('\n');
-  const headline = structuredText.headline;//tw.length > 1 ? tw[0] : '';
-  const body = structuredText.body;//tw.length > 1 ? tw.slice(1).join('\n') : tw[0];
-  
+    const structuredText = JSON.parse(text);
+    //console.log("==4structuredText=",structuredText)
+    //const tw = text.split('\n');
+    const headline = structuredText.headline;//tw.length > 1 ? tw[0] : '';
+    const body = structuredText.body;//tw.length > 1 ? tw.slice(1).join('\n') : tw[0];
+
     const signatureText = signature ? signature.split('\n').map((m, i) => <SignatureLine key={i} l={signature.length} large={large}>{m}</SignatureLine>) : [];
     useEffect(() => {
         if (isLeft != isLeftPage)
             setIsLeftPage(isLeft)
     }, [isLeft])
-  //  console.log("isLeft!!!!!!!!!!!!!!!!")
+    //  console.log("isLeft!!!!!!!!!!!!!!!!")
     /* const handlers = useSwipeable({
          onSwipedLeft: (eventData) => {
              console.log("User Swiped Left!", eventData);
@@ -224,27 +224,27 @@ const PopoutCard = ({id,hugeLeft,hugeRight,topEditing,setTopEditing,imageEditing
     return (
         <Dialog fullScreen open={open} >
             <Popout /*onClick={() => close()}*/>
-            <ExitButton>
-            <IconButton color="primary" aria-label="exit dialog" onClick={()=>close()}>
-                <ExitToAppIcon />
-            </IconButton>
-            </ExitButton>
-                <SwipeableViews index={isLeftPage?0:1}>
+                <ExitButton>
+                    <IconButton color="primary" aria-label="exit dialog" onClick={() => close()}>
+                        <ExitToAppIcon />
+                    </IconButton>
+                </ExitButton>
+                <SwipeableViews index={isLeftPage ? 0 : 1}>
                     <Left>
-                        {!imageEditing&&<div onClick={()=>{if(editable) setImageEditing(true)}}><Image src={card.image.url} /></div>}
-                        
-                        <CardImage editable={editable} onUpload={onUpload} session={session} images={images} sharedImages={sharedImages} topEditing={topEditing} setTopEditing={setTopEditing} image={image||EmptyImage} open={imageEditing} setOpen={setImageEditing} onImageChange={onImageChange} huge={hugeLeft}  />
-            
+                        {!imageEditing && <div onClick={() => { if (editable) setImageEditing(true) }}><Image src={card.image.url} /></div>}
+
+                        <CardImage editable={editable} onUpload={onUpload} session={session} images={images} sharedImages={sharedImages} topEditing={topEditing} setTopEditing={setTopEditing} image={image || EmptyImage} open={imageEditing} setOpen={setImageEditing} onImageChange={onImageChange} huge={hugeLeft} />
+
 
                     </Left>
                     <Right >
-                    <Inner>
-                        <CardHeadline id={`popout-${id}`} topEditing={topEditing} setTopEditing={setTopEditing} editable={editable} onChange={onHeadlineChange} headline={headline} large={large} loading={loading} />
-                        {loading && <LinearProgress />}
-                        <CardBody id={`popout-${id}`} topEditing={topEditing} setTopEditing={setTopEditing} editable={editable} onChange={onBodyChange} body={body} large={large} loading={loading} />
-                        <CardSignature id={`popout-${id}`} animatedSignature={animatedSignature||0} onAnimatedSignatureChange={onAnimatedSignatureChange} topEditing={topEditing} setTopEditing={setTopEditing} signature={signature} editable={editable} onChange={onSignatureChange} large={large} loading={loading} />
-                    </Inner>
-                     
+                        <Inner>
+                            <CardHeadline id={`popout-${id}`} topEditing={topEditing} setTopEditing={setTopEditing} editable={editable} onChange={onHeadlineChange} headline={headline} large={large} loading={loading} />
+                            {loading && <LinearProgress />}
+                            <CardBody id={`popout-${id}`} topEditing={topEditing} setTopEditing={setTopEditing} editable={editable} onChange={onBodyChange} body={body} large={large} loading={loading} />
+                            <CardSignature id={`popout-${id}`} animatedSignature={animatedSignature || 0} onAnimatedSignatureChange={onAnimatedSignatureChange} topEditing={topEditing} setTopEditing={setTopEditing} signature={signature} editable={editable} onChange={onSignatureChange} large={large} loading={loading} />
+                        </Inner>
+
                     </Right>
                 </SwipeableViews>
 

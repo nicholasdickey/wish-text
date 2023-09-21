@@ -189,7 +189,7 @@ const BandContainer = styled.div<{ darktext?: string, background?: string, open?
     //background-image: ${({ background }) => background ? `linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url(${background})` : null}; 
   //  background-repeat: repeat;
   //  min-height:300px;
-    width:100%;
+   // width:100%;
    
     // height:${({ open, large }) => open ? large ? 200 : 250 : large ? 200 : 120}px;
 
@@ -308,17 +308,19 @@ interface Props {
   onSignatureChange: (signature: string) => void;
   onAnimatedSignatureChange: (animatedSignature: number) => void;
   canvasRef: React.RefObject<HTMLDivElement>;
+  popoutRef: React.RefObject<HTMLDivElement>;
   session?:any;
   images?:ImageData[];
   sharedImages?:ImageData[];
   onUpload?: (result:any,widget:any) => void;
   id?:string;
-  handleRegenerateText:any;
-  setLoading:any;
-  PlayerToolbar: any;
-  setPrompt: () => void;
+  handleRegenerateText?:any;
+  setLoading?:any;
+  PlayerToolbar?: any;
+  setPrompt?: () => void;
+  
 }
-const GreetingCard: React.FC<Props> = ({ setPrompt,PlayerToolbar,handleRegenerateText:h2,setLoading,id="view", onAnimatedSignatureChange,animatedSignature=1,editable = false, onGreetingChange, onImageChange, onSignatureChange, canvasRef, delayOpen = false, startOpen = false, loading = false, large: startLarge = false, dark, fbclid, utm_content, text, image, signature,session,images,sharedImages,onUpload }) => {
+const GreetingCard: React.FC<Props> = ({popoutRef,setPrompt=()=>{},PlayerToolbar=null,handleRegenerateText:h2=()=>{},setLoading=()=>{},id="view", onAnimatedSignatureChange,animatedSignature=1,editable = false, onGreetingChange, onImageChange, onSignatureChange, canvasRef, delayOpen = false, startOpen = false, loading = false, large: startLarge = false, dark, fbclid, utm_content, text, image, signature,session,images,sharedImages,onUpload }) => {
 
   const [open, setOpen] = React.useState(startOpen);
   const [large, setLarge] = React.useState(startLarge);
@@ -374,11 +376,11 @@ const GreetingCard: React.FC<Props> = ({ setPrompt,PlayerToolbar,handleRegenerat
   return (
     <BandContainer id="band-container-wt" darktext={dark} open={open} large={large} onClick={() => console.log("CLICK")} >
 
-      <Body id="body-wt" style={{ width: '100vw', height: '100hw' }}  >
-        <PopoutCard id={id} images={images} sharedImages={sharedImages} hugeLeft={hugeLeft} hugeRight={hugeRight} topEditing={topEditing} setTopEditing={setTopEditing} imageEditing={imageEditing} setImageEditing={setImageEditing} session={session} onUpload={onUpload} onAnimatedSignatureChange={onAnimatedSignatureChange} onGreetingChange={onGreetingChange} onImageChange={onImageChange} onSignatureChange={onSignatureChange} canvasRef={canvasRef} editable={editable} open={hugeLeft || hugeRight} isLeft={hugeLeft} card={{ text, image: image || EmptyImage, signature,animatedSignature }} close={() => { setHugeLeft(false); setHugeRight(false); }} />
-        <Card style={{ width: '100vw', height: '100hw' }} large={large} open={open} dark={dark}  >
+      <Body id="body-wt-2" style={{ width: '100vw', height: '100hw' }}  >
+        <PopoutCard id={id} images={images} sharedImages={sharedImages} hugeLeft={hugeLeft} hugeRight={hugeRight} topEditing={topEditing} setTopEditing={setTopEditing} imageEditing={imageEditing} setImageEditing={setImageEditing} session={session} onUpload={onUpload} onAnimatedSignatureChange={onAnimatedSignatureChange} onGreetingChange={onGreetingChange} onImageChange={onImageChange} onSignatureChange={onSignatureChange} canvasRef={popoutRef} editable={editable} open={hugeLeft || hugeRight} isLeft={hugeLeft} card={{ text, image: image || EmptyImage, signature,animatedSignature }} close={() => { setHugeLeft(false); setHugeRight(false); }} />
+        <Card id="index-card" style={{ width: '100vw', height: '100hw' }} large={large} open={open} dark={dark}  >
           <div style={{ width: '100vw', height: '100hw' }} className={`card__container js-card-opener ${open ? "open" : ""}`}  >
-            <div ref={canvasRef} className={`card ${open ? "open" : ""}`} >
+            <div id="index-ref" ref={canvasRef} className={`card ${open ? "open" : ""}`} >
               <div className={`card__panel card__panel--front ${open ? "open" : ""}`}>
                 {image?.url && <Image large={large} open={open} src={image?.url} />}
               </div>

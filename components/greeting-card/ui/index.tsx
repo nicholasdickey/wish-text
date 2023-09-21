@@ -378,7 +378,7 @@ const GreetingCard: React.FC<BandProps> = ({editable=false, canvasRef, delayOpen
   return (
     <BandContainer id="band-container-wt" darktext={dark} open={open} large={large} onClick={() => console.log("CLICK")} >
     
-        <Body id="body-wt" style={{ width: '100vw', height: '100hw' }}  >
+        <Body id="body-wt-1" style={{ width: '100vw', height: '100hw' }}  >
           <PopoutCard open={hugeLeft || hugeRight} isLeft={hugeLeft} card={{ text, image: image || EmptyImage, signature }} close={() => { setHugeLeft(false); setHugeRight(false); }} />
           <Card style={{ width: '100vw', height: '100hw' }} large={large} open={open} dark={dark}  >
             <div style={{ width: '100vw', height: '100hw' }} className={`card__container js-card-opener ${open ? "open" : ""}`}  >

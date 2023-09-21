@@ -379,7 +379,7 @@ export default function Home({ linkid: startLinkid, card: startCard = false,
     setVirgin(true);
     const { greeting, num } = await generateText(session, true);
     setGreeting(greeting);
-    updateSession2({ greeting, num });
+    updateSession2({ greeting, num,prompt6:true,prompt2:true });
     console.log("text response:", { greeting, num })
     setNum(num);
     setMax(num);
@@ -1013,13 +1013,14 @@ Whether it's birthdays, graduations, holidays, or moments of illness or loss, WI
               </Accordion> : null}
 
             {virgin && session.greeting ?
-              <Accordion sx={{ my: 5 }} expanded={expanded === 'advanced'} onChange={handleAccordeonChange('advanced')}>
+              <Accordion sx={{ my: 5,width:'100%' }} expanded={expanded === 'advanced'} onChange={handleAccordeonChange('advanced')}>
                 <AccordionSummary
+                sx={{p:12,width:'100%' }} 
                   expandIcon={<ExpandMoreIcon />}
                   aria-controls="panel4bh-content"
                   id="panel4bh-header"
                 >
-                  <Typography sx={{ width: '33%', flexShrink: 0 }}>Advanced Inputs</Typography>
+                  <Typography sx={{ px:1,width: '100%', flexShrink: 0 }}>Advanced Inputs</Typography>
                 </AccordionSummary>
                 <AccordionDetails >
                   <Box sx={{ my: 4 }}>

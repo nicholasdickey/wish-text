@@ -247,7 +247,7 @@ export const recordSessionCard = async (sessionid: string, card: CardData):Promi
 export const addSessionImage = async (sessionid: string, image: ImageData): Promise<{ success: boolean, images: ImageData[] }> => {
   const url = `${process.env.NEXT_PUBLIC_LAKEAPI}/api/v1/wishtext/images/add-session-image?sessionid=${sessionid}`;
   const res = await axios.post(url, { image, sessionid });
-  // console.log("recordSessionCard", sessionid, res.data.success,res.data);
+  // console.         log("recordSessionCard", sessionid, res.data.success,res.data);
   return res.data;
 }
 export const fetchSessionImages = async (sessionid: string): Promise<{ success: boolean, images: ImageData[] }> => {
@@ -275,6 +275,11 @@ export const getReport = async (): Promise<{ success: boolean, report: any }> =>
   console.log("getReport:", url);
   const res = await axios.get(url);
  return res.data;
+}
+export const saveImage=async({linkid,inputVideo}:{linkid:string,inputVideo:string})=>{
+  const url = `${process.env.NEXT_PUBLIC_LAKEAPI}/api/v1/wishtext/cards/record-gif`;
+  console.log("getReport:", url,linkid,inputVideo);
+  const res = await axios.post(url,{linkid,inputVideo:inputVideo});
 }
 
 

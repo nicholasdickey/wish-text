@@ -32,7 +32,7 @@ import Button from '@mui/material/Button';
 import LinearProgress from '@mui/material/LinearProgress';
 //third party
 import { DefaultCopyField } from '@eisberg-labs/mui-copy-field';
-import { RWebShare } from "react-web-share";
+//import { RWebShare } from "react-web-share";
 import CardHeadline from "./ui21/editor/card-headline";
 import CardPreview from "./ui21/editor/card-preview";
 import Hint from "./ui21/hint";
@@ -181,6 +181,7 @@ export default function CardEditor({
 
   const theme = useTheme();
   const canvasRef = useRef<HTMLDivElement>(null);
+  const popoutRef = useRef<HTMLDivElement>(null);
   const [imageData, setImageData] = useState(null as any);
  
   const emptyImage = {
@@ -431,7 +432,7 @@ export default function CardEditor({
   const onTextEditorClick = () => {
     setTimeout(async () => await recordEvent(session.sessionid, 'clickOnTextEditor', ''), 1000);
     setPrompt5(true);
-    updateSession2({ prompt5: true });
+    updateSession2({ prompt5: true});
   }
   const handlePreview = () => {
     setOpenCardPreview(true);
@@ -569,6 +570,7 @@ export default function CardEditor({
         sharedImages={sharedImages}
         onUpload={onUpload}
         canvasRef={canvasRef}
+        popoutRef={popoutRef}
         image={image}
         text={greeting}
         signature={signature}

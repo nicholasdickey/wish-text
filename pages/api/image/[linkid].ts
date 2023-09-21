@@ -20,7 +20,7 @@ export default async function handler(
     // console.log("metaimage:::::::::::::::::::::::::::::::::::::::::",metaimage);
     //console.log("image >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>",img.length,img);
     res.writeHead(200, {
-      'Content-Type': 'image/png',
+      'Content-Type': 'image/gif',
       'Content-Length': img.length 
     });
     res.end(img)
