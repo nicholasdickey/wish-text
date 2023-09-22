@@ -121,7 +121,7 @@ const ImageOverlay: React.FC<Props> = ({ creatingCard = false, handleCreate, lin
         </DialogTitle>
         <DialogContent>
           <Wrap>
-          <Recorder div={elementRef.current} />
+         {false&&<Recorder div={elementRef.current} />}
            <div id="canvas"  style={{width:'100%',height:'100%'}}>{<Card  setPrompt={()=>{}} PlayerToolbar={{}} handleRegenerateText={() => { }} setLoading={() => { }} animatedSignature={animatedSignature} editable={false} onAnimatedSignatureChange={() => { }} onGreetingChange={() => { }} onImageChange={() => { }} onSignatureChange={() => { }} canvasRef={elementRef} popoutRef={canvasRef} delayOpen={true} large={true} signature={signature} fbclid={""} utm_content={""} dark={dark} text={text || ''} image={image} id="preview" />}</div> 
             {animate&&!creatingCard && !linkid && 
           <Button  variant="contained" onClick={() => { handleClose(); handleCreate(); }}>Create a public link</Button>

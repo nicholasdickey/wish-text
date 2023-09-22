@@ -53,7 +53,29 @@ import LightModeTwoToneIcon from '@mui/icons-material/LightModeOutlined';
 
 
 //third-party
-import { RWebShare } from "react-web-share";
+//import { RWebShare } from "react-web-share";
+/*
+<RWebShare
+                    data={{
+                      text: session.greeting || '',
+                      url: `/?occasion=${encodeURIComponent(session.occasion || '')}${session.reflections ? `&reflections=${encodeURIComponent(session.reflections)}` : ``}${session.instructions ? `&instructions=${encodeURIComponent(session.instructions)}` : ``}${session.inastyleof ? `&inastyleof=${encodeURIComponent(session.inastyleof)}` : ``}${session.language ? `&language=${encodeURIComponent(session.language)}` : ``}${session.to ? `&to=${encodeURIComponent(session.to)}` : ``}${session.from ? `&from=${encodeURIComponent(session.from)}` : ``}${session.interests ? `&interests=${encodeURIComponent(session.interests)}` : ``}`,
+                      title: 'Wish-Text.Com -  Wish Text Composer',
+                    }}
+                    onClick={() => {
+                      //console.log("shared successfully!");
+                      ga.event({
+                        action: "share",
+                        params: {
+                          sessionid: session.sessionid,
+                        }
+                      })
+                      setTimeout(async () => await recordEvent(session.sessionid, 'share', isfb ? 'facebook:' + utm_medium : utm_medium ? utm_medium : ''), 1000);
+
+                    }}
+                  >
+                    <WebShare color={"white"}><Button color={"inherit"}> <IosShareOutlinedIcon /></Button></WebShare>
+                  </RWebShare>
+                  */
 import axios from 'axios';
 
 //project
@@ -799,26 +821,7 @@ Whether it's birthdays, graduations, holidays, or moments of illness or loss, WI
               </Typography>
               <Box sx={{ display: { xs: 'block', sm: 'block' } }}>
                 <AppMenu color={theme.palette.text.primary}>
-                  <RWebShare
-                    data={{
-                      text: session.greeting || '',
-                      url: `/?occasion=${encodeURIComponent(session.occasion || '')}${session.reflections ? `&reflections=${encodeURIComponent(session.reflections)}` : ``}${session.instructions ? `&instructions=${encodeURIComponent(session.instructions)}` : ``}${session.inastyleof ? `&inastyleof=${encodeURIComponent(session.inastyleof)}` : ``}${session.language ? `&language=${encodeURIComponent(session.language)}` : ``}${session.to ? `&to=${encodeURIComponent(session.to)}` : ``}${session.from ? `&from=${encodeURIComponent(session.from)}` : ``}${session.interests ? `&interests=${encodeURIComponent(session.interests)}` : ``}`,
-                      title: 'Wish-Text.Com -  Wish Text Composer',
-                    }}
-                    onClick={() => {
-                      //console.log("shared successfully!");
-                      ga.event({
-                        action: "share",
-                        params: {
-                          sessionid: session.sessionid,
-                        }
-                      })
-                      setTimeout(async () => await recordEvent(session.sessionid, 'share', isfb ? 'facebook:' + utm_medium : utm_medium ? utm_medium : ''), 1000);
-
-                    }}
-                  >
-                    <WebShare color={"white"}><Button color={"inherit"}> <IosShareOutlinedIcon /></Button></WebShare>
-                  </RWebShare>
+                  
 
                 </AppMenu>
               </Box>

@@ -32,12 +32,12 @@ const webmRecord = async function WebmRecord(linkid:string,canvas: HTMLCanvasEle
 */
                     blobToDataURL(blob, async function (dataurl: string) {
                         const url = dataurl;
-                        /*console.log("_dbg: url", url);
-                        const a = document.createElement("a");
+                        console.log("_dbg: url", url);
+                       /* const a = document.createElement("a");
                         a.href = url;
                         a.download = "recordingData.webm";
                         a.click(); */
-                        await saveImage({inputVideo:url,linkid});
+                        await saveImage({inputVideo:url,linkid}); 
                         resolve(dataurl);
 
                         //console.log(dataurl);

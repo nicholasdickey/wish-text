@@ -27,14 +27,14 @@ import recordWebm from '../../../lib/webm-recorder';
 
 const caveat = Caveat({ subsets: ['latin'] });
 interface BodyProps {
-    l: number;
-    large?: boolean;
+  l: number;
+  large?: boolean;
 }
 
 interface LargeProps {
-    large?: boolean,
-    open?: boolean,
-    dark?: string
+  large?: boolean,
+  open?: boolean,
+  dark?: string
 }
 const Image = styled.img<LargeProps>`
     object-fit: cover;
@@ -284,7 +284,7 @@ const SignatureLine = styled(Typography) <BodyProps>`
     }
     `;
 interface MarkProps {
-    image: string;
+  image: string;
 }
 const Mark = styled.div<MarkProps>`
     position: ${({ image }) => image == "true" ? 'absolute' : 'relative'};
@@ -297,93 +297,110 @@ const Mark = styled.div<MarkProps>`
 `;
 
 interface Props {
-    dark: string,
-    fbclid: string,
-    utm_content: string,
-    text: string,
-    image?: ImageData,
-    signature: string,
-    session?: any;
-    linkid: string;
+  dark: string,
+  fbclid: string,
+  utm_content: string,
+  text: string,
+  image?: ImageData,
+  signature: string,
+  session?: any;
+  linkid: string;
+  create: boolean;
 
 }
-const GreetingCard: React.FC<Props> = ({ linkid,dark, fbclid, utm_content, text, image, signature, session }) => {
+const GreetingCard: React.FC<Props> = ({ create,linkid, dark, fbclid, utm_content, text, image, signature, session }) => {
 
-    const [online, setOnline] = React.useState(false);
-    const [width, setWidth] = React.useState(0);
-    const [hugeLeft, setHugeLeft] = React.useState(false);
-    const [hugeRight, setHugeRight] = React.useState(false);
-    const [gifImage, setGifImage] = React.useState("");
-    const theme = useTheme();
-    const router = useRouter();
-    const size = useWindowSize();
-    const handleCTAClick = () => {
-        router.push(`/start?fbclid=${fbclid}&utm_content=${utm_content}`);
-    };
-    // console.log("large=", large, "greeting=", text)
-    if (!text)
-        text = JSON.stringify({ headline: "", body: "" });
-    text = text.replace(/\n\n/g, '\n');
-    const structuredText = JSON.parse(text);
-    // console.log("structuredText=", structuredText)
-    //const tw = text.split('\n');
+  const [online, setOnline] = React.useState(false);
+  const [width, setWidth] = React.useState(0);
+  const [hugeLeft, setHugeLeft] = React.useState(false);
+  const [hugeRight, setHugeRight] = React.useState(false);
+  const [gifImage, setGifImage] = React.useState("");
+  const theme = useTheme();
+  const router = useRouter();
+  const size = useWindowSize();
+  const handleCTAClick = () => {
+    router.push(`/start?fbclid=${fbclid}&utm_content=${utm_content}`);
+  };
+  // console.log("large=", large, "greeting=", text)
+  if (!text)
+    text = JSON.stringify({ headline: "", body: "" });
+  text = text.replace(/\n\n/g, '\n');
+  const structuredText = JSON.parse(text);
+  // console.log("structuredText=", structuredText)
+  //const tw = text.split('\n');
 
-    const headline = structuredText.headline || "";//tw.length > 1 ? tw[0] : '';
-    const body = structuredText.body || "";//tw.length > 1 ? tw.slice(1).join('\n') : tw[0];
-    console.log("greeting-card render", { dark, image, text, headline, body, signature })
-    useEffect(() => {
-        setOnline(true);
-        setWidth(size.width);
-    }, []);
+  const headline = structuredText.headline || "";//tw.length > 1 ? tw[0] : '';
+  const body = structuredText.body || "";//tw.length > 1 ? tw.slice(1).join('\n') : tw[0];
+  console.log("greeting-card render", { dark, image, text, headline, body, signature })
+  useEffect(() => {
+    setOnline(true);
+    setWidth(size.width);
+  
+  }, []);
+  const handleTextClick = () => {
 
-    const handleTextClick = () => {
-
-    }
-    const mobile = useMediaQuery(theme.breakpoints.down('sm'));
-    const widthRef=useRef<number>(0);
-    useEffect(() => {
-        widthRef.current=size.width;
-        setWidth(size.width)
-    }, [size,size.width]);
-    console.log("width:",widthRef.current,size.width,width)
-    const [canvasRef, setCanvasElRef] = useCanvas((canvas) => {
-        console.log("setting dimensions", size.width    );
-        canvas.setDimensions({
-            width:  window.innerWidth,
-            height: 400
-        });
-        const text = new fabric.Text("Another Greeting from Wish-Text.Com!", {
-            originX: "center",
-            top: 20
-        });
-        canvas.add(text);
-        text.centerH();
-        function animate(toState: any) {
-            text.animate("scaleX", Math.max(toState, 0.4) * 2, {
-                onChange: () => canvas.renderAll(),
-                onComplete: () => animate(!toState),
-                duration: 2000,
-                easing: toState
-                    ? fabric.util.ease.easeInOutQuad
-                    : fabric.util.ease.easeInOutSine
-            });
-        }
-        animate(1);
+  }
+  const mobile = useMediaQuery(theme.breakpoints.down('sm'));
+  const widthRef = useRef<number>(0);
+  useEffect(() => {
+    widthRef.current = size.width;
+    setWidth(size.width)
+  }, [size, size.width]);
+  console.log("width:", widthRef.current, size.width, width)
+  const [canvasRef, setCanvasElRef] = useCanvas((canvas) => {
+    console.log("setting dimensions", size.width);
+    if(create)
+    setTimeout(async () => {
+       setGifImage(await recordWebm(linkid, document.getElementById('wt-canvas') as HTMLCanvasElement, 4))
+    }, 0);
+    canvas.setDimensions({
+      width: window.innerWidth,
+      height: 400
     });
+    const text = new fabric.Text("Hello 66 World from Wish-Text.Com!", {
+      originX: "center",
+      top: 20
+    });
+    canvas.add(text);
+    text.centerH();
+    function animate(toState: any) {
+      text.animate("scaleX", Math.max(toState, 0.4) * 2, {
+        onChange: () => canvas.renderAll(),
+        onComplete: () => animate(!toState),
+        duration: 2000,
+        easing: toState
+          ? fabric.util.ease.easeInOutQuad
+          : fabric.util.ease.easeInOutSine
+      });
+    }
+    animate(1);
+    
+   
+  });
 
   //  if (!online) return <>Loading</>;
-    return (
-        <BandContainer id="band-container-wt" darktext={dark} open={true} large={true} onClick={() => console.log("CLICK")} >
+  return (
+    <BandContainer id="band-container-wt" darktext={dark} open={true} large={true} onClick={() => console.log("CLICK")} >
 
-            <Body id={`blah-body-wt-${online?'online':'ssr'}`} style={{ width: '100vw', height: '100hw' }}  >
-                <canvas id="wt-canvas"  ref={setCanvasElRef} width={window?window.innerWidth:600} height={400}/>
-                <CTAButton onClick={async ()=>setGifImage(await recordWebm(linkid,document.getElementById('wt-canvas') as HTMLCanvasElement,8))}>Create Webm</CTAButton>
-                <CTAButton> <a href={gifImage} >Image Download Link</a></CTAButton>
-             
-            </Body>
-            
-         
-        </BandContainer>
-    );
+      <Body id={`blah-body-wt-${online ? 'online' : 'ssr'}`} style={{ width: '100vw', height: '100hw' }}  >
+        <canvas id="wt-canvas" ref={setCanvasElRef} width={window ? window.innerWidth : 600} height={400} />
+        <br/>
+       <br/>
+       <br/>
+       <br/>
+       <br/>
+       <br/>
+        <CTAButton onClick={async () => setGifImage(await recordWebm(linkid, document.getElementById('wt-canvas') as HTMLCanvasElement, 4))}>Create Webm</CTAButton>
+        <CTAButton> <a href={gifImage} >Image Download Link</a></CTAButton>
+       <br/>
+       <br/>
+       <br/><CTAButton>IMAGE</CTAButton>
+       <br/>
+        <img src={`https://dev.qwiket.com/view/${linkid}.gif`} />
+      </Body>
+
+
+    </BandContainer>
+  );
 };
 export default GreetingCard;

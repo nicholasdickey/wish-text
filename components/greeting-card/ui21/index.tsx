@@ -299,7 +299,7 @@ interface Props {
   large?: boolean,
   image?: ImageData,
   signature: string,
-  animatedSignature?:number,
+  animatedSignature?: number,
   startOpen?: boolean
   delayOpen?: boolean;
   editable?: boolean;
@@ -309,18 +309,18 @@ interface Props {
   onAnimatedSignatureChange: (animatedSignature: number) => void;
   canvasRef: React.RefObject<HTMLDivElement>;
   popoutRef: React.RefObject<HTMLDivElement>;
-  session?:any;
-  images?:ImageData[];
-  sharedImages?:ImageData[];
-  onUpload?: (result:any,widget:any) => void;
-  id?:string;
-  handleRegenerateText?:any;
-  setLoading?:any;
+  session?: any;
+  images?: ImageData[];
+  sharedImages?: ImageData[];
+  onUpload?: (result: any, widget: any) => void;
+  id?: string;
+  handleRegenerateText?: any;
+  setLoading?: any;
   PlayerToolbar?: any;
   setPrompt?: () => void;
-  
+
 }
-const GreetingCard: React.FC<Props> = ({popoutRef,setPrompt=()=>{},PlayerToolbar=null,handleRegenerateText:h2=()=>{},setLoading=()=>{},id="view", onAnimatedSignatureChange,animatedSignature=1,editable = false, onGreetingChange, onImageChange, onSignatureChange, canvasRef, delayOpen = false, startOpen = false, loading = false, large: startLarge = false, dark, fbclid, utm_content, text, image, signature,session,images,sharedImages,onUpload }) => {
+const GreetingCard: React.FC<Props> = ({ popoutRef, setPrompt = () => { }, PlayerToolbar = null, handleRegenerateText: h2 = () => { }, setLoading = () => { }, id = "view", onAnimatedSignatureChange, animatedSignature = 1, editable = false, onGreetingChange, onImageChange, onSignatureChange, canvasRef, delayOpen = false, startOpen = false, loading = false, large: startLarge = false, dark, fbclid, utm_content, text, image, signature, session, images, sharedImages, onUpload }) => {
 
   const [open, setOpen] = React.useState(startOpen);
   const [large, setLarge] = React.useState(startLarge);
@@ -342,12 +342,12 @@ const GreetingCard: React.FC<Props> = ({popoutRef,setPrompt=()=>{},PlayerToolbar
   const structuredText = JSON.parse(text);
   // console.log("structuredText=", structuredText)
   //const tw = text.split('\n');
-  
+
   const headline = structuredText.headline || "";//tw.length > 1 ? tw[0] : '';
   const body = structuredText.body || "";//tw.length > 1 ? tw.slice(1).join('\n') : tw[0];
-  console.log("greeting-card render", { image, text, headline,body,signature })
+  console.log("greeting-card render", { image, text, headline, body, signature })
   const handleTextClick = () => {
-    
+
   }
   if (dOpen) {
     setDOpen(false);
@@ -361,7 +361,7 @@ const GreetingCard: React.FC<Props> = ({popoutRef,setPrompt=()=>{},PlayerToolbar
     console.log("onBodyChange=", text);
     onGreetingChange(JSON.stringify({ headline, body: text }));
   }
-  const handleRegenerateText = async (session:any) => {
+  const handleRegenerateText = async (session: any) => {
     console.log("handleRegenerateText");
     setLoading(true);
     await h2(session);
@@ -372,12 +372,12 @@ const GreetingCard: React.FC<Props> = ({popoutRef,setPrompt=()=>{},PlayerToolbar
   // console.log("open=", open, ";large=", large, "signature:", signature)
   const signatureText = signature ? signature.split('\n').map((m, i) => <SignatureLine id={"wt-signature-line" + i} key={i} l={signature.length} large={large}>{m}</SignatureLine>) : [];
   //console.log("signatureText=", signatureText)
-  const mobile=useMediaQuery(theme.breakpoints.down('sm'));
+  const mobile = useMediaQuery(theme.breakpoints.down('sm'));
   return (
     <BandContainer id="band-container-wt" darktext={dark} open={open} large={large} onClick={() => console.log("CLICK")} >
 
       <Body id="body-wt-2" style={{ width: '100vw', height: '100hw' }}  >
-        <PopoutCard id={id} images={images} sharedImages={sharedImages} hugeLeft={hugeLeft} hugeRight={hugeRight} topEditing={topEditing} setTopEditing={setTopEditing} imageEditing={imageEditing} setImageEditing={setImageEditing} session={session} onUpload={onUpload} onAnimatedSignatureChange={onAnimatedSignatureChange} onGreetingChange={onGreetingChange} onImageChange={onImageChange} onSignatureChange={onSignatureChange} canvasRef={popoutRef} editable={editable} open={hugeLeft || hugeRight} isLeft={hugeLeft} card={{ text, image: image || EmptyImage, signature,animatedSignature }} close={() => { setHugeLeft(false); setHugeRight(false); }} />
+        <PopoutCard id={id} images={images} sharedImages={sharedImages} hugeLeft={hugeLeft} hugeRight={hugeRight} topEditing={topEditing} setTopEditing={setTopEditing} imageEditing={imageEditing} setImageEditing={setImageEditing} session={session} onUpload={onUpload} onAnimatedSignatureChange={onAnimatedSignatureChange} onGreetingChange={onGreetingChange} onImageChange={onImageChange} onSignatureChange={onSignatureChange} canvasRef={popoutRef} editable={editable} open={hugeLeft || hugeRight} isLeft={hugeLeft} card={{ text, image: image || EmptyImage, signature, animatedSignature }} close={() => { setHugeLeft(false); setHugeRight(false); }} />
         <Card id="index-card" style={{ width: '100vw', height: '100hw' }} large={large} open={open} dark={dark}  >
           <div style={{ width: '100vw', height: '100hw' }} className={`card__container js-card-opener ${open ? "open" : ""}`}  >
             <div id="index-ref" ref={canvasRef} className={`card ${open ? "open" : ""}`} >
@@ -386,13 +386,13 @@ const GreetingCard: React.FC<Props> = ({popoutRef,setPrompt=()=>{},PlayerToolbar
               </div>
               <div className={`card__panel card__panel--inside-left ${open ? "open" : ""}`} onClick={() => {
                 console.log("dialog click")
-                if(topEditing)
+                if (topEditing)
                   return;
-                if(mobile&&!hugeLeft){
+                if (mobile && !hugeLeft) {
                   setHugeLeft(true);
                   return;
                 }
-                else if(!topEditing&&editable){
+                else if (!topEditing && editable) {
                   console.log("dialog: opening")
                   setImageEditing(true);
                   setTopEditing(true);
@@ -404,31 +404,31 @@ const GreetingCard: React.FC<Props> = ({popoutRef,setPrompt=()=>{},PlayerToolbar
                 else
                   setHugeLeft(!hugeLeft);
               }}>
-                {image?.url ? <Image large={large} open={open} src={image?.url} />:editable&&<InvertText  className={caveat.className}>
-                 <div className={caveat.className}> Click to select.               ......................</div></InvertText>}
+                {image?.url ? <Image large={large} open={open} src={image?.url} /> : editable && <InvertText className={caveat.className}>
+                  <div className={caveat.className}> Click to select.               ......................</div></InvertText>}
               </div>
-              <CardImage editable={editable} onUpload={onUpload} session={session} images={images} sharedImages={sharedImages} topEditing={topEditing} setTopEditing={setTopEditing} image={image||EmptyImage} open={imageEditing} setOpen={setImageEditing} onImageChange={onImageChange} huge={hugeLeft}  />
-            
+              <CardImage editable={editable} onUpload={onUpload} session={session} images={images} sharedImages={sharedImages} topEditing={topEditing} setTopEditing={setTopEditing} image={image || EmptyImage} open={imageEditing} setOpen={setImageEditing} onImageChange={onImageChange} huge={hugeLeft} />
+
               <div className={`card__panel card__panel--inside-right ${open ? "open" : ""}`} onClick={() => {
-                  if(topEditing)
-                    return;
-                  setTimeout(()=>setPrompt(),10);
-                  
-                  console.log("RIGHT CLICK")
-                  if (size?.width > size?.height && size?.width > 600)
-                    setLarge(large);
-                  else
-                    setHugeRight(!hugeRight);
-                }}>
+                if (topEditing)
+                  return;
+                setTimeout(() => setPrompt(), 10);
+
+                console.log("RIGHT CLICK")
+                if (size?.width > size?.height && size?.width > 600)
+                  setLarge(large);
+                else
+                  setHugeRight(!hugeRight);
+              }}>
                 <Inner >
-               
-     
-                  <CardHeadline id={`normal-${id}`} topEditing={topEditing} setTopEditing={setTopEditing} editable={editable&&!mobile} onChange={onHeadlineChange} headline={headline} large={large} loading={loading} />
+
+
+                  <CardHeadline id={`normal-${id}`} topEditing={topEditing} setTopEditing={setTopEditing} editable={editable && !mobile} onChange={onHeadlineChange} headline={headline} large={large} loading={loading} />
                   {loading && <LinearProgress />}
-                  <CardBody id={`normal-${id}`}  topEditing={topEditing} setTopEditing={setTopEditing} editable={editable&&!mobile} onChange={onBodyChange} body={body} large={large} loading={loading} />
-                  {!loading &&editable&&PlayerToolbar}
-                  {!loading &&editable&& <TextToolbar fresh={false} outside={false} session={session} onGenerateClick={handleRegenerateText}  />}     
-                  <CardSignature id={`normal-${id}`} animatedSignature={animatedSignature} onAnimatedSignatureChange={onAnimatedSignatureChange} topEditing={topEditing} setTopEditing={setTopEditing} signature={signature} editable={editable&&!mobile} onChange={onSignatureChange} large={large} loading={loading} />
+                  <CardBody id={`normal-${id}`} topEditing={topEditing} setTopEditing={setTopEditing} editable={editable && !mobile} onChange={onBodyChange} body={body} large={large} loading={loading} />
+                  {!loading && editable && PlayerToolbar}
+                  {!loading && editable && <TextToolbar fresh={false} outside={false} session={session} onGenerateClick={handleRegenerateText} />}
+                  <CardSignature id={`normal-${id}`} animatedSignature={animatedSignature} onAnimatedSignatureChange={onAnimatedSignatureChange} topEditing={topEditing} setTopEditing={setTopEditing} signature={signature} editable={editable && !mobile} onChange={onSignatureChange} large={large} loading={loading} />
                 </Inner>
               </div>
             </div>

@@ -33,7 +33,7 @@ import Script from 'next/script'
 import ReactMarkdown from "react-markdown";
 import CardData from "../../lib/card-data";
 import ImageData from "../../lib/image-data";
-
+import { headers } from 'next/headers';
 import {
     GetServerSidePropsContext,
 } from "next";
@@ -278,7 +278,7 @@ const roboto = Roboto({ subsets: ['latin'], weight: ['300', '400', '700'], style
 let v = false;
 export default function Home({ linkid,isGif, create, id, card, dark, fresh, fbclid, utm_content, isbot, isfb, sessionid, ironsession: startSession }:
     { linkid:string,isGif: boolean, create: boolean, id: string, card: CardData, dark: number, fresh: boolean, fbclid: string, utm_content: string, isbot: number, isfb: number, sessionid: string, ironsession: Options }) {
-
+    console.log("Home");
     const [session, setSession] = useState(startSession);
     const [systemMode, setSystemMode] = React.useState(false);
     const [darkMode, setDarkMode] = React.useState(startSession.mode);
@@ -321,7 +321,7 @@ export default function Home({ linkid,isGif, create, id, card, dark, fresh, fbcl
             const ses = s();
             console.log('===>pdate session:', updSession, "exist session", ses, curSession, session);
 
-            await axios.post(`/api/session/save`, { session: ses });
+            const {data}=await axios.post(`/api/session/save`, { session: ses });
         }, 200);
 
     }, [session]);
@@ -393,9 +393,7 @@ export default function Home({ linkid,isGif, create, id, card, dark, fresh, fbcl
                 <link rel="preconnect" href="https://fonts.googleapis.com" />
                 <link rel="preconnect" href="https://fonts.gstatic.com" />
                 <link href="https://fonts.googleapis.com/css2?family=Caveat&display=swap" rel="stylesheet" />
-                <script src="https://cdn.webrtc-experiment.com/gif-recorder.js"></script>
-                {false&&<script src="https://cdn.webrtc-experiment.com/MediaStreamRecorder.js"> </script>}
-            </Head>
+             </Head>
             <ThemeProvider theme={theme}>
                 <main className={roboto.className} >
 
@@ -438,7 +436,7 @@ export default function Home({ linkid,isGif, create, id, card, dark, fresh, fbcl
                                     </Button>
                                 </ModeSwitch>
                             </Wide>
-                            {client && <Card linkid={id} signature={signature} fbclid={fbclid} utm_content={utm_content} dark={darkMode ? "true" : "false"} text={greeting || ''} image={image} session={session} />}
+                            {client && <Card create={create} linkid={id} signature={signature} fbclid={fbclid} utm_content={utm_content} dark={darkMode ? "true" : "false"} text={greeting || ''} image={image} session={session} />}
 
                         </Body>
 
@@ -468,10 +466,39 @@ export default function Home({ linkid,isGif, create, id, card, dark, fresh, fbcl
 export const getServerSideProps = withSessionSsr(
     async function getServerSideProps(context: GetServerSidePropsContext): Promise<any> {
         try {
+           
             let { fbclid, utm_content, dark, create = false }:
                 { fbclid: string, utm_content: string, dark: boolean, create: boolean } = context.query as any;
 
             let id: string = (context.params?.id || '') as string;
+           // const contentType = context.req.headers['content-type'];
+            const acceptHeader = context.req.headers['accept'];
+
+            // Check if the request accepts HTML (full page load)
+            const isFullPageLoad = acceptHeader && acceptHeader.includes('text/html');
+          
+            if(!isFullPageLoad){
+
+                const link=id;
+              
+                const linkid:string=link.split(".")[0];
+                const url = `${process.env.NEXT_PUBLIC_LAKEAPI}/api/v1/wishtext/cards/get-metaimage?linkid=${linkid}`;
+                console.log("embedded image:", url);
+                const result = await axios.get(url);
+                const {success,msg,metaimage} = result.data;
+                console.log("image gif",  {linkid, success});
+            
+                var img = new Buffer(metaimage.split(',')[1], 'base64');
+                // console.log("metaimage:::::::::::::::::::::::::::::::::::::::::",metaimage);
+                //console.log("image >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>",img.length,img);
+                context.res.writeHead(200, {
+                  'Content-Type': 'image/gif',
+                  'Content-Length': img.length 
+                });
+                context.res.end(img);
+                console.log("embedded image sent");
+                return  { props: {} };
+            }
             let isGif = false;
             if (id.indexOf('.gif') > 0) {
                 isGif = true;

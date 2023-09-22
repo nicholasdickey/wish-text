@@ -1,7 +1,25 @@
 import React from 'react';
 import styled from 'styled-components';
 import { IconButton } from '@mui/material';
-import { RWebShare } from "react-web-share";
+//import { RWebShare } from "react-web-share";
+/*
+<RWebShare
+                    data={{
+                      text: greeting || '',
+                      url,
+                      title: 'Wish-Text.Com -  Wish Text Composer',
+                    }}
+                    onClick={() => {
+                      //console.log("shared successfully!");
+                     
+                    }}
+                  >
+            <ToolbarButton color="primary" size="large" >
+                <IosShareOutlinedIcon />
+                <ToolbarText> Share Link</ToolbarText>
+            </ToolbarButton>
+            </RWebShare>
+            */
 import IosShareOutlinedIcon from '@mui/icons-material/IosShareOutlined';
 const ToolbarContainer = styled.div`
   display: flex;
@@ -38,22 +56,7 @@ const Toolbar: React.FC<ToolbarProps> = ({
     //console.log("Toolbar",hasGreeting)
     return (
         <ToolbarContainer data-id="toolbar-generate">
-            <RWebShare
-                    data={{
-                      text: greeting || '',
-                      url,
-                      title: 'Wish-Text.Com -  Wish Text Composer',
-                    }}
-                    onClick={() => {
-                      //console.log("shared successfully!");
-                     
-                    }}
-                  >
-            <ToolbarButton color="primary" size="large" >
-                <IosShareOutlinedIcon />
-                <ToolbarText> Share Link</ToolbarText>
-            </ToolbarButton>
-            </RWebShare>
+            
         </ToolbarContainer>
     );
 };
