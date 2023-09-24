@@ -31,6 +31,7 @@
     "file-saver": "^2.0.5",
     "gif.js": "^0.2.0",
     "gif.js.optimized": "^1.0.1",
+    "gsap": "^3.12.2",
     "html-to-image": "^1.11.11",
     "html2canvas": "^1.4.1",
     "html2canvas-objectfit-fix": "^1.2.0",
