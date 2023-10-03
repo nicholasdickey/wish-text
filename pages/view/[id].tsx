@@ -48,7 +48,7 @@ import { Roboto } from 'next/font/google';
 import { withSessionSsr, Options } from '../../lib/with-session';
 import { isbot } from '../../lib/isbot';
 import Band from "../../components/band";
-import Card from "../../components/greeting-card/canvas";
+import Card from "../../components/greeting-card/preview/gsap-card";
 import ToolbarCreate from "../../components/toolbar-create";
 
 const ModeSwitch = styled.div`
@@ -393,6 +393,7 @@ export default function Home({ linkid,isGif, create, id, card, dark, fresh, fbcl
                 <link rel="preconnect" href="https://fonts.googleapis.com" />
                 <link rel="preconnect" href="https://fonts.gstatic.com" />
                 <link href="https://fonts.googleapis.com/css2?family=Caveat&display=swap" rel="stylesheet" />
+                <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
              </Head>
             <ThemeProvider theme={theme}>
                 <main className={roboto.className} >
@@ -436,8 +437,8 @@ export default function Home({ linkid,isGif, create, id, card, dark, fresh, fbcl
                                     </Button>
                                 </ModeSwitch>
                             </Wide>
-                            {client && <Card create={create} linkid={id} signature={signature} fbclid={fbclid} utm_content={utm_content} dark={darkMode ? "true" : "false"} text={greeting || ''} image={image} session={session} />}
-
+                            <Card  create={true} popoutRef={popoutRef} editable={false} onAnimatedSignatureChange={()=>{}}  onGreetingChange={()=>{}} onImageChange={()=>{}} onSignatureChange={()=>{}} canvasRef={canvasRef} delayOpen={true} large={true} signature={signature} fbclid={fbclid} utm_content={utm_content} dark={darkMode ? "true" : "false"} text={greeting || ''} image={image} />
+          
                         </Body>
 
                         <Wrap><Footer darkmode={"false"}>

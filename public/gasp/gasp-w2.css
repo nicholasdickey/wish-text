@@ -1,0 +1,22 @@
+body {
+	min-height: 90vh;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-direction: column;
+	background-color: #f8f7ff;
+}
+
+svg {
+	width: 95vw;
+	max-width: 700px;
+}
+
+.button {
+	margin-top: 2rem;
+	background-color: #504f59;
+	padding: 0.5rem 1rem;
+	outline: none;
+	border: none;
+	color: #f8f7ff;
+}

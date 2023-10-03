@@ -422,7 +422,6 @@ const GreetingCard: React.FC<Props> = ({ popoutRef, setPrompt = () => { }, Playe
               }}>
                 <Inner >
 
-
                   <CardHeadline id={`normal-${id}`} topEditing={topEditing} setTopEditing={setTopEditing} editable={editable && !mobile} onChange={onHeadlineChange} headline={headline} large={large} loading={loading} />
                   {loading && <LinearProgress />}
                   <CardBody id={`normal-${id}`} topEditing={topEditing} setTopEditing={setTopEditing} editable={editable && !mobile} onChange={onBodyChange} body={body} large={large} loading={loading} />

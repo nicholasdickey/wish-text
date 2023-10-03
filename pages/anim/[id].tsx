@@ -48,7 +48,7 @@ import { Roboto } from 'next/font/google';
 import { withSessionSsr, Options } from '../../lib/with-session';
 import { isbot } from '../../lib/isbot';
 import Band from "../../components/band";
-import Card from "../../components/greeting-card/canvas/anim";
+import Card from "../../components/greeting-card/canvas/fabric";
 import ToolbarCreate from "../../components/toolbar-create";
 
 const ModeSwitch = styled.div`
