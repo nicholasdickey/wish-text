@@ -45,7 +45,7 @@ export default function Home({ id, card }:
 	console.log("input",{headline,body,signature,text,greeting})
     const html = `
     <main class="gsap-container">
-		<div class="body">
+		<div id="wt-body" class="body">
 			<div class="inner-div">
 		
 			<div class="left-panel">	
@@ -69,18 +69,21 @@ export default function Home({ id, card }:
 						${signature}
 					</div>
 				</div>
-				<div class="gsap-footer">
-					www.wish-text.com
+				<div class="footer-container">
+					<div class="gsap-footer">
+						${"www.wish-text.com"}
+						
+					</div>
+					
 				</div>
 			</div>
 		</div>	
-	<br/>
-	<br/>
-	<br/>
-	<br/>
-	<button class="button">replay</button>
+	
 </main>
   <head>    
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Caveat&display=swap" rel="stylesheet">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/CustomEase.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>

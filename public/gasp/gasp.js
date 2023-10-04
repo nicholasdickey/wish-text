@@ -201,25 +201,29 @@ function lettering() {
 //console.log("got timeline")
 function draw(){
 gsap.set(".left-panel", { transformStyle: "preserve-3d",zIndex:5 });
-gsap.set(".right-panel", { transformStyle: "preserve-3d",background:"#FFD700" });
+gsap.set(".right-panel", { transformStyle: "preserve-3d",background:"#FFD700",color:"#FFD700" });
 gsap.set('.back', { rotationY: -180 })
-gsap.set('.inner-div', { rotationX: 80,rotation:-5,translateX:-200,translateY:120,width:120,height:80 });
+gsap.set('.inner-div', { rotationX: 80,rotation:-5,translateX:-120,width:600,height:400 });
 gsap.set('.left-panel', { rotationY: -5 })
-gsap.set('.gsap-headline',{opacity:0})
-gsap.set('.gsap-signature',{opacity:0})
-gsap.set('.gsap-body',{opacity:0})
-gsap.set('.gsap-footer',{opacity:0})
-//gsap.to('.inner-div', { delay:1,duration: 1, left:-30,rotation: -10, width: 300, height: 200, ease: Sine.easeOut });
-gsap.to('.inner-div', { delay:1,duration: 2, left:0,rotation: 0, width: 600, height: 400,translateX:0,translateY:80, ease: Back.easeOut });
-gsap.to('.inner-div', { duration: 1, rotationX: 0, ease: Sine.easeOut,delay:1 })
-gsap.to(`.left-panel`, { delay: 2.0, duration: 2, rotationY: -180, ease: Back.easeOut })
-gsap.to(`.right-panel`, { delay: 2.4, duration: 2,background:"white", ease: Sine.easeOut })
-//gsap.to('.body', { delay:1,duration: 3, rotationX: 0, ease: Sine.easeOut })
-gsap.to('.gsap-headline',{delay:3,duration:1.0,opacity:1, ease: Sine.easeOut})
-gsap.to('.gsap-signature',{delay:3,duration:2.0,opacity:1, ease: Sine.easeOut})
+gsap.set('.footer-container',{opacity:0})
+/*gsap.set('.gsap-headline',{opacity:0.5,fontSize:22})
+gsap.set('.gsap-signature',{opacity:0.5,fontSize:20})
+gsap.set('.gsap-body',{opacity:0.5})
+gsap.set('.gsap-body',{FontFace:"Roboto",fontSize:14})*/
 
-gsap.to('.gsap-body', {  delay: 3,duration: 2.0,opacity:1, ease: Sine.easeOut })
-gsap.to('.gsap-footer', {  delay: 5,duration: 4.0,opacity:1, ease: Sine.easeOut })
+
+
+//gsap.to('.inner-div', { delay:1,duration: 1, left:-30,rotation: -10, width: 300, height: 200, ease: Sine.easeOut });
+//gsap.to('.inner-div', { delay:0.1,duration: 1.0,  width: 600, height: 400, ease: Sine.easeOut });
+gsap.to('.inner-div', { delay:0.2,duration: 1.8, rotationX: 0, left:0,rotation: 0, translateX:0,translateY:80,ease: Back.easeOut })
+gsap.to(`.left-panel`, { delay: 0.6, duration: 1.6, rotationY: -180, ease: Back.easeOut })
+gsap.to(`.right-panel`, { delay: 0.6, duration: 1.0,background:"#00564d", color:"#fff",ease: Sine.easeOut })
+//gsap.to('.body', { delay:1,duration: 3, rotationX: 0, ease: Sine.easeOut })
+/*gsap.to('.gsap-headline',{delay:0.3,duration:1.1,opacity:1, fontSize:20,ease: Sine.easeOut})
+gsap.to('.gsap-signature',{delay:0.3,duration:1.1,opacity:1, fontSize:17, ease: Sine.easeOut})
+
+gsap.to('.gsap-body', {  delay: 0.3,duration: 1.1,opacity:1, fontSize:14, ease: Sine.easeOut })*/
+gsap.to('.footer-container', {delay: 1.6,duration:1.4,opacity:1,ease: Back.easeOut })
 
 /*
 tl.set(".left-panel", { transformStyle: "preserve-3d" });
@@ -285,3 +289,15 @@ gsap-video-export https://codepen.io/cassie-codes/pen/VweQjBw -S svg -z 2 -v 108
    76  ffmpeg -i video.mp4 -i palette.png -filter_complex "fps=30,scale=1080:1080:flags=lanczos[x];[x][1:v]paletteuse" video.gif
 
    */
+
+   /*
+
+
+   gsap-video-export https://dev.qwiket.com/preview/7zphndzr25hfquwbb1mu48 -S .body  -v 1080x1080 -z 1 '"-pix_fmt yuv420p -crf 1"'
+   ffmpeg -i video.mp4 -vf "fps=10,scale=1080:1080:flags=lanczos,palettegen=stats_mode=diff" palette.png -y
+ ffmpeg -i video.mp4 -i palette.png -filter_complex "fps=30,scale=1080:1080:flags=lanczos[x];[x][1:v]paletteuse" video.gif -y
+
+   */
+ /* 
+ ffmpeg   -i video.mp4 -vf "fps=10,scale=1080:-1:flags=lanczos,split[s0][s1];[s0]palettegen[p];[s1][p]paletteuse" -loop 3 video.gif -y
+ */
