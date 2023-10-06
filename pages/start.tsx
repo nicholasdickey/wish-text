@@ -139,7 +139,7 @@ const WBLogo = styled.div`
 `;
 const Starter = styled.div`
   display:flex;
-  justify-content:flex-start;
+  justify-content:center;
   font-size:36px;
   align-items:center;
   margin-bottom:10px;
@@ -259,7 +259,7 @@ const roboto = Roboto({ subsets: ['latin'], weight: ['300', '400', '700'], style
 let v = false;
 export default function Home({ linkid: startLinkid, card: startCard = false,
   signature: startSignature,
-  sharedImages, dark, num: startNum = 0, max: startMax = 0, cardNum: startCardNum,
+  sharedImages:startSharedImages, dark, num: startNum = 0, max: startMax = 0, cardNum: startCardNum,
   cardMax: startCardMax,
   prompt1: startPrompt1, prompt2: startPrompt2, prompt3: startPrompt3,
   prompt4: startPrompt4, prompt5: startPrompt5, prompt6: startPrompt6, promptImageStrip: startPromptImageStrip,
@@ -334,6 +334,7 @@ export default function Home({ linkid: startLinkid, card: startCard = false,
 
 
   const [images, setImages] = useState<ImageData[]>(startImages);
+  const [sharedImages, setSharedImages] = useState<ImageData[]>(startSharedImages);
   const [newCardsStack, setNewCardsStack] = useState<CardData[]>(session.newCardStackString ? JSON.parse(session.newCardStackString) : []);
   //-----------------------------------------------------------
 
@@ -359,6 +360,10 @@ export default function Home({ linkid: startLinkid, card: startCard = false,
       },
     })
   }
+  useEffect(() => {
+    console.log("prompt6=",startPrompt6);
+  },[])
+
   if (!virgin && !virginEvent && !v && !isbot) {
     v = true;
     setVirginEvent(true);
@@ -401,8 +406,8 @@ export default function Home({ linkid: startLinkid, card: startCard = false,
     setVirgin(true);
     const { greeting, num } = await generateText(session, true);
     setGreeting(greeting);
-    updateSession2({ greeting, num,prompt6:true,prompt2:true });
-    console.log("text response:", { greeting, num })
+    updateSession2({ greeting, num,max:num,prompt6:true,prompt2:true,virgin:true });
+    console.log("debug:text response:", { greeting, num })
     setNum(num);
     setMax(num);
     setLoadReady(true);
@@ -470,18 +475,25 @@ export default function Home({ linkid: startLinkid, card: startCard = false,
   };
   // console.log("_app:darkMode",darkMode,session?.mode||"")
   React.useEffect(() => {
-    console.log("useEffect greeting", greeting, session?.greeting)
+    console.log("debug: useEffect greeting", greeting, session?.greeting)
     if (greeting != session.greeting) {
       setGreeting(session.greeting || '');
     }
-  }, [greeting, session?.greeting])
+  }, [session?.greeting])
   React.useEffect(() => {
     console.log("useEffect num", num, session?.num)
 
     if (num != session.num) {
       setNum(session.num || 1);
     }
-  }, [num, session?.num])
+  }, [session?.num])
+  React.useEffect(() => {
+    console.log("useEffect max", max, session?.max)
+
+    if (max != session.max) {
+      setNum(session.max || 1);
+    }
+  }, [session?.max])
   React.useEffect(() => {
     const matchMedia = window.matchMedia("(prefers-color-scheme: dark)");
     setSystemMode(!!(matchMedia.matches));
@@ -725,7 +737,7 @@ export default function Home({ linkid: startLinkid, card: startCard = false,
       await processRecord(record, num);
     }
   }
-
+  console.log("debug: start",{num,max})
   const OutputPlayerToolbar = <>{max > 1 ? <PlayerToolbar
     num={num}
     max={max}
@@ -762,6 +774,7 @@ export default function Home({ linkid: startLinkid, card: startCard = false,
     }}
   /> : null}</>
   const { fbclid, utm_content } = JSON.parse(utm_medium);
+  console.log("start debug:",greeting)
   return (
     <>
       <Head>
@@ -964,7 +977,7 @@ Whether it's birthdays, graduations, holidays, or moments of illness or loss, WI
                 control={
                   <Checkbox
                     sx={{  mx:4,color: 'secondary' }}
-                    checked={!naive}
+                    checked={naive==true?false:true}
                     onChange={onNaiveChange}
                   />
                 }
@@ -1018,7 +1031,7 @@ Whether it's birthdays, graduations, holidays, or moments of illness or loss, WI
             {virgin && session.greeting ?
               <Accordion sx={{ my: 5,width:'100%' }} expanded={expanded === 'advanced'} onChange={handleAccordeonChange('advanced')}>
                 <AccordionSummary
-                sx={{p:12,width:'100%' }} 
+                sx={{p:0,width:'100%' }} 
                   expandIcon={<ExpandMoreIcon />}
                   aria-controls="panel4bh-content"
                   id="panel4bh-header"
@@ -1441,6 +1454,7 @@ export const getServerSideProps = withSessionSsr(
       prompt3 = prompt3 || options.prompt3 || '';
       prompt4 = prompt4 || options.prompt4 || '';
       prompt5 = prompt5 || options.prompt5 || '';
+      prompt6 = prompt6 || options.prompt6 || '';
 
       promptImageStrip = promptImageStrip || options.promptImageStrip || false;
       num = num || options.num || 1;
@@ -1473,6 +1487,7 @@ export const getServerSideProps = withSessionSsr(
           prompt3: prompt3,
           prompt4: prompt4,
           prompt5: prompt5,
+          prompt6: prompt6,
           promptImageStrip: promptImageStrip,
 
           num: num,

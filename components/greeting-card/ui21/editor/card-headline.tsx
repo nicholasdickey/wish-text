@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import React, { useRef,useState,useEffect } from "react";
+import React, { useRef, useState, useEffect } from "react";
 
 import Typography from "@mui/material/Typography";
 import { useTheme } from '@mui/material/styles';
@@ -12,7 +12,7 @@ import ReactMarkdown from "react-markdown";
 interface BodyProps {
     l: number;
     large?: boolean;
-    
+
 }
 const Headline = styled.div<BodyProps>`
     width:100%;
@@ -60,11 +60,11 @@ interface WidthProps {
     divwidth: number;
     l: number;
     large: boolean;
-    topEditing:boolean;
-    editable:boolean
+    topEditing: boolean;
+    editable: boolean
 }
 
-const Editor=styled.div<WidthProps>`
+const Editor = styled.div<WidthProps>`
     position:relative;
     display:flex;
     flex-direction:column;
@@ -77,21 +77,21 @@ const Editor=styled.div<WidthProps>`
    // margin-bottom:10px;
     width:100%;
    // min-height:40px;
-   // border: ${({topEditing})=>topEditing?'none': '1px dashed red'}; /* Change the color as needed */
+   // border: ${({ topEditing }) => topEditing ? 'none' : '1px dashed red'}; /* Change the color as needed */
     & textarea{
-        width:${({ divwidth }) => divwidth?(divwidth-14)+'px':'100%'};
-        max-width:${({ divwidth }) => divwidth?(divwidth-14)+'px':'100%'};
-       // min-width:${({ divwidth }) => divwidth?divwidth+'px':'100%'};
+        width:${({ divwidth }) => divwidth ? (divwidth - 14) + 'px' : '100%'};
+        max-width:${({ divwidth }) => divwidth ? (divwidth - 14) + 'px' : '100%'};
+       // min-width:${({ divwidth }) => divwidth ? divwidth + 'px' : '100%'};
        // font-family: "Roboto", "Helvetica", "Arial", sans-serif;
         line-height:1.7;
         font-weight: 700;
         text-align:center;
         font-size: ${({ large }) => large ? 22 : 15}px;
         @media (max-width: 600px) {
-            font-size: ${({l})=>l>15?17:19}px;
+            font-size: ${({ l }) => l > 15 ? 17 : 19}px;
     }
     @media (min-width: 900px) {
-        font-size: ${({l})=>l>15?17:19}px;
+        font-size: ${({ l }) => l > 15 ? 17 : 19}px;
     }
     } 
 `;
@@ -113,58 +113,60 @@ const EditorBox = styled.div`
 `;
 
 interface HeadlineProps {
-    headline:string;
+    headline: string;
     large: boolean;
     loading: boolean;
     editable: boolean;
-    topEditing:boolean;
-    setTopEditing:(editing:boolean)=>void;
+    topEditing: boolean;
+    setTopEditing: (editing: boolean) => void;
     onChange: (headline: string) => void;
-    id:string;
+    id: string;
 }
 
-const HeadlineEditor: React.FC<HeadlineProps> = ({ id,topEditing,setTopEditing,editable,headline, large, loading,onChange }) => {
+const HeadlineEditor: React.FC<HeadlineProps> = ({ id, topEditing, setTopEditing, editable, headline, large, loading, onChange }) => {
     const [headlineEditing, setHeadlineEditing] = useState(editable);
     const [text, setText] = useState(headline);
     const [divwidth, setDivWidth] = useState(0);
     const theme = useTheme();
-    if(id.indexOf("popout")>=0)
-        large=true;
+    console.log("debug headline:", headline, text, editable, headlineEditing)
+    if (id.indexOf("popout") >= 0)
+        large = true;
     else
-        large=false;
-        useEffect(() => {
-            if(headline!=text){
-                setText(headline);
-            }
-        },[headline]);
+        large = false;
+    useEffect(() => {
+        console.log("debug: headline setText", headline, text);
+        if (headline != text) {
+            setText(headline);
+        }
+    }, [headline]);
     let ref = useRef<HTMLDivElement>(null);
-   /* useEffect(() => {
-        const keyDownHandler = (event:any) => {
-            console.log('User pressed: ', event.key);
-    
-            if (event.key === 'Escape'||event.key === 'Enter') {
-                event.preventDefault();
-                console.log("ESCAPE headline",text)
-                onChange(text);
-                setHeadlineEditing(false);
-                setTopEditing(false);
-            }
-        };
-        document.addEventListener('keydown', keyDownHandler);
-        return () => {
-            document.removeEventListener('keydown', keyDownHandler);
-        };
-      }, []);*/
+    /* useEffect(() => {
+         const keyDownHandler = (event:any) => {
+             console.log('User pressed: ', event.key);
+     
+             if (event.key === 'Escape'||event.key === 'Enter') {
+                 event.preventDefault();
+                 console.log("ESCAPE headline",text)
+                 onChange(text);
+                 setHeadlineEditing(false);
+                 setTopEditing(false);
+             }
+         };
+         document.addEventListener('keydown', keyDownHandler);
+         return () => {
+             document.removeEventListener('keydown', keyDownHandler);
+         };
+       }, []);*/
 
     useEffect(() => {
-         const handleClickOutside = (event: MouseEvent) => {
+        const handleClickOutside = (event: MouseEvent) => {
             if (ref.current && !ref.current.contains(event.target as Node)) {
                 //if(headlineEditing)
-               //     setHeadlineEditing(false);
+                //     setHeadlineEditing(false);
                 //if(topEditing)
-              //      setTopEditing(false);
-                if(text!=headline)
-                 onChange(text);
+                //      setTopEditing(false);
+                if (text != headline)
+                    onChange(text);
             }
         };
         document.addEventListener("mousedown", handleClickOutside);
@@ -174,28 +176,34 @@ const HeadlineEditor: React.FC<HeadlineProps> = ({ id,topEditing,setTopEditing,e
     }, [ref, setHeadlineEditing]);
 
     const handleHeadlineChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-       setText( event.target.value);
-       console.log("setHeadline:",event.target.value)
+        setText(event.target.value);
+        console.log("setHeadline:", event.target.value)
+        onChange(event.target.value);
+    };
+    const handleUpdate = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+        setText(event.target.value);
+       
     };
     useEffect(() => {
 
         const div = ref?.current;
         console.log("width-div", div);
-        const width = div?.clientWidth||0;// ? div.clientWidth > 500 ? div.clientWidth : 552 : 552;
-        setDivWidth(width+10-4);
+        const width = div?.clientWidth || 0;// ? div.clientWidth > 500 ? div.clientWidth : 552 : 552;
+        setDivWidth(width + 10 - 4);
         console.log("set width:", width);
     }, [ref.current]);
+    console.log("debug: headline render",text)
     return (
-        <Editor className={josefin.className} editable={editable} topEditing={topEditing} divwidth={divwidth}  ref={ref} l={text.length || 0} large={large || false}>
-            {!editable&&<HeadlineWrap onClick={()=>{console.log("CLICK - headline");if(editable){setHeadlineEditing(true);setTopEditing(true);}}}>
+        <Editor className={josefin.className} editable={editable} topEditing={topEditing} divwidth={divwidth} ref={ref} l={text.length || 0} large={large || false}>
+            {!editable && <HeadlineWrap onClick={() => { console.log("CLICK - headline"); if (editable) { setHeadlineEditing(true); setTopEditing(true); } }}>
                 <Headline l={text.length} large={large} className="q-h" >
-                <ReactMarkdown>
-                    {loading ? "" : text.replace('#', '###').replace('####', '##').replace('\n','')}
-                </ReactMarkdown>       
-            </Headline>
-            {false&&large&&editable&&!headlineEditing&&<Typography variant="body2"  sx={{ mt: 1 }}>Click to edit</Typography>}
+                    <ReactMarkdown>
+                        {loading ? "" : text.replace('#', '###').replace('####', '##').replace('\n', '')}
+                    </ReactMarkdown>
+                </Headline>
+                {false && large && editable && !headlineEditing && <Typography variant="body2" sx={{ mt: 1 }}>Click to edit</Typography>}
             </HeadlineWrap>}
-            {!loading&&editable && <EditorBox >
+            {!loading && editable && <EditorBox >
                 <FormControlLabel
                     ref={ref}
                     sx={{ width: 1, m: 0, p: 0 }}
@@ -203,17 +211,18 @@ const HeadlineEditor: React.FC<HeadlineProps> = ({ id,topEditing,setTopEditing,e
                     label={<Typography style={{ color: theme.palette.text.secondary }}></Typography>}
                     control={
                         <StyledTextareaAutosize
-                            className={josefin.className} 
+                            className={josefin.className}
                             aria-label="headline editor"
-                           // minRows={1}   
-                            autoFocus={true}                 
+                            // minRows={1}   
+                            autoFocus={true}
                             placeholder="Edit the headline"
-                            onChange={handleHeadlineChange}
-                            value={text.replace('#', '###').replace('####', '##').replace('\n','')}
+                            onBlur={handleHeadlineChange}
+                            onChange={handleUpdate}
+                            value={text.replace('#', '###').replace('####', '##').replace('\n', '')}
                         />
                     }
-                />     
-              </EditorBox>}
+                />
+            </EditorBox>}
         </Editor>
     )
 }

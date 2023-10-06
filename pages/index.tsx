@@ -305,6 +305,8 @@ export default function Home({ dark, fresh, fbclid, utm_content, isbot, isfb, se
     const signature = 'Enjoy and be happy,\n your Dad!';
     const image = '';
     const canvasRef = React.useRef<HTMLDivElement>(null);
+    const popoutRef = React.useRef<HTMLDivElement>(null);
+   
     return (
         <>
             <Head>
@@ -410,7 +412,7 @@ Whether it's birthdays, graduations, holidays, or moments of illness or loss, WI
                                 dark="true"
                                 card={
                                     //<Card animatedSignature={animatedSignature} editable={false} onAnimatedSignatureChange={()=>{}}  onGreetingChange={()=>{}} onImageChange={()=>{}} onSignatureChange={()=>{}} canvasRef={canvasRef} delayOpen={true} large={true} signature={signature} fbclid={""} utm_content={""} dark={dark} text={text || ''} image={image} />
-                                      <Card animatedSignature={1} editable={false} onAnimatedSignatureChange={()=>{}}  onGreetingChange={()=>{}} onImageChange={()=>{}} onSignatureChange={()=>{}} canvasRef={canvasRef} delayOpen={true} large={true} signature={signature} fbclid={fbclid} utm_content={utm_content} dark={darkMode ? "true" : "false"} text={greeting || ''} image={demoImage} />}
+                                      <Card popoutRef={popoutRef} animatedSignature={1} editable={false} onAnimatedSignatureChange={()=>{}}  onGreetingChange={()=>{}} onImageChange={()=>{}} onSignatureChange={()=>{}} canvasRef={canvasRef} delayOpen={true} large={true} signature={signature} fbclid={fbclid} utm_content={utm_content} dark={darkMode ? "true" : "false"} text={greeting || ''} image={demoImage} />}
                                 fresh={fresh} fbclid={fbclid} utm_content={utm_content} isbot={isbot} isfb={isfb} sessionid={sessionid}
                                 title="Create Virtual Wishing Cards" subtitle={"Create beautiful wish cards"} cta="Create a Wish Card Now!" />
                             }

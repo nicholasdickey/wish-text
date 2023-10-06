@@ -19,13 +19,6 @@ import EmptyImage from "../../empty-image";
 import Card from "../index";
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import IconButton from '@mui/material/IconButton';
-import dynamic from 'next/dynamic';
-//import Example from './example';
-
-const Recorder = dynamic(
-  () => import('../gif-recorder'),
-  { ssr: false }
-)
 
 interface LargeProps {
   large?: boolean,
@@ -94,16 +87,16 @@ const ImageOverlay: React.FC<Props> = ({ creatingCard = false, handleCreate, lin
   console.log("Preview Dialog: open:", { open, animatedSignature });
 
   const canvasRef = React.useRef<HTMLDivElement>(null);
-  const elementRef =  useRef<HTMLDivElement>(null);
+  const elementRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
-   // if (canvas.current!=ref) {
-      console.log("=>canvas.current", elementRef?.current)
-      setRef(elementRef.current||null);
-      setAnimate(true);
+    // if (canvas.current!=ref) {
+    console.log("=>canvas.current", elementRef?.current)
+    setRef(elementRef.current || null);
+    setAnimate(true);
     //}
-  },[]);
-  
-  console.log("canvas",ref)
+  }, []);
+
+  console.log("canvas", ref)
   return (
     <div>
       {false && <Button variant="outlined" onClick={handleClickOpen}>
@@ -121,21 +114,20 @@ const ImageOverlay: React.FC<Props> = ({ creatingCard = false, handleCreate, lin
         </DialogTitle>
         <DialogContent>
           <Wrap>
-         {false&&<Recorder div={elementRef.current} />}
-           <div id="canvas"  style={{width:'100%',height:'100%'}}>{<Card  setPrompt={()=>{}} PlayerToolbar={{}} handleRegenerateText={() => { }} setLoading={() => { }} animatedSignature={animatedSignature} editable={false} onAnimatedSignatureChange={() => { }} onGreetingChange={() => { }} onImageChange={() => { }} onSignatureChange={() => { }} canvasRef={elementRef} popoutRef={canvasRef} delayOpen={true} large={true} signature={signature} fbclid={""} utm_content={""} dark={dark} text={text || ''} image={image} id="preview" />}</div> 
-            {animate&&!creatingCard && !linkid && 
-          <Button  variant="contained" onClick={() => { handleClose(); handleCreate(); }}>Create a public link</Button>
-       }
+            <div id="canvas" style={{ width: '100%', height: '100%' }}>{<Card setPrompt={() => { }} PlayerToolbar={{}} handleRegenerateText={() => { }} setLoading={() => { }} animatedSignature={animatedSignature} editable={false} onAnimatedSignatureChange={() => { }} onGreetingChange={() => { }} onImageChange={() => { }} onSignatureChange={() => { }} canvasRef={elementRef} popoutRef={canvasRef} delayOpen={true} large={true} signature={signature} fbclid={""} utm_content={""} dark={dark} text={text || ''} image={image} id="preview" />}</div>
+            {animate && !creatingCard && !linkid &&
+              <Button variant="contained" onClick={() => { handleClose(); handleCreate(); }}>Create a public link</Button>
+            }
           </Wrap>
-             
+
           <ExitButton>
             <IconButton color="primary" aria-label="exit dialog" onClick={() => setOpen(false)}>
               <ExitToAppIcon />
             </IconButton>
           </ExitButton>
-     
+
         </DialogContent>
-       
+
       </Dialog>
     </div>
   );

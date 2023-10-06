@@ -26,7 +26,7 @@ function VaraText({ text, id }: { text: string[], id: string }) {
         if (!delay) {
             delay = 1;
             console.log("use effect vara =>text:", text, typeof text)
-            setTimeout(() => {
+         //   setTimeout(() => {
                 if (!v) {
                     setV(true);
                     vara = new Vara(
@@ -52,7 +52,7 @@ function VaraText({ text, id }: { text: string[], id: string }) {
                     );
                     console.log("Render vara:", text)
                 }
-            }, delay);
+          //  }, delay);
         }
 
     }, [v, text]);

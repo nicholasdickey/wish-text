@@ -6,8 +6,11 @@ import { useTheme } from '@mui/material/styles';
 import { TextareaAutosize } from "@mui/base/TextareaAutosize";
 import FormControlLabel from '@mui/material/FormControlLabel';
 import FormHelperText from '@mui/material/FormHelperText';
-import { Josefin_Sans } from 'next/font/google'
+import { Josefin_Sans,Roboto } from 'next/font/google'
+
 const josefin = Josefin_Sans({ subsets: ['latin'] })
+const roboto = Josefin_Sans({ subsets: ['latin'] })
+
 import ReactMarkdown from "react-markdown";
 interface BodyProps {
     l: number;
@@ -105,6 +108,7 @@ const EditorBox = styled.div`
     overflow:auto;
     resize: none;
     border:none;
+    font-family: 'Josefin Sans', sans-serif;
   }
   
   padding-left:0px;
@@ -121,7 +125,7 @@ interface Props {
     large: boolean;
     loading: boolean;
     editable: boolean;
-    onChange: (headline: string) => void;
+    onChange: (body: string) => void;
     topEditing: boolean;
     setTopEditing: (editing: boolean) => void;
     id: string;
@@ -139,11 +143,12 @@ const BodyEditor: React.FC<Props> = ({ id, topEditing, setTopEditing, editable, 
     //console.log("topEditing",topEditing)
     console.log("id,large",{id,large})
     useEffect(() => {
-        console.log("updating body:",body,text)
+        console.log("debug: useEffect[body] updating text:",body,text)
         if(body!=text){
             setText(body);
         }
     },[body]);
+    
 
     let ref = useRef<HTMLDivElement>(null);
     /* useEffect(() => {
@@ -182,7 +187,12 @@ const BodyEditor: React.FC<Props> = ({ id, topEditing, setTopEditing, editable, 
 
     const handleChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         setText(event.target.value);
-        console.log("setBody:", event.target.value)
+        console.log("change setBody:", event.target.value)
+        onChange(event.target.value);
+    };
+    const handleUpdate = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+        setText(event.target.value);
+      
     };
 
     useEffect(() => {
@@ -204,7 +214,7 @@ const BodyEditor: React.FC<Props> = ({ id, topEditing, setTopEditing, editable, 
             </Wrap>}
             {false && large && editable && !editing && <Typography variant="body2" sx={{ mt: 2 }}>Click to edit</Typography>}
 
-            {editable && !loading&&<EditorBox >
+            {editable && !loading&&<EditorBox className={josefin.className}>
                 <FormControlLabel
                    
                     sx={{ border: 0, m: 0, p: 0 }}
@@ -219,7 +229,8 @@ const BodyEditor: React.FC<Props> = ({ id, topEditing, setTopEditing, editable, 
                             autoFocus={true}
                             // resize="none"
                             placeholder="Edit the message"
-                            onChange={handleChange}
+                            onBlur={handleChange}
+                            onChange={handleUpdate}
                             value={text}
                         />
                     }

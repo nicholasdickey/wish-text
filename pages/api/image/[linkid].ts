@@ -8,6 +8,7 @@ export default async function handler(
 ) {
    // let linkid:string = req.query.linkid as string;
     let { linkid:link } = req.query
+    console.log("image.ts:", link)
     link=link as string;
     const linkid:string=link.split(".")[0];
     const url = `${process.env.NEXT_PUBLIC_LAKEAPI}/api/v1/wishtext/cards/get-metaimage?linkid=${linkid}`;

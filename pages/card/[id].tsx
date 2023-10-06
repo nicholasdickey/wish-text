@@ -276,8 +276,8 @@ const OuterWrapper = styled.div`
 
 const roboto = Roboto({ subsets: ['latin'], weight: ['300', '400', '700'], style: ['normal', 'italic'] })
 let v = false;
-export default function Home({ isGif,create,id, card, dark, fresh, fbclid, utm_content, isbot, isfb, sessionid, ironsession: startSession }:
-  { isGif:boolean,create:boolean,id: string, card: CardData, dark: number, fresh: boolean, fbclid: string, utm_content: string, isbot: number, isfb: number, sessionid: string, ironsession: Options }) {
+export default function Home({ isGif,id, card, dark, fresh, fbclid, utm_content, isbot, isfb, sessionid, ironsession: startSession }:
+  { isGif:boolean,id: string, card: CardData, dark: number, fresh: boolean, fbclid: string, utm_content: string, isbot: number, isfb: number, sessionid: string, ironsession: Options }) {
 
   const [session, setSession] = useState(startSession);
   const [systemMode, setSystemMode] = React.useState(false);
@@ -359,9 +359,13 @@ export default function Home({ isGif,create,id, card, dark, fresh, fbclid, utm_c
   }, [systemMode, darkMode, session?.mode, modeIsSet]);
   const { signature, greeting, image } = card;
   const text = (greeting||"").replaceAll('\n\n', '\n');
+  const {headline,body}=JSON.parse(text);
   const tw = text.split('\n');
-  const headline=tw.length>1?tw[0]:'';
-  const body=tw.length>1?tw.slice(1).join('\n'):tw[0];
+  //const headline=tw.length>1?tw[0]:'';
+  //const body=tw.length>1?tw.slice(1).join('\n'):tw[0];
+  console.log("headline,body,image",headline,body,image.url)
+  const title=headline?`${headline} (click to view the card)`:"Click To View a Card created for you on Wish-Text.Com"
+  const imageUrl =image.url;//`${process.env.NEXT_PUBLIC_SERVER}/api/og.png?linkid=${card.linkid}`;
   return (
     <>
       <Head>
@@ -370,13 +374,13 @@ export default function Home({ isGif,create,id, card, dark, fresh, fbclid, utm_c
         <meta name="slogan" content="Greetings Text" />
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:site" content="@wishtext" />
-        <meta name="twitter:title" content={headline?headline:"A Wish Card"} />
+        <meta name="twitter:title" content={title} />
         <meta name="twitter:description" content={headline?body:card.greeting} />
         <meta name="twitter:image" content={`${process.env.NEXT_PUBLIC_SERVER}/api/image/${card.linkid}.png`} />
-        <meta name="title" content={headline?headline:"A Wish Card"} />
-        <meta property="og:title" content={headline?headline:"A Wish Card"} />
+        <meta name="title" content={title} />
+        <meta property="og:title" content={title} />
         <meta property="og:url" content={`https://www.wish-text.com/card/${card.linkid}`} />
-        <meta property="og:image" content={`${process.env.NEXT_PUBLIC_SERVER}/api/image/${card.linkid}.png`} />
+        <meta property="og:image" content={imageUrl} />
         <meta name="description" content={headline?body:card.greeting} />
         <meta property="og:description" content={headline?body:card.greeting} />
         <link rel="icon" href={systemMode ? "/wbLogo.png" : "/bwLogo.png"} sizes="64x63" type="image/png" />
@@ -537,7 +541,7 @@ export const getServerSideProps = withSessionSsr(
           card,
           ironsession,
           isGif,
-          create
+         
         }
       }
     } catch (x) {

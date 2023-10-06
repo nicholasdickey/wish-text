@@ -111,7 +111,9 @@ export default function CardEditor({
   setLinkid,
   setGreeting,
   //setCurrentNum,
-  PlayerToolbar
+  PlayerToolbar,
+  setNum,
+  setMax,
 
 }: {
 
@@ -151,7 +153,7 @@ export default function CardEditor({
   utm_content: string;
   darkMode: boolean;
   startOpen?: boolean;
-  //setNum: (num: number) => void;
+ 
   cardNum: number;
   cardMax: number;
   setNumPointer: (num: number) => void;
@@ -169,6 +171,8 @@ export default function CardEditor({
   setPromptImageStrip: (promptImageStrim: boolean) => void;
   setGreeting: (greeting: string) => void;
   PlayerToolbar: any;
+  setNum?: (number: number) => void;
+  setMax?: (number: number) => void;
 }) {
 
   const [loading, setLoading] = useState<boolean>(false);
@@ -183,7 +187,7 @@ export default function CardEditor({
   const canvasRef = useRef<HTMLDivElement>(null);
   const popoutRef = useRef<HTMLDivElement>(null);
   const [imageData, setImageData] = useState(null as any);
- 
+  console.log("debug: new card editor:",greeting)
   const emptyImage = {
     url: '',
     publicId: '',
@@ -442,14 +446,14 @@ export default function CardEditor({
     setCreatingCard(true);
     // setTimeout(async () => await recordEvent(session.sessionid, 'create-card', ''), 1000);
     //await handleDownload();
-    const metaimage = await captureImage();
+    //const metaimage = await captureImage();
     let card: CardData = {
    
       image,
       signature,
       animatedSignature,
       greeting,
-      metaimage
+      metaimage:''
     }
 
     const { success, linkid, cardNum } = await recordSessionCard(sessionid, card);

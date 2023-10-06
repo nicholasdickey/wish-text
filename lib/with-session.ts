@@ -58,6 +58,7 @@ export interface Options{
     prompt3?:string;
     prompt4?:string;
     prompt5?:string;
+    prompt6?:string;
     naive?:boolean;
     reflections?:string;
     instructions?:string;

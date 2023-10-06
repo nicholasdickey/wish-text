@@ -393,8 +393,9 @@ export default function Home({ linkid,isGif, create, id, card, dark, fresh, fbcl
                 <link rel="preconnect" href="https://fonts.googleapis.com" />
                 <link rel="preconnect" href="https://fonts.gstatic.com" />
                 <link href="https://fonts.googleapis.com/css2?family=Caveat&display=swap" rel="stylesheet" />
-                <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
              </Head>
+             <Script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"/>
+            
             <ThemeProvider theme={theme}>
                 <main className={roboto.className} >
 
