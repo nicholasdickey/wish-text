@@ -46,7 +46,7 @@ const Toolbar: React.FC<ToolbarProps> = ({
   onLastClick,
   onFirstClick,
 }) => {
- console.log("debug: playerToolbar",{num,max})
+ //console.log("debug: playerToolbar",{num,max})
   return (
     <ToolbarContainer> 
       <ToolbarButton color="primary" size="large" onClick={onFirstClick} disabled={num==1}>

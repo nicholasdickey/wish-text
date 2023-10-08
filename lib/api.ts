@@ -157,9 +157,9 @@ export const fetchSession = async (sessionid: string) => {
 
 }
 // Fetches the session
-export const fetchSharedImages = async () => {
+export const fetchSharedImages = async (tags:string) => {
   try {
-    const url = `${process.env.NEXT_PUBLIC_LAKEAPI}/api/v1/wishtext/session/fetch-shared-images`;
+    const url = `${process.env.NEXT_PUBLIC_LAKEAPI}/api/v1/wishtext/session/fetch-shared-images?tags=${encodeURIComponent(tags)}`;
     const res = await axios.get(url);
     // console.log("fetchSharedImages", res.data.session);
     if (res.data.success)

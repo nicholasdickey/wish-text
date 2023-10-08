@@ -134,7 +134,7 @@ const HeadlineEditor: React.FC<HeadlineProps> = ({ id, topEditing, setTopEditing
     else
         large = false;
     useEffect(() => {
-        console.log("debug: headline setText", headline, text);
+        //console.log("debug: headline setText", headline, text);
         if (headline != text) {
             setText(headline);
         }
@@ -192,7 +192,7 @@ const HeadlineEditor: React.FC<HeadlineProps> = ({ id, topEditing, setTopEditing
         setDivWidth(width + 10 - 4);
         console.log("set width:", width);
     }, [ref.current]);
-    console.log("debug: headline render",text)
+    //console.log("debug: headline render",text)
     return (
         <Editor className={josefin.className} editable={editable} topEditing={topEditing} divwidth={divwidth} ref={ref} l={text.length || 0} large={large || false}>
             {!editable && <HeadlineWrap onClick={() => { console.log("CLICK - headline"); if (editable) { setHeadlineEditing(true); setTopEditing(true); } }}>

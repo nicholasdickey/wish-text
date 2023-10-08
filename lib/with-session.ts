@@ -81,6 +81,6 @@ export interface Options{
     animatedSignature?:number;
     num?:number;
     linkid?:string;
-
     promptImageStrip?:boolean;
+    tags?:string;
  }

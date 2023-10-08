@@ -143,7 +143,7 @@ const BodyEditor: React.FC<Props> = ({ id, topEditing, setTopEditing, editable, 
     //console.log("topEditing",topEditing)
     console.log("id,large",{id,large})
     useEffect(() => {
-        console.log("debug: useEffect[body] updating text:",body,text)
+        //console.log("debug: useEffect[body] updating text:",body,text)
         if(body!=text){
             setText(body);
         }

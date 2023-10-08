@@ -311,6 +311,7 @@ export default function Home({ linkid: startLinkid, card: startCard = false,
   const [modeIsSet, setModeIsSet] = React.useState(startSession.modeIsSet);
   const [systemMode, setSystemMode] = React.useState(false);
   const [greeting, setGreeting] = useState(session.greeting || '');
+  const [tags, setTags] = useState(session.tags || []);
   const [num, setNum] = useState<number>(session.num || 0);
 
 
@@ -406,13 +407,17 @@ export default function Home({ linkid: startLinkid, card: startCard = false,
     setVirgin(true);
     const { greeting, num } = await generateText(session, true);
     setGreeting(greeting);
-    updateSession2({ greeting, num,max:num,prompt6:true,prompt2:true,virgin:true });
-    console.log("debug:text response:", { greeting, num })
+    const oGreeting=JSON.parse(greeting);
+    const tags=oGreeting.tags; 
+    updateSession2({ greeting, num,max:num,prompt6:true,prompt2:true,virgin:true,tags });
+    console.log("debug:text response:", { greeting, num,tags })
     setNum(num);
     setMax(num);
     setLoadReady(true);
     setLoading(false);
     setPrompt6(true);
+    
+    setSharedImages(await fetchSharedImages(tags));
 
   }, []);
   const handleMenuClick = useCallback((item: string) => {
@@ -475,7 +480,7 @@ export default function Home({ linkid: startLinkid, card: startCard = false,
   };
   // console.log("_app:darkMode",darkMode,session?.mode||"")
   React.useEffect(() => {
-    console.log("debug: useEffect greeting", greeting, session?.greeting)
+    //console.log("debug: useEffect greeting", greeting, session?.greeting)
     if (greeting != session.greeting) {
       setGreeting(session.greeting || '');
     }
@@ -737,7 +742,7 @@ export default function Home({ linkid: startLinkid, card: startCard = false,
       await processRecord(record, num);
     }
   }
-  console.log("debug: start",{num,max})
+  //console.log("debug: start",{num,max})
   const OutputPlayerToolbar = <>{max > 1 ? <PlayerToolbar
     num={num}
     max={max}
@@ -774,7 +779,7 @@ export default function Home({ linkid: startLinkid, card: startCard = false,
     }}
   /> : null}</>
   const { fbclid, utm_content } = JSON.parse(utm_medium);
-  console.log("start debug:",greeting)
+  //console.log("start debug:",greeting)
   return (
     <>
       <Head>
@@ -1338,18 +1343,21 @@ export const getServerSideProps = withSessionSsr(
       let startoptions: Options | null = null;// = await fetchSession(sessionid);
       let sharedImages: ImageData[] | null = null;// = await fetchSharedImages();
       let images: ImageData[] | null = null;//=await fetchSessionImages();
+      let tags:string;
 
       try {
         let startoptions2: Options | null = null;
         let sharedImages2: ImageData[] | null = null;
         let imagesData: { success: boolean, images: ImageData[] } | null = null;
-        [startoptions2, sharedImages2, imagesData] = await Promise.all([
+        [startoptions2,  imagesData] = await Promise.all([
           fetchSession(sessionid),
-          fetchSharedImages(),
           fetchSessionImages(sessionid),
         ]);
+        // sharedImages2
+        //      fetchSharedImages(),
+    
         startoptions = startoptions2;
-        sharedImages = sharedImages2;
+      
         images = imagesData.success ? imagesData.images : [];
         //  console.log("Start Options:", startoptions);
         //  console.log("Shared Images:", sharedImages);
@@ -1365,7 +1373,12 @@ export const getServerSideProps = withSessionSsr(
         noExplain: false,
         currentCardString: '',
         newCardStackString: '',
+        tags:''
       } as Options;
+      if(!startoptions.tags)
+        startoptions.tags="all";
+      const sharedImages2=await fetchSharedImages(startoptions.tags);
+      sharedImages = sharedImages2;
       //console.log("startSession=", startoptions)
       const ua = context.req.headers['user-agent'];
       const botInfo = isbot({ ua });
@@ -1509,7 +1522,8 @@ export const getServerSideProps = withSessionSsr(
           utm_medium: `{"fbclid":"${fbclid}","utm_content":"${utm_content}"}`,
           sharedImages,
           linkid,
-          images
+          images,
+          
         }
       }
     } catch (x) {

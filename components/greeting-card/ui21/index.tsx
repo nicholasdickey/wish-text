@@ -345,7 +345,7 @@ const GreetingCard: React.FC<Props> = ({ popoutRef, setPrompt = () => { }, Playe
 
   const headline = structuredText.headline || "";//tw.length > 1 ? tw[0] : '';
   const body = structuredText.body || "";//tw.length > 1 ? tw.slice(1).join('\n') : tw[0];
-  console.log("debug: greeting-card render", { image, text, headline, body, signature })
+  //console.log("debug: greeting-card render", { image, text, headline, body, signature })
   const handleTextClick = () => {
 
   }
@@ -373,7 +373,7 @@ const GreetingCard: React.FC<Props> = ({ popoutRef, setPrompt = () => { }, Playe
   const signatureText = signature ? signature.split('\n').map((m, i) => <SignatureLine id={"wt-signature-line" + i} key={i} l={signature.length} large={large}>{m}</SignatureLine>) : [];
   //console.log("signatureText=", signatureText)
   const mobile = useMediaQuery(theme.breakpoints.down('sm'));
-  console.log("debug: index greeting-card render",{loading,editable,PlayerToolbar})
+  //console.log("debug: index greeting-card render",{loading,editable,PlayerToolbar})
   return (
     <BandContainer id="band-container-wt" darktext={dark} open={open} large={large} onClick={() => console.log("CLICK")} >
 

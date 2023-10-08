@@ -187,7 +187,7 @@ export default function CardEditor({
   const canvasRef = useRef<HTMLDivElement>(null);
   const popoutRef = useRef<HTMLDivElement>(null);
   const [imageData, setImageData] = useState(null as any);
-  console.log("debug: new card editor:",greeting)
+  //console.log("debug: new card editor:",greeting)
   const emptyImage = {
     url: '',
     publicId: '',
