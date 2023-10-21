@@ -393,10 +393,10 @@ Whether it's birthdays, graduations, holidays, or moments of illness or loss, WI
                     </div>
                     <Body>
                         <FirstBandContainer>
-                            Craft Personalized Messages with Ease!
+                            AI-Assisted Custom Cards
                         </FirstBandContainer>
                         {false && <LineContainer darkmode={"false"} />}
-                        <Band setLoading={setLoading} loading={loading} card={null} fresh={fresh} fbclid={fbclid} utm_content={utm_content} isbot={isbot} isfb={isfb} sessionid={sessionid} dark={"true"} title="Wish&nbsp;It? Text&nbsp;It!" subtitle={line1} cta="Create a Message" />
+                        <Band setLoading={setLoading} loading={loading} card={null} fresh={fresh} fbclid={fbclid} utm_content={utm_content} isbot={isbot} isfb={isfb} sessionid={sessionid} dark={"true"} title="Create and Share a Card&nbsp; With Ease!" subtitle={line1} cta="Create a Card" />
 
 
 
