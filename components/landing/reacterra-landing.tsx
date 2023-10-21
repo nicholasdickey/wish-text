@@ -120,6 +120,8 @@ const Title = styled(Typography)`
 
 const Subtitle = styled(Typography)`
   margin-bottom: 2rem;
+  margin-left: 13rem;
+  margin-right: 13rem;
   text-overflow: wrap;
   padding:10px;
   @media (max-width: 700px) {
@@ -519,6 +521,9 @@ Whether it's birthdays, graduations, holidays, or moments of illness or loss, WI
                         <Title variant="h3">
                         Startup MVP portfolio: Twitter AI-powered News Digest:
                             </Title>
+                            <Subtitle variant="h6">
+                              The digest service reads news articles and produces openAI-generated summaries to create a uniform news tape experience across the hundreds of news sources.
+                              </Subtitle>
                           <br/>
                           <br/>
                           <br/>
