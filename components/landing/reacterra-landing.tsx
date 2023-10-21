@@ -299,18 +299,18 @@ const Body = styled.div`
 const roboto = Roboto({ subsets: ['latin'], weight: ['300', '400', '700'], style: ['normal', 'italic'] })
 let v = false;
 interface LandingProps {
-    dark: number, 
-    fresh: boolean, 
-    fbclid: string, 
-    utm_content: string, 
-    isbot: number, 
-    isfb: number, 
+    dark: number,
+    fresh: boolean,
+    fbclid: string,
+    utm_content: string,
+    isbot: number,
+    isfb: number,
     sessionid: string
 
 }
 const Landing: React.FC<LandingProps> = ({ dark, fresh, fbclid, utm_content, isbot, isfb, sessionid }: LandingProps) => {
     const myRef = useRef(null);
-    const twitterRef=useRef(null)
+    const twitterRef = useRef(null)
     const [myElementIsVisible, updateMyElementIsVisible] = useState(false);
     const [darkMode, setDarkMode] = React.useState(true);
     const [systemMode, setSystemMode] = React.useState(false);
@@ -332,7 +332,7 @@ const Landing: React.FC<LandingProps> = ({ dark, fresh, fbclid, utm_content, isb
             const entry = entries[0];
             if (entry.isIntersecting && !myElementIsVisible) {
                 try {
-                   // recordEvent(sessionid, 'landing-card-reveal', `{"fbclid":"${fbclid}","utm_content":"${utm_content}"}`);
+                    // recordEvent(sessionid, 'landing-card-reveal', `{"fbclid":"${fbclid}","utm_content":"${utm_content}"}`);
                 } catch (x) {
                     console.log('landingCardRevealError', x);
                 }
@@ -362,15 +362,15 @@ const Landing: React.FC<LandingProps> = ({ dark, fresh, fbclid, utm_content, isb
         })
     }
     useEffect(() => {
-        try{
+        try {
             //@ts-ignore
-         window.twttr.widgets.load(twitterRef.current);
-         console.log("twitter loaded");
+            window.twttr.widgets.load(twitterRef.current);
+            console.log("twitter loaded");
         }
-        catch(x){
-         console.log('handled twitter exception',x)
+        catch (x) {
+            console.log('handled twitter exception', x)
         }
-       }, []);
+    }, []);
     useEffect(() => {
         if (dark) {
             setDarkMode(true);
@@ -385,7 +385,7 @@ const Landing: React.FC<LandingProps> = ({ dark, fresh, fbclid, utm_content, isb
         s.setAttribute("src", "https://platform.twitter.com/widgets.js");
         s.setAttribute("async", "true");
         document.head.appendChild(s);
-      }, []);
+    }, []);
     React.useEffect(() => {
         const matchMedia = window.matchMedia("(prefers-color-scheme: dark)");
         setSystemMode(matchMedia.matches);
@@ -441,12 +441,13 @@ Whether it's birthdays, graduations, holidays, or moments of illness or loss, WI
                 <link rel="preconnect" href="https://fonts.googleapis.com" />
                 <link rel="preconnect" href="https://fonts.gstatic.com" />
                 <link href="https://fonts.googleapis.com/css2?family=Caveat&display=swap" rel="stylesheet" />
-                <Script strategy="afterInteractive"
-          id="after-interactive"
-          dangerouslySetInnerHTML={{ // the twitter script
-            __html: `window.twttr = (function(d, s, id) {var js, fjs = d.getElementsByTagName(s)[0],t = window.twttr || {};if (d.getElementById(id)) return t;js = d.createElement(s);js.id = id;js.src = "https://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js, fjs);t._e = [];t.ready = function(f) {t._e.push(f);};return t;}(document, "script", "twitter-wjs"));`,
-          }} />
+                
             </Head>
+            <Script strategy="afterInteractive"
+                    id="after-interactive"
+                    dangerouslySetInnerHTML={{ // the twitter script
+                        __html: `window.twttr = (function(d, s, id) {var js, fjs = d.getElementsByTagName(s)[0],t = window.twttr || {};if (d.getElementById(id)) return t;js = d.createElement(s);js.id = id;js.src = "https://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js, fjs);t._e = [];t.ready = function(f) {t._e.push(f);};return t;}(document, "script", "twitter-wjs"));`,
+                    }} />
             <ThemeProvider theme={theme}>
                 <main className={roboto.className} >
 
@@ -462,7 +463,7 @@ Whether it's birthdays, graduations, holidays, or moments of illness or loss, WI
                                     component="div"
                                     sx={{ flexGrow: 1, display: { xs: 'none', sm: 'block' } }}
                                 >
-                                   Reacterra Labs: complete technology for prompt engineering AI startups
+                                    Reacterra Labs: complete technology for prompt engineering AI startups
                                 </Typography>
                                 <Typography
                                     variant="h6"
@@ -493,7 +494,7 @@ Whether it's birthdays, graduations, holidays, or moments of illness or loss, WI
                     </div>
                     <Body>
                         <FirstBandContainer>
-                          Front End + Cloud   + AI
+                            Front End + Cloud   + AI
                         </FirstBandContainer>
                         {false && <LineContainer darkmode={"false"} />}
                         <First1BandContainer >From idea to millions of users: lean and fast!</First1BandContainer>
@@ -502,67 +503,67 @@ Whether it's birthdays, graduations, holidays, or moments of illness or loss, WI
 
                         <SecondBandContainer>
                             <Title variant="h4">
-                            {line2}
+                                {line2}
                             </Title>
                             <Subtitle variant="h6">
                                 <ReactMarkdown> React.js, React Native, Next.js,
-                                VercelCloud, Docker, Kubernetes, AWS/Digital Ocean, Redis, NoSQL/SQL</ReactMarkdown>
+                                    VercelCloud, Docker, Kubernetes, AWS/Digital Ocean, Redis, NoSQL/SQL</ReactMarkdown>
                             </Subtitle>
                             {loading ? <LinearProgress /> :
-                            <Title variant="h6">
-                                   Email: <a href="email:contact@reacterra.com">contact@reacterra.com</a>
-                                   </Title>
-                           }                       </SecondBandContainer>
+                                <Title variant="h6">
+                                    Email: <a href="email:contact@reacterra.com">contact@reacterra.com</a>
+                                </Title>
+                            }                       </SecondBandContainer>
 
                         <div ref={myRef} >
-                            {myElementIsVisible && <div> 
-                               
-                            <BandCard
-                                setLoading={setLoading}
-                                loading={loading}
-                                extra="card=true"
-                                dark="true"
-                                card={
-                                    <div>
-                                       
-                                    <Card popoutRef={popoutRef} animatedSignature={1} editable={false} onAnimatedSignatureChange={() => { }} onGreetingChange={() => { }} onImageChange={() => { }} onSignatureChange={() => { }} canvasRef={canvasRef} delayOpen={true} large={true} signature={signature} fbclid={fbclid} utm_content={utm_content} dark={darkMode ? "true" : "false"} text={greeting || ''} image={demoImage} />
-                                    </div>
+                            {myElementIsVisible && <div>
+
+                                <BandCard
+                                    setLoading={setLoading}
+                                    loading={loading}
+                                    extra="card=true"
+                                    dark="true"
+                                    card={
+                                        <div>
+
+                                            <Card popoutRef={popoutRef} animatedSignature={1} editable={false} onAnimatedSignatureChange={() => { }} onGreetingChange={() => { }} onImageChange={() => { }} onSignatureChange={() => { }} canvasRef={canvasRef} delayOpen={true} large={true} signature={signature} fbclid={fbclid} utm_content={utm_content} dark={darkMode ? "true" : "false"} text={greeting || ''} image={demoImage} />
+                                        </div>
                                     }
-                                fresh={fresh} fbclid={fbclid} utm_content={utm_content} isbot={isbot} isfb={isfb} sessionid={sessionid}
-                                title={ 'Startup MVP portfolio: wish-text.com:'} subtitle={"Create beautiful wish cards with the help of AI "} cta="Create a Wish Card Now!" />
+                                    fresh={fresh} fbclid={fbclid} utm_content={utm_content} isbot={isbot} isfb={isfb} sessionid={sessionid}
+                                    title={'Startup MVP portfolio: wish-text.com:'} subtitle={"Create beautiful wish cards with the help of AI "} cta="Create a Wish Card Now!" />
                             </div>}
                         </div>
                         <First2BandContainer ref={twitterRef}>
-                        <Title variant="h3">
-                        Startup MVP portfolio: Twitter AI-powered News Digest:
+                            <Title variant="h3">
+                                Startup MVP portfolio: Twitter AI-powered News Digest:
                             </Title>
                             <Subtitle variant="h6">
-                              The digest service reads news articles and produces openAI-generated summaries to create a uniform news tape experience across the hundreds of news sources.
-                              </Subtitle>
-                          <br/>
-                          <br/>
-                          <br/>
-                           
-                          
-                               <div style={{width:480,zIndex:101}}>
+                                The digest service reads news articles and produces openAI-generated summaries to create a uniform news tape experience across the hundreds of news sources.
+                            </Subtitle>
+                            <br />
+                            <br />
+                            <br />
 
-                            <a className="twitter-timeline" data-tweet-limit="3" data-theme="dark"  href="https://twitter.com/am1_news?ref_src=twsrc%5Etfw">Tweets by America One News</a> 
-                            
+
+                            <div style={{ width: 480, zIndex: 101 }}>
+
+                                <a className="twitter-timeline" data-tweet-limit="3" data-theme="dark" href="https://twitter.com/am1_news?ref_src=twsrc%5Etfw">Tweets by America One News</a>
+
                             </div>
                         </First2BandContainer>
 
                         <First3BandContainer>
-                        <Title variant="h3">
-                        Startup MVP portfolio:  AI-powered News Digest Website:</Title>
-                 
-                        <div><Link href="https://www.american-outdoorsman.com"><h6>www.american-outdoorsman.com</h6> </Link>
-                          
-                           <img style={{width:"60%",padding:40}}src="https://ucarecdn.com/a995e32a-b391-4101-ad91-50b157805983/20231021.png"/>
-                           </div>
+                            <Title variant="h3">
+                                Startup MVP portfolio:  AI-powered News Digest Website:</Title>
+
+                            <div><Link href="https://www.american-outdoorsman.com"><h6>www.american-outdoorsman.com</h6> </Link>
+
+                                <img style={{ width: "60%", padding: 40 }} src="https://ucarecdn.com/a995e32a-b391-4101-ad91-50b157805983/20231021.png" />
+                            </div>
                         </First3BandContainer>
 
                     </Body>
-                  
+
                     <Footer darkmode={"false"}>
                         <Copyright>
 
@@ -588,5 +589,5 @@ Whether it's birthdays, graduations, holidays, or moments of illness or loss, WI
             </ThemeProvider>
         </>
     )
-}  
+}
 export default Landing;
