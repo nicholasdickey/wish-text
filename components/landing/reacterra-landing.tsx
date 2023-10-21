@@ -544,12 +544,12 @@ Whether it's birthdays, graduations, holidays, or moments of illness or loss, WI
                             <br />
                             <br />
 
+                            <Subtitle variant="h6">
+                          
 
-                            <div style={{ width: 480, zIndex: 101 }}>
+                                <a className="twitter-timeline-doesnt-work" data-tweet-limit="3" data-theme="dark" href="https://twitter.com/am1_news?ref_src=twsrc%5Etfw">America One News on Twitter</a>
 
-                                <a className="twitter-timeline-doesnt-work" data-tweet-limit="3" data-theme="dark" href="https://twitter.com/am1_news?ref_src=twsrc%5Etfw">Tweets by America One News</a>
-
-                            </div>
+                            </Subtitle>
                         </First2BandContainer>
 
                         <First3BandContainer>
