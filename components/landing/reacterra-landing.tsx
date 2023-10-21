@@ -491,7 +491,7 @@ Whether it's birthdays, graduations, holidays, or moments of illness or loss, WI
                             </Title>
                             <Subtitle variant="h6">
                                 <ReactMarkdown> React.js, React Native, Next.js,
-                                VercelCloud, Docker, Kubernetes, AWS/Digital Ocean, Redis caching, SQL</ReactMarkdown>
+                                VercelCloud, Docker, Kubernetes, AWS/Digital Ocean, Redis, NoSQL/SQL</ReactMarkdown>
                             </Subtitle>
                             {loading ? <LinearProgress /> :
                             <Title variant="h6">
