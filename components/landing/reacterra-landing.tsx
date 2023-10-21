@@ -391,7 +391,7 @@ const Landing: React.FC<LandingProps> = ({ dark, fresh, fbclid, utm_content, isb
     const line1 = `Combining AI prompt engineering with best in class modern web and cloud technologies, from concept to MVP to no-limits scalable, 99.99% available, reliable, performat modern web and native apps. Prioritizing lean and fast process.
         
     `
-    const line2 = `Best in class technology that powers tech industry: front-end, back-end, cloud, mobile, and AI prompt engineering.`
+    const line2 = `Best in class technology: front-end, back-end, cloud, mobile, and AI prompt engineering.`
 
     const line3 = `Gift suggestions with no effort.   
         Happy or sad, the AI assistant will help you find the right gifts. 
