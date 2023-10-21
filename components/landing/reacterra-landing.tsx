@@ -12,6 +12,7 @@ import Typography from '@mui/material/Typography';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 
 import { AppBar } from '@mui/material';
+import Link from 'next/link'
 import CssBaseline from '@mui/material/CssBaseline';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
@@ -139,8 +140,9 @@ const FirstBandContainer = styled.h1`
   justify-content: center;
   padding: 5rem 0;
   text-align: center;
-  background: url('wide-candles.jpg') ; /* Replace with your image URL */
-  background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('wide-candles.jpg'); /* Replace with your image URL */
+ // background: url('wide-candles.jpg') ; /* Replace with your image URL */
+  //background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('wide-candles.jpg'); /* Replace with your image URL */
+  background-color:black;
   font-weight:500;
   color: #fff;
   min-height: 380px;
@@ -154,6 +156,81 @@ const FirstBandContainer = styled.h1`
   }
   
 `;
+const First1BandContainer = styled.h1`
+  display: flex;
+  width: 100%;
+  align-items: center;
+  flex-wrap: wrap;
+  justify-content: center;
+  padding: 5rem 0;
+  text-align: center;
+ // background: url('wide-candles.jpg') ; /* Replace with your image URL */
+  //background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('wide-candles.jpg'); /* Replace with your image URL */
+  background-color:#2d2b38;
+  font-weight:500;
+  color: #fff;
+  min-height: 380px;
+  background-repeat: repeat;
+
+  background-size: 900px 491px;
+  font-size:3rem;
+  //font-size:4rem;
+  @media (max-width: 700px) {
+    font-size:3rem;
+  }
+  
+`;
+const First2BandContainer = styled.h1`
+  display: flex;
+  width: 100%;
+  align-items: center;
+  flex-wrap: wrap;
+  justify-content: center;
+  padding: 5rem 0;
+  text-align: center;
+ // background: url('wide-candles.jpg') ; /* Replace with your image URL */
+  //background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('wide-candles.jpg'); /* Replace with your image URL */
+  background-color: #b71c1c;
+  font-weight:500;
+  color: #fff;
+  min-height: 380px;
+  background-repeat: repeat;
+
+  background-size: 900px 491px;
+  font-size:3rem;
+  //font-size:4rem;
+  @media (max-width: 700px) {
+    font-size:3rem;
+  }
+  
+`;
+const First3BandContainer = styled.h1`
+  display: flex;
+  width: 100%;
+  align-items: center;
+  flex-wrap: wrap;
+  justify-content: center;
+  padding: 5rem 0;
+  text-align: center;
+ // background: url('wide-candles.jpg') ; /* Replace with your image URL */
+  //background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('wide-candles.jpg'); /* Replace with your image URL */
+  background-color:#2d2b38;
+  font-weight:500;
+  color: #fff;
+  min-height: 380px;
+  background-repeat: repeat;
+
+  background-size: 900px 491px;
+  font-size:3rem;
+  //font-size:4rem;
+  @media (max-width: 700px) {
+    font-size:3rem;
+  }
+  a {
+    color: #FFFFFF;
+    text-decoration: none;
+  }
+`;
 const SecondBandContainer = styled.div`
   display: flex;
   position:relative;
@@ -163,15 +240,15 @@ const SecondBandContainer = styled.div`
   justify-content: center;
   padding: 5rem 2rem;
   text-align: center;
-  background: url('wide-candles.jpg') ; /* Replace with your image URL */
-  background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('wide-christmas-candles.jpg'); /* Replace with your image URL */
- 
+ // background: url('wide-candles.jpg') ; /* Replace with your image URL */
+ // background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('wide-christmas-candles.jpg'); /* Replace with your image URL */
+ background-color: black;
   color: #fff;
   min-height: 380px;
   background-repeat: repeat;
 
   background-size: 900px 491px;
-  font-size:4rem;
+  font-size:1rem;
   @media (max-width: 700px) {
     font-size:3rem;
   }
@@ -247,7 +324,7 @@ const Landing: React.FC<LandingProps> = ({ dark, fresh, fbclid, utm_content, isb
             const entry = entries[0];
             if (entry.isIntersecting && !myElementIsVisible) {
                 try {
-                    recordEvent(sessionid, 'landing-card-reveal', `{"fbclid":"${fbclid}","utm_content":"${utm_content}"}`);
+                   // recordEvent(sessionid, 'landing-card-reveal', `{"fbclid":"${fbclid}","utm_content":"${utm_content}"}`);
                 } catch (x) {
                     console.log('landingCardRevealError', x);
                 }
@@ -264,7 +341,7 @@ const Landing: React.FC<LandingProps> = ({ dark, fresh, fbclid, utm_content, isb
                 mode: 'dark',
                 background: {
                     default: '#2d2b38',//' blueGrey[900],
-                    paper: blueGrey[600],
+                    paper: blueGrey[900],
                 }
             },
         })
@@ -285,7 +362,12 @@ const Landing: React.FC<LandingProps> = ({ dark, fresh, fbclid, utm_content, isb
         setDarkMode(!!(e.matches));
         setSystemMode(!!(e.matches));
     };
-
+    React.useEffect(() => {
+        const s = document.createElement("script");
+        s.setAttribute("src", "https://platform.twitter.com/widgets.js");
+        s.setAttribute("async", "true");
+        document.head.appendChild(s);
+      }, []);
     React.useEffect(() => {
         const matchMedia = window.matchMedia("(prefers-color-scheme: dark)");
         setSystemMode(matchMedia.matches);
@@ -302,7 +384,7 @@ const Landing: React.FC<LandingProps> = ({ dark, fresh, fbclid, utm_content, isb
     const line1 = `Combining AI prompt engineering with best in class modern web and cloud technologies, from concept to MVP to no-limits scalable, 99.99% available, reliable, performat modern web and native apps. Prioritizing lean and fast process.
         
     `
-    const line2 = `Best in class technology that powers the tech industry. Front-end, back-end, cloud, mobile, and AI prompt engineering.`
+    const line2 = `Best in class technology that powers tech industry: front-end, back-end, cloud, mobile, and AI prompt engineering.`
 
     const line3 = `Gift suggestions with no effort.   
         Happy or sad, the AI assistant will help you find the right gifts. 
@@ -341,7 +423,7 @@ Whether it's birthdays, graduations, holidays, or moments of illness or loss, WI
                 <link rel="preconnect" href="https://fonts.googleapis.com" />
                 <link rel="preconnect" href="https://fonts.gstatic.com" />
                 <link href="https://fonts.googleapis.com/css2?family=Caveat&display=swap" rel="stylesheet" />
-
+                
             </Head>
             <ThemeProvider theme={theme}>
                 <main className={roboto.className} >
@@ -358,7 +440,7 @@ Whether it's birthdays, graduations, holidays, or moments of illness or loss, WI
                                     component="div"
                                     sx={{ flexGrow: 1, display: { xs: 'none', sm: 'block' } }}
                                 >
-                                   Reacterra Labs
+                                   Reacterra Labs: complete technology for prompt engineering AI startups
                                 </Typography>
                                 <Typography
                                     variant="h6"
@@ -389,87 +471,78 @@ Whether it's birthdays, graduations, holidays, or moments of illness or loss, WI
                     </div>
                     <Body>
                         <FirstBandContainer>
-                           Web   + AI
+                          Front End + Cloud   + AI
                         </FirstBandContainer>
                         {false && <LineContainer darkmode={"false"} />}
-                        <Band setLoading={setLoading} loading={loading} card={null} fresh={fresh} fbclid={fbclid} utm_content={utm_content} isbot={isbot} isfb={isfb} sessionid={sessionid} dark={"true"} title="From idea to millions of users" subtitle={line1} cta="Create a Message" />
+                        <First1BandContainer >From idea to millions of users: lean and fast!</First1BandContainer>
 
 
 
                         <SecondBandContainer>
-                            <Title variant="h3">
-                                React.js, React Native, Next.js,
-                                VercelCloud, Docker, Kubernetes, AWS, Caching, SQL,
+                            <Title variant="h4">
+                            {line2}
                             </Title>
-                            <Subtitle variant="h5">
-                                <ReactMarkdown>{line2}</ReactMarkdown>
+                            <Subtitle variant="h6">
+                                <ReactMarkdown> React.js, React Native, Next.js,
+                                VercelCloud, Docker, Kubernetes, AWS/Digital Ocean, Redis caching, SQL</ReactMarkdown>
                             </Subtitle>
                             {loading ? <LinearProgress /> :
-                                <CTAButton variant="contained" color="primary" onClick={() => handleCTAClick("2")}>
-                                    Start Creating Now!
-                                </CTAButton>}
-                        </SecondBandContainer>
+                            <Title variant="h6">
+                                   Email: <a href="email:contact@reacterra.com">contact@reacterra.com</a>
+                                   </Title>
+                           }                       </SecondBandContainer>
 
                         <div ref={myRef} >
-                            {myElementIsVisible && <BandCard
+                            {myElementIsVisible && <div> 
+                               
+                            <BandCard
                                 setLoading={setLoading}
                                 loading={loading}
                                 extra="card=true"
                                 dark="true"
                                 card={
-                                    //<Card animatedSignature={animatedSignature} editable={false} onAnimatedSignatureChange={()=>{}}  onGreetingChange={()=>{}} onImageChange={()=>{}} onSignatureChange={()=>{}} canvasRef={canvasRef} delayOpen={true} large={true} signature={signature} fbclid={""} utm_content={""} dark={dark} text={text || ''} image={image} />
-                                    <Card popoutRef={popoutRef} animatedSignature={1} editable={false} onAnimatedSignatureChange={() => { }} onGreetingChange={() => { }} onImageChange={() => { }} onSignatureChange={() => { }} canvasRef={canvasRef} delayOpen={true} large={true} signature={signature} fbclid={fbclid} utm_content={utm_content} dark={darkMode ? "true" : "false"} text={greeting || ''} image={demoImage} />}
+                                    <div>
+                                       
+                                    <Card popoutRef={popoutRef} animatedSignature={1} editable={false} onAnimatedSignatureChange={() => { }} onGreetingChange={() => { }} onImageChange={() => { }} onSignatureChange={() => { }} canvasRef={canvasRef} delayOpen={true} large={true} signature={signature} fbclid={fbclid} utm_content={utm_content} dark={darkMode ? "true" : "false"} text={greeting || ''} image={demoImage} />
+                                    </div>
+                                    }
                                 fresh={fresh} fbclid={fbclid} utm_content={utm_content} isbot={isbot} isfb={isfb} sessionid={sessionid}
-                                title="Our startup MVP portfolio: wish-text.com" subtitle={"Create beautiful wish cards"} cta="Create a Wish Card Now!" />
-                            }
+                                title={ 'Startup MVP portfolio: wish-text.com:'} subtitle={"Create beautiful wish cards with the help of AI "} cta="Create a Wish Card Now!" />
+                            </div>}
                         </div>
-                        <BandContainer darktext={"true"} background={"gifts-candles-wide.jpg"}>
-                            <Title variant="h3">
-                                Gift Recommendations For Any Occasion
+                        <First2BandContainer>
+                        <Title variant="h3">
+                        Startup MVP portfolio: Twitter AI-powered News Digest:
                             </Title>
-                            <Subtitle variant="h5">
-                                <ReactMarkdown>{line3}</ReactMarkdown>
-                            </Subtitle>
-                            {loading ? <LinearProgress /> :
-                                <CTAButton variant="contained" color="primary" onClick={() => handleCTAClick("4")}>
-                                    Begin Now
-                                </CTAButton>}
+                          <br/>
+                          <br/>
+                          <br/>
+                           
+                          
+                                <div style={{width:480,zIndex:101}}><Script async src="https://platform.twitter.com/widgets.js" /><div dangerouslySetInnerHTML={{__html:
+                            `<a class="twitter-timeline" data-theme="dark"  href="https://twitter.com/am1_news?ref_src=twsrc%5Etfw">Tweets by am1_news</a> 
+                            `
+                            }}/></div>
+                        </First2BandContainer>
 
-                        </BandContainer>
-
-                        {false && <BandContainer>
-                            <Title variant="h3">
-                                Upload your images and create greeting cards
-                            </Title>
-                            <Subtitle variant="h5">
-                                Download on your device<br /> and use in social networks <br />and messengers
-                                with the direct upload.
-                                <ImageDemo>
-                                    <img src="/demo-card1-small.png" width="100%" alt="Wish Text Composer Logo" />
-                                </ImageDemo>
-                                <ImageDemo>
-                                    <img src="/demo-card5-small.png" width="100%" alt="Wish Text Composer Logo" />
-                                </ImageDemo>
-                                <ImageDemo>
-                                    <img src="/demo-card3-small.png" width="100%" alt="Wish Text Composer Logo" />
-                                </ImageDemo>
-
-                            </Subtitle>
-                            {loading ? <LinearProgress /> : <CTAButton variant="contained" color="primary" onClick={() => handleCTAClick("5")}>
-                                Let us show you how!
-                            </CTAButton>}
-                        </BandContainer>}
+                        <First3BandContainer>
+                        <Title variant="h3">
+                        Startup MVP portfolio:  AI-powered News Digest Website:</Title>
+                 
+                        <div><Link href="https://www.american-outdoorsman.com"><h6>www.american-outdoorsman.com</h6> </Link>
+                          
+                           <img style={{width:"60%",padding:40}}src="https://ucarecdn.com/a995e32a-b391-4101-ad91-50b157805983/20231021.png"/>
+                           </div>
+                        </First3BandContainer>
 
                     </Body>
+                  
                     <Footer darkmode={"false"}>
                         <Copyright>
 
                             <Sub>
-                                <Typography variant="caption" gutterBottom>Create the &quot;wishing&quot; or greeting text for you to paste into your favorite messaging app.
-                                    AI will provide the helpful suggestions that you can edit by clicking on the suggestion.
-
-                                    Additionally, Wish Text Composer can help you to create an online &apos;wish card&apos;, a greeting card using stock or an uploaded image.
-                                    Utilizing AI, it also provides the gift suggestions.
+                                <Typography variant="caption" gutterBottom>
+                                    Make your startup a reality at a fraction of a cost and time.
                                 </Typography>
                             </Sub>
                         </Copyright>
@@ -477,7 +550,7 @@ Whether it's birthdays, graduations, holidays, or moments of illness or loss, WI
                             Copyright 2023 Wish-Text.Com, All Rights Reserved
                         </Typography></Sub>
                             <Sub><Typography variant="caption" gutterBottom>
-                                Contact: support@hudsonwilde.com
+                                Contact: contact@reacterra.com
                             </Typography></Sub>
                             <Sub><Typography variant="caption" gutterBottom>
                                 Crafted in Northern Minnesota, USA.
