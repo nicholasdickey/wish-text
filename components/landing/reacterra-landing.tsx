@@ -310,6 +310,7 @@ interface LandingProps {
 }
 const Landing: React.FC<LandingProps> = ({ dark, fresh, fbclid, utm_content, isbot, isfb, sessionid }: LandingProps) => {
     const myRef = useRef(null);
+    const twitterRef=useRef(null)
     const [myElementIsVisible, updateMyElementIsVisible] = useState(false);
     const [darkMode, setDarkMode] = React.useState(true);
     const [systemMode, setSystemMode] = React.useState(false);
@@ -360,6 +361,16 @@ const Landing: React.FC<LandingProps> = ({ dark, fresh, fbclid, utm_content, isb
             },
         })
     }
+    useEffect(() => {
+        try{
+            //@ts-ignore
+         window.twttr.widgets.load(twitterRef.current);
+         console.log("twitter loaded");
+        }
+        catch(x){
+         console.log('handled twitter exception',x)
+        }
+       }, []);
     useEffect(() => {
         if (dark) {
             setDarkMode(true);
@@ -430,7 +441,11 @@ Whether it's birthdays, graduations, holidays, or moments of illness or loss, WI
                 <link rel="preconnect" href="https://fonts.googleapis.com" />
                 <link rel="preconnect" href="https://fonts.gstatic.com" />
                 <link href="https://fonts.googleapis.com/css2?family=Caveat&display=swap" rel="stylesheet" />
-                
+                <Script strategy="afterInteractive"
+          id="after-interactive"
+          dangerouslySetInnerHTML={{ // the twitter script
+            __html: `window.twttr = (function(d, s, id) {var js, fjs = d.getElementsByTagName(s)[0],t = window.twttr || {};if (d.getElementById(id)) return t;js = d.createElement(s);js.id = id;js.src = "https://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js, fjs);t._e = [];t.ready = function(f) {t._e.push(f);};return t;}(document, "script", "twitter-wjs"));`,
+          }} />
             </Head>
             <ThemeProvider theme={theme}>
                 <main className={roboto.className} >
@@ -517,7 +532,7 @@ Whether it's birthdays, graduations, holidays, or moments of illness or loss, WI
                                 title={ 'Startup MVP portfolio: wish-text.com:'} subtitle={"Create beautiful wish cards with the help of AI "} cta="Create a Wish Card Now!" />
                             </div>}
                         </div>
-                        <First2BandContainer>
+                        <First2BandContainer ref={twitterRef}>
                         <Title variant="h3">
                         Startup MVP portfolio: Twitter AI-powered News Digest:
                             </Title>
@@ -529,10 +544,11 @@ Whether it's birthdays, graduations, holidays, or moments of illness or loss, WI
                           <br/>
                            
                           
-                               {loaded&&<div style={{width:480,zIndex:101}}><Script async src="https://platform.twitter.com/widgets.js" /><div dangerouslySetInnerHTML={{__html:
-                            `<a class="twitter-timeline" data-theme="dark"  href="https://twitter.com/am1_news?ref_src=twsrc%5Etfw">Tweets by America One News</a> 
-                            `
-                            }}/></div>}
+                               <div style={{width:480,zIndex:101}}>
+
+                            <a class="twitter-timeline" data-tweet-limit="3" data-theme="dark"  href="https://twitter.com/am1_news?ref_src=twsrc%5Etfw">Tweets by America One News</a> 
+                            
+                            </div>
                         </First2BandContainer>
 
                         <First3BandContainer>
