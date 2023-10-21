@@ -202,7 +202,10 @@ const First2BandContainer = styled.h1`
   @media (max-width: 700px) {
     font-size:3rem;
   }
-  
+  a {
+    color: #FFFFFF;
+    text-decoration: none;
+  }
 `;
 const First3BandContainer = styled.h1`
   display: flex;
@@ -309,6 +312,7 @@ const Landing: React.FC<LandingProps> = ({ dark, fresh, fbclid, utm_content, isb
     const [darkMode, setDarkMode] = React.useState(true);
     const [systemMode, setSystemMode] = React.useState(false);
     const [loading, setLoading] = React.useState(false);
+    const [loaded, setLoaded] = React.useState(false);
     const router = useRouter();
     const handleCTAClick = (ctaTag: string) => {
         setLoading(true);
@@ -320,6 +324,7 @@ const Landing: React.FC<LandingProps> = ({ dark, fresh, fbclid, utm_content, isb
         router.push(`/start?fbclid=${fbclid}&utm_content=${utm_content}`);
     };
     useEffect(() => {
+        setLoaded(true);
         const observer = new IntersectionObserver((entries, observer) => {
             const entry = entries[0];
             if (entry.isIntersecting && !myElementIsVisible) {
@@ -519,10 +524,10 @@ Whether it's birthdays, graduations, holidays, or moments of illness or loss, WI
                           <br/>
                            
                           
-                                <div style={{width:480,zIndex:101}}><Script async src="https://platform.twitter.com/widgets.js" /><div dangerouslySetInnerHTML={{__html:
-                            `<a class="twitter-timeline" data-theme="dark"  href="https://twitter.com/am1_news?ref_src=twsrc%5Etfw">Tweets by am1_news</a> 
+                               {loaded&&<div style={{width:480,zIndex:101}}><Script async src="https://platform.twitter.com/widgets.js" /><div dangerouslySetInnerHTML={{__html:
+                            `<a class="twitter-timeline" data-theme="dark"  href="https://twitter.com/am1_news?ref_src=twsrc%5Etfw">Tweets by America One News</a> 
                             `
-                            }}/></div>
+                            }}/></div>}
                         </First2BandContainer>
 
                         <First3BandContainer>
