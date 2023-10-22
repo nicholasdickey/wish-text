@@ -903,7 +903,7 @@ Whether it's birthdays, graduations, holidays, or moments of illness or loss, WI
                       occasion: '',
                       virgin: false,
                       prompt1: false,
-                      prompt2: false,
+                      prompt2: true,
                       prompt3: false,
                       prompt4: false,
                       prompt5: false,
@@ -1302,7 +1302,7 @@ export const getServerSideProps = withSessionSsr(
   async function getServerSideProps(context: GetServerSidePropsContext): Promise<any> {
     try {
       let { linkid, card, signature, animatedSignature, dark, num, max, cardNum, cardMax, prompt1, prompt2, prompt3, prompt4, prompt5, prompt6, promptImageStrip, fbclid, utm_medium, utm_campaign, utm_content, virgin, virgin2, from, to, occasion, naive, reflections, instructions, inastyleof, language, age, interests, sex }:
-        { linkid: string, card: boolean, signature: string, animatedSignature: number, dark: boolean, num: number, max: number, cardNum: number, cardMax: number, prompt1: string, prompt2: string, prompt3: string, prompt4: string, prompt5: string, prompt6: string, fbclid: string, utm_medium: string, utm_campaign: string, utm_content: string, virgin: boolean, virgin2: boolean, from: string, to: string, occasion: string, naive: boolean, reflections: string, instructions: string, inastyleof: string, language: string, age: string, interests: string, sex: string, promptImageStrip: boolean } = context.query as any;
+        { linkid: string, card: boolean, signature: string, animatedSignature: number, dark: boolean, num: number, max: number, cardNum: number, cardMax: number, prompt1: string, prompt2: boolean, prompt3: string, prompt4: string, prompt5: string, prompt6: string, fbclid: string, utm_medium: string, utm_campaign: string, utm_content: string, virgin: boolean, virgin2: boolean, from: string, to: string, occasion: string, naive: boolean, reflections: string, instructions: string, inastyleof: string, language: string, age: string, interests: string, sex: string, promptImageStrip: boolean } = context.query as any;
 
       linkid = linkid || '';
       from = from || '';
@@ -1317,7 +1317,7 @@ export const getServerSideProps = withSessionSsr(
       animatedSignature = animatedSignature === 0 ? 0 : 1;
 
       prompt1 = prompt1 || '';
-      prompt2 = prompt2 || '';
+      prompt2 = prompt2 || true;
       prompt3 = prompt3 || '';
       prompt4 = prompt4 || '';
       prompt5 = prompt5 || '';
@@ -1463,7 +1463,7 @@ export const getServerSideProps = withSessionSsr(
       signature = signature || options.signature || '';
       animatedSignature = animatedSignature === 0 ? 0 : options.animatedSignature === 0 ? 0 : 1
       prompt1 = prompt1 || options.prompt1 || '';
-      prompt2 = prompt2 || options.prompt2 || '';
+      prompt2 = prompt2 || options.prompt2 || true;
       prompt3 = prompt3 || options.prompt3 || '';
       prompt4 = prompt4 || options.prompt4 || '';
       prompt5 = prompt5 || options.prompt5 || '';

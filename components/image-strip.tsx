@@ -16,7 +16,8 @@ const ImageStripContainer = styled.div`
   display: flex;
   align-items: center;
   overflow-x: auto;
-  padding: 2px;
+  padding: 32px;
+  height: 220px;
   margin: 0 -4px 0px -4px;
   transition: all 0.8s ease;
 `;
