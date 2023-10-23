@@ -46,7 +46,9 @@ const SignatureLabel = styled.div`
 `;
 
 const CopyField = styled(DefaultCopyField)`
-  width:100%;
+  width:80%;
+  margin:10%;
+  padding:4px;
 `;
 const Divider = styled.div`
 display:none;
