@@ -140,16 +140,16 @@ const FirstBandContainer = styled.h1`
   align-items: center;
   flex-wrap: wrap;
   justify-content: center;
-  padding: 5rem 0;
+ // padding: 5rem 0;
   text-align: center;
  // background: url('wide-candles.jpg') ; /* Replace with your image URL */
-  //background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('wide-candles.jpg'); /* Replace with your image URL */
+  background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('dark-mind5.jpg'); /* Replace with your image URL */
   background-color:black;
   font-weight:500;
   color: #fff;
   min-height: 380px;
   background-repeat: repeat;
-
+  margin:  0px;
   background-size: 900px 491px;
   font-size:5rem;
   font-size:4rem;
@@ -164,16 +164,17 @@ const First1BandContainer = styled.h1`
   align-items: center;
   flex-wrap: wrap;
   justify-content: center;
-  padding: 5rem 0;
+  margin:  0px;
+ // padding: 5rem 0;
   text-align: center;
  // background: url('wide-candles.jpg') ; /* Replace with your image URL */
-  //background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('wide-candles.jpg'); /* Replace with your image URL */
+  background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('dark-mind4.jpg'); /* Replace with your image URL */
   background-color:#2d2b38;
   font-weight:500;
   color: #fff;
   min-height: 380px;
   background-repeat: repeat;
-
+  margin:  0px;
   background-size: 900px 491px;
   font-size:3rem;
   //font-size:4rem;
@@ -188,10 +189,11 @@ const First2BandContainer = styled.h1`
   align-items: center;
   flex-wrap: wrap;
   justify-content: center;
-  padding: 5rem 0;
+  padding: 5rem 5rem;
   text-align: center;
+  margin:  0px;
  // background: url('wide-candles.jpg') ; /* Replace with your image URL */
-  //background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('wide-candles.jpg'); /* Replace with your image URL */
+  background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.7)), url('dark-mind6.jpg'); /* Replace with your image URL */
   background-color: #b71c1c;
   font-weight:500;
   color: #fff;
@@ -216,9 +218,10 @@ const First3BandContainer = styled.h1`
   flex-wrap: wrap;
   justify-content: center;
   padding: 5rem 0;
+  margin:0px;
   text-align: center;
  // background: url('wide-candles.jpg') ; /* Replace with your image URL */
-  //background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('wide-candles.jpg'); /* Replace with your image URL */
+  background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('dark-mind8.jpg'); /* Replace with your image URL */
   background-color:#2d2b38;
   font-weight:500;
   color: #fff;
@@ -246,8 +249,8 @@ const SecondBandContainer = styled.div`
   padding: 5rem 2rem;
   text-align: center;
  // background: url('wide-candles.jpg') ; /* Replace with your image URL */
- // background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('wide-christmas-candles.jpg'); /* Replace with your image URL */
- background-color: black;
+  background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('dark-mind7.jpg'); /* Replace with your image URL */
+ background-color: grey;
   color: #fff;
   min-height: 380px;
   background-repeat: repeat;
@@ -441,13 +444,13 @@ Whether it's birthdays, graduations, holidays, or moments of illness or loss, WI
                 <link rel="preconnect" href="https://fonts.googleapis.com" />
                 <link rel="preconnect" href="https://fonts.gstatic.com" />
                 <link href="https://fonts.googleapis.com/css2?family=Caveat&display=swap" rel="stylesheet" />
-                
+
             </Head>
             <Script strategy="afterInteractive"
-                    id="after-interactive"
-                    dangerouslySetInnerHTML={{ // the twitter script
-                        __html: `window.twttr = (function(d, s, id) {var js, fjs = d.getElementsByTagName(s)[0],t = window.twttr || {};if (d.getElementById(id)) return t;js = d.createElement(s);js.id = id;js.src = "https://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js, fjs);t._e = [];t.ready = function(f) {t._e.push(f);};return t;}(document, "script", "twitter-wjs"));`,
-                    }} />
+                id="after-interactive"
+                dangerouslySetInnerHTML={{ // the twitter script
+                    __html: `window.twttr = (function(d, s, id) {var js, fjs = d.getElementsByTagName(s)[0],t = window.twttr || {};if (d.getElementById(id)) return t;js = d.createElement(s);js.id = id;js.src = "https://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js, fjs);t._e = [];t.ready = function(f) {t._e.push(f);};return t;}(document, "script", "twitter-wjs"));`,
+                }} />
             <ThemeProvider theme={theme}>
                 <main className={roboto.className} >
 
@@ -463,7 +466,7 @@ Whether it's birthdays, graduations, holidays, or moments of illness or loss, WI
                                     component="div"
                                     sx={{ flexGrow: 1, display: { xs: 'none', sm: 'block' } }}
                                 >
-                                    Reacterra Labs: complete technology for prompt engineering AI startups
+                                    Reacterra Labs: complete bespoke technology solutions for prompt engineering AI startups
                                 </Typography>
                                 <Typography
                                     variant="h6"
@@ -511,10 +514,49 @@ Whether it's birthdays, graduations, holidays, or moments of illness or loss, WI
                             </Subtitle>
                             {loading ? <LinearProgress /> :
                                 <Title variant="h6">
-                                    Email: <a href="email:contact@reacterra.com">contact@reacterra.com</a>
+                                    Email: <a style={{color:"white",textDecoration:"none"}} href="email:contact@reacterra.com"><span style={{color:"white",textDecoration:"none"}}>contact@reacterra.com</span></a>
                                 </Title>
-                            }                       </SecondBandContainer>
+                            }    </SecondBandContainer>
+                            <First2BandContainer ref={twitterRef}>
+                            <Title variant="h3">
+                                Startup MVP portfolio: Social Media AI-powered News Digest:
+                            </Title>
+                            <Subtitle variant="h6">
+                                The digest service reads news articles and produces openAI-generated summaries to create a uniform news tape experience across the hundreds of news sources.
+                            </Subtitle>
+                            <br />
+                            <br />
+                            <br />
+                            <Subtitle variant="h6">
+                                <div> 
+                                <a className="twitter-timeline-doesnt-work" data-tweet-limit="3" data-theme="dark" href="https://twitter.com/nfl_digest?ref_src=twsrc%5Etfw">NFL Digest on Twitter (X)</a>
+                                </div>
+                                <div><a className="twitter-timeline-doesnt-work" data-tweet-limit="3" data-theme="dark" href="https://twitter.com/nhl_digest?ref_src=twsrc%5Etfw">NHL Digest on Twitter (X)</a>
+                                
+                                </div>
+                                <div>
+                                <a className="twitter-timeline-doesnt-work" data-tweet-limit="3" data-theme="dark" href="https://twitter.com/coolmediatrends?ref_src=twsrc%5Etfw">Cool Trends on Twitter (X)</a>
+                                </div>
+                                <div>
+                                <a className="twitter-timeline-doesnt-work" data-tweet-limit="3" data-theme="dark" href="https://twitter.com/nfl_digest?ref_src=twsrc%5Etfw">MLB Digest on Twitter (X)</a>
+                                </div>
+                            </Subtitle>
+                            <Subtitle variant="h6">
+                                <a className="twitter-timeline-doesnt-work" data-tweet-limit="3" data-theme="dark" href="https://twitter.com/am1_news?ref_src=twsrc%5Etfw">America One News on Twitter (X)</a>
+                            </Subtitle>
+                        </First2BandContainer>                   
 
+                      
+
+                        <First3BandContainer>
+                            <Title variant="h3">
+                                Startup MVP portfolio:  AI-powered News Digest Website:</Title>
+
+                            <div><Link href="https://www.american-outdoorsman.com"><h6>www.american-outdoorsman.com</h6> </Link>
+
+                                <img style={{ width: "60%", padding: 40 }} src="https://ucarecdn.com/a995e32a-b391-4101-ad91-50b157805983/20231021.png" />
+                            </div>
+                        </First3BandContainer>
                         <div ref={myRef} >
                             {myElementIsVisible && <div>
 
@@ -533,35 +575,7 @@ Whether it's birthdays, graduations, holidays, or moments of illness or loss, WI
                                     title={'Startup MVP portfolio: wish-text.com:'} subtitle={"Create beautiful wish cards with the help of AI "} cta="Create a Wish Card Now!" />
                             </div>}
                         </div>
-                        <First2BandContainer ref={twitterRef}>
-                            <Title variant="h3">
-                                Startup MVP portfolio: Twitter AI-powered News Digest:
-                            </Title>
-                            <Subtitle variant="h6">
-                                The digest service reads news articles and produces openAI-generated summaries to create a uniform news tape experience across the hundreds of news sources.
-                            </Subtitle>
-                            <br />
-                            <br />
-                            <br />
-
-                            <Subtitle variant="h6">
-                          
-
-                                <a className="twitter-timeline-doesnt-work" data-tweet-limit="3" data-theme="dark" href="https://twitter.com/am1_news?ref_src=twsrc%5Etfw">America One News on Twitter</a>
-
-                            </Subtitle>
-                        </First2BandContainer>
-
-                        <First3BandContainer>
-                            <Title variant="h3">
-                                Startup MVP portfolio:  AI-powered News Digest Website:</Title>
-
-                            <div><Link href="https://www.american-outdoorsman.com"><h6>www.american-outdoorsman.com</h6> </Link>
-
-                                <img style={{ width: "60%", padding: 40 }} src="https://ucarecdn.com/a995e32a-b391-4101-ad91-50b157805983/20231021.png" />
-                            </div>
-                        </First3BandContainer>
-
+                        
                     </Body>
 
                     <Footer darkmode={"false"}>
@@ -577,7 +591,7 @@ Whether it's birthdays, graduations, holidays, or moments of illness or loss, WI
                             Copyright 2023 Wish-Text.Com, All Rights Reserved
                         </Typography></Sub>
                             <Sub><Typography variant="caption" gutterBottom>
-                                Contact: contact@reacterra.com
+                                Contact: <a href="mailto:contact@reacterra.com" >contact@reacterra.com</a>
                             </Typography></Sub>
                             <Sub><Typography variant="caption" gutterBottom>
                                 Crafted in Northern Minnesota, USA.
