@@ -545,7 +545,7 @@ export default function CardEditor({
   };
 
 
-  //console.log("RENDER currentCard:", currentCard, "newCardStack:", newCardsStack, "num:", num);
+  console.log("RENDER========>");
   ;
 
   return (

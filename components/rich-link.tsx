@@ -11,7 +11,6 @@ export const Container = styled.div`
   margin-top: 10px;
   padding-bottom: 60px;
 
- 
 `;
 
 const ProductImage = styled(CardMedia)`
@@ -57,7 +56,7 @@ const RichLinkContainer = styled.a`
   display: flex;
   align-items: center;
   padding:4px;
- 
+  
 
 `;
 
@@ -78,7 +77,7 @@ export const RichLink: React.FC<RichLinkProps> = ({ session,title, imageUrl, pri
   const theme = useTheme();
   return (
    
-    <Grid item xs={12} key={`rich-link-${title}`}>
+    <Grid id={`rich-link-${title}`}  item xs={12} key={`rich-link-${title}`}>
      
         <Card variant="outlined">
         <RichLinkContainer href={link} onClick={()=>{

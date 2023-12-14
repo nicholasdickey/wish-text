@@ -43,10 +43,9 @@ const Toolbar: React.FC<ToolbarProps> = ({
  console.log("Toolbar",hasGreeting)
   return (
     <ToolbarContainer data-id="toolbar-generate">
-      <ToolbarButton color={error?"error":"success"} size="large" onClick={onGenerateClick}>
-     
+      <ToolbarButton color={error?"error":"success"} size="large" onClick={onGenerateClick}>   
         <TextFieldsIcon />
-        <ToolbarText>{hasGreeting?'Suggest':'Suggest'} Wish Text</ToolbarText>
+        <ToolbarText>{hasGreeting?'Generat':'Generate'} Wish Text</ToolbarText>
       </ToolbarButton>
       {false&&hasGreeting&&<CldUploadWidget onUpload={onUploadClick} uploadPreset="h17xjq8e">
           {({ open }) => {

@@ -191,7 +191,7 @@ const ClearButton = styled(IconButton)`
   width: auto;
  `;
 const ActionContainer = styled.div`
-  margin-top:20px;
+ // margin-top:20px;
   display: flex;
   justify-content:flex-end;
   width: 100%;
@@ -398,7 +398,7 @@ export default function Home({ linkid: startLinkid, card: startCard = false,
     })
   }
   const handleRegenerateText = useCallback(async (session: any) => {
-    console.log("handleRegenerateText=>", session);
+    console.log("debug: handleRegenerateText=>", session);
     setLoadReady(false);
     //setPrompt5(true);
     setPrompt2(true);
@@ -407,6 +407,7 @@ export default function Home({ linkid: startLinkid, card: startCard = false,
     setVirgin(true);
     const { greeting, num } = await generateText(session, true);
     setGreeting(greeting);
+    console.log("debug:handleRegenerateText", { greeting, num })
     const oGreeting=JSON.parse(greeting);
     const tags=oGreeting.tags; 
     updateSession2({ greeting, num,max:num,prompt6:true,prompt2:true,virgin:true,tags });
@@ -779,7 +780,7 @@ export default function Home({ linkid: startLinkid, card: startCard = false,
     }}
   /> : null}</>
   const { fbclid, utm_content } = JSON.parse(utm_medium);
-  //console.log("start debug:",greeting)
+  console.log("render start debug:",greeting)
   return (
     <>
       <Head>
@@ -969,14 +970,14 @@ Whether it's birthdays, graduations, holidays, or moments of illness or loss, WI
                 </Starter>
               </Box>
               : null}
-            <Combo id="occasion"
+           {!session.greeting&&<Combo id="occasion"
               label="Occasion"
               value={occasion}
               error={missingOccasion}
               onChange={onOccasionChange}
               helperText="Required for a meaningful result. For example: &ldquo;8th Birthday for a boy&rdquo;, &ldquo;Sweet Sixteen&rdquo;, &ldquo;Illness&rdquo; &ldquo;Death in the family&rdquo;, &ldquo;Christmas&rdquo;, &ldquo;Graduation&ldquo;"
-            />
-            {occasion&&<Box sx={{ mb: 4, mx:1,color: 'primary', justifyContent: 'flex-end' }}>
+            />}
+            {!session.greeting&&occasion&&<Box sx={{ mb: 4, mx:1,color: 'primary', justifyContent: 'flex-end' }}>
               <FormControlLabel
                 label={<Typography style={{ color: theme.palette.text.secondary }}>Keep it light-hearted, if possible, with emojis.</Typography>}
                 control={
@@ -1033,7 +1034,7 @@ Whether it's birthdays, graduations, holidays, or moments of illness or loss, WI
                 </AccordionDetails>
               </Accordion> : null}
 
-            {virgin && session.greeting ?
+            {false&&virgin && session.greeting ?
               <Accordion sx={{ my: 5,width:'100%' }} expanded={expanded === 'advanced'} onChange={handleAccordeonChange('advanced')}>
                 <AccordionSummary
                 sx={{p:0,width:'100%' }} 
@@ -1107,7 +1108,7 @@ Whether it's birthdays, graduations, holidays, or moments of illness or loss, WI
                   </Box>
                 </AccordionDetails>
               </Accordion> : null}
-            {!prompt2 && occasion ?
+            {false&&!prompt2 && occasion ?
               <Box sx={{ mt: 10, width: 1 }}>
                 <Starter><LooksTwoOutlinedIcon fontSize="inherit" color='success' />
                   <StarterMessage><Typography fontSize="inherit" color="secondary"/*color="#ffee58"*/>Click or tap on the &quot;Suggest Wish Text&quot; button:</Typography></StarterMessage></Starter>
@@ -1154,6 +1155,7 @@ Whether it's birthdays, graduations, holidays, or moments of illness or loss, WI
                 })
               }}>Open Wish Card Composer</OvalButton>
             </Box>}
+            
             {false && session.card && <Box sx={{ mt: 1, width: 1 }}>
               <OvalButton fullWidth size="small" variant="contained" onClick={async () => {
                 updateSession2({ card: false });
@@ -1180,11 +1182,12 @@ Whether it's birthdays, graduations, holidays, or moments of illness or loss, WI
             </Box>
             }
            {false&& <Hint message="Hit" prompt={prompt5} setPrompt={setPrompt5} loading={loading}/>}
-           {occasion&&!prompt6&&<Box sx={{my:6}}><GenerateToolbar session={session} onGenerateClick={handleRegenerateText} outside={true} fresh={!greeting} loading={loading}/></Box>}
+           {occasion&&!prompt6&&<Box sx={{my:0}}><GenerateToolbar session={session} onGenerateClick={handleRegenerateText} outside={true} fresh={!greeting} loading={loading}/></Box>}
+            
             {greeting &&
 
-              <Box sx={{ my: 1 }}>
-
+              <Box sx={{ my: 0 }}>
+              
                 <GreetingCard
                   PlayerToolbar={OutputPlayerToolbar}
                   greeting={greeting}

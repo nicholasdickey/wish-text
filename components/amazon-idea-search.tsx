@@ -9,6 +9,7 @@ import Paper from '@mui/material/Paper';
 
 const Results = styled.div`
   // Add your custom styles for the Results component here
+  
 `;
 
 const Title = styled(Paper)`

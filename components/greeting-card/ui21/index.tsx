@@ -18,6 +18,7 @@ import CardBody from "./editor/card-body";
 import CardSignature from "./editor/card-signature";
 import CardImage from "./editor/card-image";
 import TextToolbar from "./editor/toolbars/text";
+import TextDialog from "../text-dialog";
 import { Caveat } from 'next/font/google';
 const caveat = Caveat({ subsets: ['latin'] });
 interface BodyProps {
@@ -329,6 +330,7 @@ const GreetingCard: React.FC<Props> = ({ popoutRef, setPrompt = () => { }, Playe
   const [dOpen, setDOpen] = React.useState(delayOpen);
   const [topEditing, setTopEditing] = React.useState(false);
   const [imageEditing, setImageEditing] = React.useState(false);
+  const [textDialog, setTextDialog] = React.useState(false);
   const theme = useTheme();
   const router = useRouter();
   const size = useWindowSize();
@@ -368,7 +370,9 @@ const GreetingCard: React.FC<Props> = ({ popoutRef, setPrompt = () => { }, Playe
     setLoading(false);
     console.log("after h2");
   }
-
+  const openDialog=()=>{
+    setTextDialog(true);
+  }
   // console.log("open=", open, ";large=", large, "signature:", signature)
   const signatureText = signature ? signature.split('\n').map((m, i) => <SignatureLine id={"wt-signature-line" + i} key={i} l={signature.length} large={large}>{m}</SignatureLine>) : [];
   //console.log("signatureText=", signatureText)
@@ -379,6 +383,7 @@ const GreetingCard: React.FC<Props> = ({ popoutRef, setPrompt = () => { }, Playe
 
       <Body id="body-wt-2" style={{ width: '100vw', height: '100hw' }}  >
         <PopoutCard id={id} images={images} sharedImages={sharedImages} hugeLeft={hugeLeft} hugeRight={hugeRight} topEditing={topEditing} setTopEditing={setTopEditing} imageEditing={imageEditing} setImageEditing={setImageEditing} session={session} onUpload={onUpload} onAnimatedSignatureChange={onAnimatedSignatureChange} onGreetingChange={onGreetingChange} onImageChange={onImageChange} onSignatureChange={onSignatureChange} canvasRef={popoutRef} editable={editable} open={hugeLeft || hugeRight} isLeft={hugeLeft} card={{ text, image: image || EmptyImage, signature, animatedSignature }} close={() => { setHugeLeft(false); setHugeRight(false); }} />
+        {!loading && editable && <TextDialog session={session} open={textDialog} setOpen={setTextDialog} handleRegenerateText={handleRegenerateText} onGreetingChange={onGreetingChange}/>}
         <Card id="index-card" style={{ width: '100vw', height: '100hw' }} large={large} open={open} dark={dark}  >
           <div style={{ width: '100vw', height: '100hw' }} className={`card__container js-card-opener ${open ? "open" : ""}`}  >
             <div id="index-ref" ref={canvasRef} className={`card ${open ? "open" : ""}`} >
@@ -427,7 +432,7 @@ const GreetingCard: React.FC<Props> = ({ popoutRef, setPrompt = () => { }, Playe
                   {loading && <LinearProgress />}
                   <CardBody id={`normal-${id}`} topEditing={topEditing} setTopEditing={setTopEditing} editable={editable && !mobile} onChange={onBodyChange} body={body} large={large} loading={loading} />
                   {!loading && editable && PlayerToolbar}
-                  {!loading && editable && <TextToolbar fresh={false} outside={false} session={session} onGenerateClick={handleRegenerateText} />}
+                  {!loading && editable && <TextToolbar fresh={false} outside={false} session={session} onGenerateClick={openDialog} />}
                   <CardSignature id={`normal-${id}`} animatedSignature={animatedSignature} onAnimatedSignatureChange={onAnimatedSignatureChange} topEditing={topEditing} setTopEditing={setTopEditing} signature={signature} editable={editable && !mobile} onChange={onSignatureChange} large={large} loading={loading} />
                 </Inner>
               </div>

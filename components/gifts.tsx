@@ -24,6 +24,7 @@ const InnerGifts = styled.div`
   margin-top: 10px;
   width: 100%;
   min-height: 140px;
+  border-radius: 10%;
 `;
 
 const ButtonContainer = styled.div`
@@ -60,6 +61,7 @@ const FormContainer = styled.div`
   flex-direction: column;
   align-items: center;
   margin-top: 40px;
+  
 `;
 
 const PlaceholderOuterContainer = styled.div`
