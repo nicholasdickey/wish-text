@@ -585,7 +585,7 @@ export default function CardEditor({
         utm_content={utm_content}
         dark={darkMode ? "true" : "false"}
         startOpen={true} 
-        large={true}
+        cardlarge={true}
         editable={true}
         onGreetingChange={(value: string) => {handleChange({ greeting: value, image, signature, animatedSignature,linkid: '' }) }}
         onImageChange={(image: ImageData) => { handleChange({ greeting, image, signature, animatedSignature,linkid: '' }) }}

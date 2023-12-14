@@ -297,7 +297,7 @@ interface Props {
   utm_content: string,
   text: string,
   loading?: boolean,
-  large?: boolean,
+  cardlarge?: boolean,
   image?: ImageData,
   signature: string,
   animatedSignature?: number,
@@ -321,7 +321,7 @@ interface Props {
   setPrompt?: () => void;
 
 }
-const GreetingCard: React.FC<Props> = ({ popoutRef, setPrompt = () => { }, PlayerToolbar = null, handleRegenerateText: h2 = () => { }, setLoading = () => { }, id = "view", onAnimatedSignatureChange, animatedSignature = 1, editable = false, onGreetingChange, onImageChange, onSignatureChange, canvasRef, delayOpen = false, startOpen = false, loading = false, large: startLarge = false, dark, fbclid, utm_content, text, image, signature, session, images, sharedImages, onUpload }) => {
+const GreetingCard: React.FC<Props> = ({ popoutRef, setPrompt = () => { }, PlayerToolbar = null, handleRegenerateText: h2 = () => { }, setLoading = () => { }, id = "view", onAnimatedSignatureChange, animatedSignature = 1, editable = false, onGreetingChange, onImageChange, onSignatureChange, canvasRef, delayOpen = false, startOpen = false, loading = false, cardlarge: startLarge = false, dark, fbclid, utm_content, text, image, signature, session, images, sharedImages, onUpload }) => {
 
   const [open, setOpen] = React.useState(startOpen);
   const [large, setLarge] = React.useState(startLarge);

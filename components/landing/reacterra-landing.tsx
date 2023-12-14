@@ -540,6 +540,13 @@ Whether it's birthdays, graduations, holidays, or moments of illness or loss, WI
                                 <div>
                                 <a className="twitter-timeline-doesnt-work" data-tweet-limit="3" data-theme="dark" href="https://twitter.com/nfl_digest?ref_src=twsrc%5Etfw">MLB Digest on Twitter (X)</a>
                                 </div>
+                                <div>
+                                <a className="twitter-timeline-doesnt-work" data-tweet-limit="3" data-theme="dark" href="https://www.facebook.com/profile.php?id=61554108250826">NFL Digest on Facebook</a>
+                                </div>
+                                <div>
+                                <a className="twitter-timeline-doesnt-work" data-tweet-limit="3" data-theme="dark" href="https://www.facebook.com/profile.php?id=61554510092985">NHL Digest on Facebook</a>
+                                </div>
+                               
                             </Subtitle>
                             <Subtitle variant="h6">
                                 <a className="twitter-timeline-doesnt-work" data-tweet-limit="3" data-theme="dark" href="https://twitter.com/am1_news?ref_src=twsrc%5Etfw">America One News on Twitter (X)</a>
@@ -568,7 +575,7 @@ Whether it's birthdays, graduations, holidays, or moments of illness or loss, WI
                                     card={
                                         <div>
 
-                                            <Card popoutRef={popoutRef} animatedSignature={1} editable={false} onAnimatedSignatureChange={() => { }} onGreetingChange={() => { }} onImageChange={() => { }} onSignatureChange={() => { }} canvasRef={canvasRef} delayOpen={true} large={true} signature={signature} fbclid={fbclid} utm_content={utm_content} dark={darkMode ? "true" : "false"} text={greeting || ''} image={demoImage} />
+                                            <Card popoutRef={popoutRef} animatedSignature={1} editable={false} onAnimatedSignatureChange={() => { }} onGreetingChange={() => { }} onImageChange={() => { }} onSignatureChange={() => { }} canvasRef={canvasRef} delayOpen={true} cardlarge={true} signature={signature} fbclid={fbclid} utm_content={utm_content} dark={darkMode ? "true" : "false"} text={greeting || ''} image={demoImage} />
                                         </div>
                                     }
                                     fresh={fresh} fbclid={fbclid} utm_content={utm_content} isbot={isbot} isfb={isfb} sessionid={sessionid}

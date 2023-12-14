@@ -10,7 +10,7 @@ import { fetchSession, recordEvent, updateSession, deleteSessionHistories, getSe
 const landing=process.env.NEXT_PUBLIC_LANDING;
 export default function Home({ dark, fresh, fbclid, utm_content, isbot, isfb, sessionid }:
     { dark: number, fresh: boolean, fbclid: string, utm_content: string, isbot: number, isfb: number, sessionid: string }) {
-    return landing=="REACTERRA"?<ReacterraLanding dark={dark} fresh={fresh} fbclid={fbclid} utm_content={utm_content} isbot={isbot} isfb={isfb} sessionid={sessionid} />:<WishCardLanding dark={dark} fresh={fresh} fbclid={fbclid} utm_content={utm_content} isbot={isbot} isfb={isfb} sessionid={sessionid} />
+    return landing?.toUpperCase()=="REACTERRA"?<ReacterraLanding dark={dark} fresh={fresh} fbclid={fbclid} utm_content={utm_content} isbot={isbot} isfb={isfb} sessionid={sessionid} />:<WishCardLanding dark={dark} fresh={fresh} fbclid={fbclid} utm_content={utm_content} isbot={isbot} isfb={isfb} sessionid={sessionid} />
 }
 export const getServerSideProps = withSessionSsr(
     async function getServerSideProps(context: GetServerSidePropsContext): Promise<any> {
