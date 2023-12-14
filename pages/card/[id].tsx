@@ -436,7 +436,7 @@ export default function Home({ isGif,id, card, dark, fresh, fbclid, utm_content,
                 </Button>
               </ModeSwitch>
             </Wide>
-            <Card popoutRef={popoutRef} editable={false} onAnimatedSignatureChange={()=>{}}  onGreetingChange={()=>{}} onImageChange={()=>{}} onSignatureChange={()=>{}} canvasRef={canvasRef} delayOpen={true} large={true} signature={signature} fbclid={fbclid} utm_content={utm_content} dark={darkMode ? "true" : "false"} text={greeting || ''} image={image} />
+            <Card popoutRef={popoutRef} editable={false} onAnimatedSignatureChange={()=>{}}  onGreetingChange={()=>{}} onImageChange={()=>{}} onSignatureChange={()=>{}} canvasRef={canvasRef} delayOpen={true} cardlarge={true} signature={signature} fbclid={fbclid} utm_content={utm_content} dark={darkMode ? "true" : "false"} text={greeting || ''} image={image} />
           
           </Body>
           
