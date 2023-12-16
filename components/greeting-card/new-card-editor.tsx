@@ -223,10 +223,10 @@ export default function CardEditor({
   const onImageChange = (image: ImageData) => {
     setImage(image);
   }
-  const handleChange = (card: CardData) => {
+  const handleChange = (tag:string,card: CardData) => {
     let { greeting:card_Greeting="",signature: cardSignature, animatedSignature:cardAnimatedSignature, image: cardImage, linkid: cardLinkid, num: card_Num } = card;
-    console.log("handleChange1:",{image,cardImage,greeting,card_Greeting,signature,cardSignature, animatedSignature,cardAnimatedSignature, cardLinkid,card_Num});
-    
+    console.log("handleChange0:",tag,{tag,image,cardImage,greeting,card_Greeting,signature,cardSignature, animatedSignature,cardAnimatedSignature, cardLinkid,card_Num});
+    setLoading(false);
     if(! cardAnimatedSignature)
     cardAnimatedSignature=0;    
     if (!card_Greeting)
@@ -253,7 +253,7 @@ export default function CardEditor({
       setAnimatedSignature(cardAnimatedSignature);
     //setCardAnimatedSignature(cardAnimatedSignature);
     const newCardsLength = newCardsStack.length;
-    console.log("handleChange111:", newCardsStack, cardNum)
+    console.log("handleChange--111:", newCardsStack, cardNum)
     let cm = cardMax, cn = cardNum;
     let newStack = [...newCardsStack];
 
@@ -298,7 +298,7 @@ export default function CardEditor({
          
         }
 
-        handleChange(card);
+        handleChange("useEffect(greeting)",card);
       }
     }
   }, [greeting]);
@@ -405,7 +405,7 @@ export default function CardEditor({
     }
     console.log("render: setSelectedImage", image);
     // setSelectedImage(image); 
-    handleChange({
+    handleChange("stripClickHandler",{
       image,
       signature,
       greeting,
@@ -426,7 +426,7 @@ export default function CardEditor({
         thumbnailUrl: '',
         original_filename: ''
       }
-      handleChange({
+      handleChange("useEffect empty",{
         greeting: '',
         image: image,
         signature: '',
@@ -536,7 +536,7 @@ export default function CardEditor({
       // setImages(newImages.);)  
     }, 1);
 
-    handleChange({
+    handleChange("onUpload",{
       greeting,
       image: newImage,
       signature,
@@ -587,11 +587,12 @@ export default function CardEditor({
         startOpen={true} 
         cardlarge={true}
         editable={true}
-        onGreetingChange={(value: string) => {handleChange({ greeting: value, image, signature, animatedSignature,linkid: '' }) }}
-        onImageChange={(image: ImageData) => { handleChange({ greeting, image, signature, animatedSignature,linkid: '' }) }}
-        onSignatureChange={(value: string) => { handleChange({ greeting, image, signature: value,animatedSignature, linkid: '' }) }}
-        onAnimatedSignatureChange={(value: number) => { handleChange({ greeting, image, signature, animatedSignature: value, linkid: '' }) }}
-        handleRegenerateText={handleRegenerateText}
+        onGreetingChange={(value: string) => {handleChange("onGreetingsChange", {greeting: value, image, signature, animatedSignature,linkid: '' }) }}
+        onSignatureChange={(value: string) => { handleChange("onSignatureChange", {greeting,  signature:value,image,animatedSignature, linkid: '' }) }}
+        
+        onImageChange={(value: ImageData) => { handleChange("onImageChange", {greeting,  signature,image: value,animatedSignature, linkid: '' }) }}
+        onAnimatedSignatureChange={(value: number) => { handleChange("onAminatedSignatureChange", {greeting, image, signature, animatedSignature: value, linkid: '' }) }}
+        handleRegenerateText={(...params:any[])=>{setLoading(false);handleRegenerateText(params);}}
         loading={loading}
         setLoading={setLoading}
         PlayerToolbar={PlayerToolbar}

@@ -17,7 +17,7 @@ export const generateText = async (session: Options,fresh:boolean) => {
         fresh,
         sessionid,
       },null,4)),1000);
-      console.log("handleGenerate====>",session);
+      console.log("handleGenerate====> before getWishText",session);
       const {content:result,num} = await getWishText({
         style: "",
         from,
