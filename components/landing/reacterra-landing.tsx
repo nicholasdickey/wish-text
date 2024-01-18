@@ -211,6 +211,35 @@ const First2BandContainer = styled.h1`
     text-decoration: none;
   }
 `;
+const First4BandContainer = styled.h1`
+  display: flex;
+  width: 100%;
+  align-items: center;
+  flex-wrap: wrap;
+  justify-content: center;
+  padding: 5rem 5rem;
+  text-align: center;
+  margin:  0px;
+ // background: url('wide-candles.jpg') ; /* Replace with your image URL */
+  background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.7)), url('dark-mind-11.jpg'); /* Replace with your image URL */
+  background-color: #b71c1c;
+  font-weight:500;
+  color: #fff;
+  min-height: 380px;
+  background-repeat: repeat;
+
+  background-size: 900px 491px;
+  font-size:3rem;
+  //font-size:4rem;
+  @media (max-width: 700px) {
+    font-size:3rem;
+  }
+  a {
+    color: #FFFFFF;
+    text-decoration: none;
+  }
+`;
+
 const First3BandContainer = styled.h1`
   display: flex;
   width: 100%;
@@ -517,6 +546,24 @@ Whether it's birthdays, graduations, holidays, or moments of illness or loss, WI
                                     Email: <a style={{color:"white",textDecoration:"none"}} href="email:contact@reacterra.com"><span style={{color:"white",textDecoration:"none"}}>contact@reacterra.com</span></a>
                                 </Title>
                             }    </SecondBandContainer>
+                           
+                           
+                           <First4BandContainer ref={twitterRef}>
+                            <Title variant="h3">
+                                Startup MVP portfolio: <Link href="https://www.findexar.com?utm_content=reacterra">WWW.FINDEXAR.COM</Link>
+                            </Title>
+                            <Subtitle variant="h6">
+                            Real-Time Annotated Index of Athlete Media Mentions for Fantasy Sports.
+                            </Subtitle>
+                            <br />
+                            <br />
+                            <br />
+                          
+                           
+                        </First4BandContainer>       
+                           
+                           
+                           
                             <First2BandContainer ref={twitterRef}>
                             <Title variant="h3">
                                 Startup MVP portfolio: Social Media AI-powered News Digest:
